@@ -44,3 +44,7 @@ Other fixtures cover weather calendars, units, missing data, synchronization, hi
 - Some native compact labels can still be abbreviated. Some backend/Jinja text and canonical dropdown values remain English.
 - Wider UI coverage and occasional isolated-frontend latency observations from development are not claimed resolved by publishing this fork.
 - `live_native_loader_equality: false` in a portable build manifest means that the offline builder did not validate a particular target HA installation. Live verification is installation-specific and is not copied as a guarantee for other users.
+
+## HACS installation assistant
+
+In an isolated Python 3.14 environment with `homeassistant==2026.10.2 pytest pytest-asyncio`, run `python -m pytest tests/hacs -q`. The suite validates original-source identity, native package configuration in EN/PL, real config/options flows with frontend setup stubbed, existing state preservation, explicit acknowledgment, active-watering checks, lazy resource loading, interrupted staging/retry and managed-file protection. It does not operate physical valves or claim a completed user migration. CI also rebuilds the deterministic HACS bundle and rejects drift from the committed payload.
