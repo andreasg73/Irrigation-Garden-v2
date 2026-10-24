@@ -10,22 +10,43 @@ automation:
   - alias: Irrigation Triggered Cycle Start
     id: irrigation_triggered_cycle_start
     trigger:
-      - platform: state
+      - trigger: state
         entity_id: input_boolean.irrigation_cycle1_running
         to: 'on'
         
-      - platform: state
+      - trigger: state
         entity_id: input_boolean.irrigation_cycle2_running
         to: 'on'
 
-      - platform: state
+      - trigger: state
         entity_id: input_boolean.irrigation_cycle3_running
         to: 'on'
 
+    # Serialize start requests; recheck after dequeuing to reject overlaps.
+    mode: queued
+    max: 3
+
     action:
+      - if:
+          - condition: template
+            value_template: >
+              {% set selected = trigger.entity_id %}
+              {% set other = ['input_boolean.irrigation_cycle1_running',
+                              'input_boolean.irrigation_cycle2_running',
+                              'input_boolean.irrigation_cycle3_running'] | reject('eq', selected) | list %}
+              {{ not is_state('input_boolean.irrigation_master_control_switch','on')
+                 or not is_state('input_boolean.irrigation_stop_in_progress','off')
+                 or not is_state(selected,'on')
+                 or is_state('script.irrigation_run_a_cycle','on')
+                 or other | select('is_state','on') | list | length > 0 }}
+        then:
+          - action: input_boolean.turn_off
+            target:
+              entity_id: "{{ trigger.entity_id }}"
+          - stop: Rejected overlapping or disabled cycle start
       #=== Set previous run times for all zones to ' '
-      - service: input_text.set_value
-        data_template:
+      - action: input_text.set_value
+        data:
           entity_id: >
             {% for input_text in states.input_text if input_text.object_id.startswith('irrigation_zone') and
                                                       input_text.object_id.endswith('_previous_duration_in_seconds')  -%}
@@ -35,20 +56,20 @@ automation:
           value: ''
       
       #=== Set previous total watering time to 'none'
-      - service: input_text.set_value
+      - action: input_text.set_value
         data:
           entity_id: input_text.irrigation_previous_total_watering_time
           value: None
 
       #=== Set previous cycle total time to zero
-      - service: input_text.set_value
+      - action: input_text.set_value
         data:
           entity_id: input_text.irrigation_previous_total_watering_time
           value: 0
 
       #=== Update Last Run cycle name
-      - service: input_text.set_value
-        data_template:
+      - action: input_text.set_value
+        data:
           entity_id: input_text.irrigation_previous_run_cycle_name
           value: >
             {% if 'cycle1' in trigger.entity_id %}
@@ -60,28 +81,23 @@ automation:
             {% endif %}
 
       #=== Update Last Run Date
-      - service: input_text.set_value
-        data_template:
+      - action: input_text.set_value
+        data:
           entity_id: input_text.irrigation_previous_run_date
           value: >
             {{ now().strftime("%A %-d %B") }}
 
       #=== Update Last Run Time
-      - service: input_text.set_value
-        data_template:
+      - action: input_text.set_value
+        data:
           entity_id: input_text.irrigation_previous_run_time
           value: >
             {{ now().strftime("%H:%M") }}
 
-      #=== START THE PROCESS
-      - service: script.irrigation_run_a_cycle
-        data_template:
-          cycle: >
-            {% if trigger.entity_id == 'input_boolean.irrigation_cycle1_running' %}
-              cycle1
-            {% elif trigger.entity_id == 'input_boolean.irrigation_cycle2_running' %}
-              cycle2
-            {% else %}
-              cycle3
-            {% endif %}
-
+      #=== START THE PROCESS (worker owns its lifetime, starter stays responsive)
+      - action: script.turn_on
+        target:
+          entity_id: script.irrigation_run_a_cycle
+        data:
+          variables:
+            cycle: "{{ trigger.entity_id.split('irrigation_')[1].split('_')[0] }}"

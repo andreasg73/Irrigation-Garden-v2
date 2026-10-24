@@ -57,10 +57,10 @@ automation:
     id: irrigation_set_default_controller_wifi_1_signal_sensor
     trigger:
       #=== If HA starts
-      - platform: homeassistant
+      - trigger: homeassistant
         event: start
 
-      - platform: state
+      - trigger: state
         entity_id: input_text.irrigation_external_sensor_controller_1_wifi
         to: ''
 
@@ -76,7 +76,7 @@ automation:
           state: ''
 
     action:
-      - service: input_text.set_value
+      - action: input_text.set_value
         data:
           entity_id: input_text.irrigation_external_sensor_controller_1_wifi
           value: Not set
@@ -90,10 +90,10 @@ automation:
     id: irrigation_set_default_controller_2_wifi_signal_sensor
     trigger:
       #=== If HA starts
-      - platform: homeassistant
+      - trigger: homeassistant
         event: start
 
-      - platform: state
+      - trigger: state
         entity_id: input_text.irrigation_external_sensor_controller_2_wifi
         to: ''
 
@@ -109,10 +109,27 @@ automation:
           state: ''
 
     action:
-      - service: input_text.set_value
+      - action: input_text.set_value
         data:
           entity_id: input_text.irrigation_external_sensor_controller_2_wifi
           value: Not set
           # value: sensor.esphome_irrigation_controller_2_wifi_signal
 
 
+
+
+# Both original Wi-Fi configuration fields feed diagnostics. They do not imply
+# a zone/controller mapping: actual availability is checked on the mapped switch.
+template:
+  - binary_sensor:
+      - name: Irrigation Controllers Available
+        unique_id: irrigation_controllers_available
+        state: >
+          {% set ns = namespace(ok=true) %}
+          {% for n in [1,2] %}
+            {% set entity = states('input_text.irrigation_external_sensor_controller_' ~ n ~ '_wifi') | trim %}
+            {% if entity is match('^[a-z_]+\.[a-z0-9_]+$') and not has_value(entity) %}
+              {% set ns.ok = false %}
+            {% endif %}
+          {% endfor %}
+          {{ ns.ok }}

@@ -368,7 +368,7 @@ sensor:
   - platform: history_stats
     name: Irrigation Zone1 Total Time Today
     unique_id: irrigation_zone1_total_time_today
-    entity_id: switch.garden_irrigation_relay_zone1
+    entity_id: binary_sensor.irrigation_zone1_activity
     state: 'on'
     type: time
     start: >
@@ -379,7 +379,7 @@ sensor:
   - platform: history_stats
     name: Irrigation Zone2 Total Time Today
     unique_id: irrigation_zone2_total_time_today
-    entity_id: switch.garden_irrigation_relay_zone2
+    entity_id: binary_sensor.irrigation_zone2_activity
     state: 'on'
     type: time
     start: >
@@ -390,7 +390,7 @@ sensor:
   - platform: history_stats
     name: Irrigation Zone3 Total Time Today
     unique_id: irrigation_zone3_total_time_today
-    entity_id: switch.garden_irrigation_relay_zone3
+    entity_id: binary_sensor.irrigation_zone3_activity
     state: 'on'
     type: time
     start: >
@@ -401,7 +401,7 @@ sensor:
   - platform: history_stats
     name: Irrigation Zone4 Total Time Today
     unique_id: irrigation_zone4_total_time_today
-    entity_id: switch.garden_irrigation_relay_zone4
+    entity_id: binary_sensor.irrigation_zone4_activity
     state: 'on'
     type: time
     start: >
@@ -412,7 +412,7 @@ sensor:
   - platform: history_stats
     name: Irrigation Zone5 Total Time Today
     unique_id: irrigation_zone5_total_time_today
-    entity_id: switch.garden_irrigation_relay_zone5
+    entity_id: binary_sensor.irrigation_zone5_activity
     state: 'on'
     type: time
     start: >
@@ -423,7 +423,7 @@ sensor:
   - platform: history_stats
     name: Irrigation Zone6 Total Time Today
     unique_id: irrigation_zone6_total_time_today
-    entity_id: switch.garden_irrigation_relay_zone6
+    entity_id: binary_sensor.irrigation_zone6_activity
     state: 'on'
     type: time
     start: >
@@ -434,7 +434,7 @@ sensor:
   - platform: history_stats
     name: Irrigation Zone7 Total Time Today
     unique_id: irrigation_zone7_total_time_today
-    entity_id: switch.garden_irrigation_relay_zone7
+    entity_id: binary_sensor.irrigation_zone7_activity
     state: 'on'
     type: time
     start: >
@@ -445,7 +445,7 @@ sensor:
   - platform: history_stats
     name: Irrigation Zone8 Total Time Today
     unique_id: irrigation_zone8_total_time_today
-    entity_id: switch.garden_irrigation_relay_zone8
+    entity_id: binary_sensor.irrigation_zone8_activity
     state: 'on'
     type: time
     start: >
@@ -456,7 +456,7 @@ sensor:
   - platform: history_stats
     name: Irrigation Zone9 Total Time Today
     unique_id: irrigation_zone9_total_time_today
-    entity_id: switch.front_irrigation
+    entity_id: binary_sensor.irrigation_zone9_activity
     state: 'on'
     type: time
     start: >
@@ -467,7 +467,7 @@ sensor:
   - platform: history_stats
     name: Irrigation Zone10 Total Time Today
     unique_id: irrigation_zone10_total_time_today
-    entity_id: switch.garden_irrigation_relay_zone10
+    entity_id: binary_sensor.irrigation_zone10_activity
     state: 'on'
     type: time
     start: >
@@ -478,7 +478,7 @@ sensor:
   - platform: history_stats
     name: Irrigation Zone11 Total Time Today
     unique_id: irrigation_zone11_total_time_today
-    entity_id: switch.garden_irrigation_relay_zone11
+    entity_id: binary_sensor.irrigation_zone11_activity
     state: 'on'
     type: time
     start: >
@@ -489,7 +489,7 @@ sensor:
   - platform: history_stats
     name: Irrigation Zone12 Total Time Today
     unique_id: irrigation_zone12_total_time_today
-    entity_id: switch.garden_irrigation_relay_zone12
+    entity_id: binary_sensor.irrigation_zone12_activity
     state: 'on'
     type: time
     start: >
@@ -500,7 +500,7 @@ sensor:
   - platform: history_stats
     name: Irrigation Zone13 Total Time Today
     unique_id: irrigation_zone13_total_time_today
-    entity_id: switch.garden_irrigation_relay_zone13
+    entity_id: binary_sensor.irrigation_zone13_activity
     state: 'on'
     type: time
     start: >
@@ -511,7 +511,7 @@ sensor:
   - platform: history_stats
     name: Irrigation Zone14 Total Time Today
     unique_id: irrigation_zone14_total_time_today
-    entity_id: switch.garden_irrigation_relay_zone14
+    entity_id: binary_sensor.irrigation_zone14_activity
     state: 'on'
     type: time
     start: >
@@ -522,7 +522,7 @@ sensor:
   - platform: history_stats
     name: Irrigation Zone15 Total Time Today
     unique_id: irrigation_zone15_total_time_today
-    entity_id: switch.garden_irrigation_relay_zone15
+    entity_id: binary_sensor.irrigation_zone15_activity
     state: 'on'
     type: time
     start: >
@@ -533,7 +533,7 @@ sensor:
   - platform: history_stats
     name: Irrigation Zone16 Total Time Today
     unique_id: irrigation_zone16_total_time_today
-    entity_id: switch.garden_irrigation_relay_zone16
+    entity_id: binary_sensor.irrigation_zone16_activity
     state: 'on'
     type: time
     start: >
@@ -548,175 +548,360 @@ sensor:
   - platform: history_stats
     name: Irrigation Zone1 Total Time Yesterday
     unique_id: irrigation_zone1_total_time_yesterday
-    entity_id: switch.garden_irrigation_relay_zone1
+    entity_id: binary_sensor.irrigation_zone1_activity
     state: 'on'
     type: time
     end: >
       {{ today_at() }}
-    duration:
-      hours: 24
+    start: >
+      {{ today_at() - timedelta(days=1) }}
 
   - platform: history_stats
     name: Irrigation Zone2 Total Time Yesterday
     unique_id: irrigation_zone2_total_time_yesterday
-    entity_id: switch.garden_irrigation_relay_zone2
+    entity_id: binary_sensor.irrigation_zone2_activity
     state: 'on'
     type: time
     end: >
       {{ today_at() }}
-    duration:
-      hours: 24
+    start: >
+      {{ today_at() - timedelta(days=1) }}
 
   - platform: history_stats
     name: Irrigation Zone3 Total Time Yesterday
     unique_id: irrigation_zone3_total_time_yesterday
-    entity_id: switch.garden_irrigation_relay_zone3
+    entity_id: binary_sensor.irrigation_zone3_activity
     state: 'on'
     type: time
     end: >
       {{ today_at() }}
-    duration:
-      hours: 24
+    start: >
+      {{ today_at() - timedelta(days=1) }}
 
   - platform: history_stats
     name: Irrigation Zone4 Total Time Yesterday
     unique_id: irrigation_zone4_total_time_yesterday
-    entity_id: switch.garden_irrigation_relay_zone4
+    entity_id: binary_sensor.irrigation_zone4_activity
     state: 'on'
     type: time
     end: >
       {{ today_at() }}
-    duration:
-      hours: 24
+    start: >
+      {{ today_at() - timedelta(days=1) }}
 
   - platform: history_stats
     name: Irrigation Zone5 Total Time Yesterday
     unique_id: irrigation_zone5_total_time_yesterday
-    entity_id: switch.garden_irrigation_relay_zone5
+    entity_id: binary_sensor.irrigation_zone5_activity
     state: 'on'
     type: time
     end: >
       {{ today_at() }}
-    duration:
-      hours: 24
+    start: >
+      {{ today_at() - timedelta(days=1) }}
 
   - platform: history_stats
     name: Irrigation Zone6 Total Time Yesterday
     unique_id: irrigation_zone6_total_time_yesterday
-    entity_id: switch.garden_irrigation_relay_zone6
+    entity_id: binary_sensor.irrigation_zone6_activity
     state: 'on'
     type: time
     end: >
       {{ today_at() }}
-    duration:
-      hours: 24
+    start: >
+      {{ today_at() - timedelta(days=1) }}
 
   - platform: history_stats
     name: Irrigation Zone7 Total Time Yesterday
     unique_id: irrigation_zone7_total_time_yesterday
-    entity_id: switch.garden_irrigation_relay_zone7
+    entity_id: binary_sensor.irrigation_zone7_activity
     state: 'on'
     type: time
     end: >
       {{ today_at() }}
-    duration:
-      hours: 24
+    start: >
+      {{ today_at() - timedelta(days=1) }}
 
   - platform: history_stats
     name: Irrigation Zone8 Total Time Yesterday
     unique_id: irrigation_zone8_total_time_yesterday
-    entity_id: switch.garden_irrigation_relay_zone8
+    entity_id: binary_sensor.irrigation_zone8_activity
     state: 'on'
     type: time
     end: >
       {{ today_at() }}
-    duration:
-      hours: 24
+    start: >
+      {{ today_at() - timedelta(days=1) }}
 
   - platform: history_stats
     name: Irrigation Zone9 Total Time Yesterday
     unique_id: irrigation_zone9_total_time_yesterday
-    entity_id: switch.front_irrigation
+    entity_id: binary_sensor.irrigation_zone9_activity
     state: 'on'
     type: time
     end: >
       {{ today_at() }}
-    duration:
-      hours: 24
+    start: >
+      {{ today_at() - timedelta(days=1) }}
 
   - platform: history_stats
     name: Irrigation Zone10 Total Time Yesterday
     unique_id: irrigation_zone10_total_time_yesterday
-    entity_id: switch.garden_irrigation_relay_zone10
+    entity_id: binary_sensor.irrigation_zone10_activity
     state: 'on'
     type: time
     end: >
       {{ today_at() }}
-    duration:
-      hours: 24
+    start: >
+      {{ today_at() - timedelta(days=1) }}
 
   - platform: history_stats
     name: Irrigation Zone11 Total Time Yesterday
     unique_id: irrigation_zone11_total_time_yesterday
-    entity_id: switch.garden_irrigation_relay_zone11
+    entity_id: binary_sensor.irrigation_zone11_activity
     state: 'on'
     type: time
     end: >
       {{ today_at() }}
-    duration:
-      hours: 24
+    start: >
+      {{ today_at() - timedelta(days=1) }}
 
   - platform: history_stats
     name: Irrigation Zone12 Total Time Yesterday
     unique_id: irrigation_zone12_total_time_yesterday
-    entity_id: switch.garden_irrigation_relay_zone12
+    entity_id: binary_sensor.irrigation_zone12_activity
     state: 'on'
     type: time
     end: >
       {{ today_at() }}
-    duration:
-      hours: 24
+    start: >
+      {{ today_at() - timedelta(days=1) }}
 
   - platform: history_stats
     name: Irrigation Zone13 Total Time Yesterday
     unique_id: irrigation_zone13_total_time_yesterday
-    entity_id: switch.garden_irrigation_relay_zone13
+    entity_id: binary_sensor.irrigation_zone13_activity
     state: 'on'
     type: time
     end: >
       {{ today_at() }}
-    duration:
-      hours: 24
+    start: >
+      {{ today_at() - timedelta(days=1) }}
 
   - platform: history_stats
     name: Irrigation Zone14 Total Time Yesterday
     unique_id: irrigation_zone14_total_time_yesterday
-    entity_id: switch.garden_irrigation_relay_zone14
+    entity_id: binary_sensor.irrigation_zone14_activity
     state: 'on'
     type: time
     end: >
       {{ today_at() }}
-    duration:
-      hours: 24
+    start: >
+      {{ today_at() - timedelta(days=1) }}
 
   - platform: history_stats
     name: Irrigation Zone15 Total Time Yesterday
     unique_id: irrigation_zone15_total_time_yesterday
-    entity_id: switch.garden_irrigation_relay_zone15
+    entity_id: binary_sensor.irrigation_zone15_activity
     state: 'on'
     type: time
     end: >
       {{ today_at() }}
-    duration:
-      hours: 24
+    start: >
+      {{ today_at() - timedelta(days=1) }}
 
   - platform: history_stats
     name: Irrigation Zone16 Total Time Yesterday
     unique_id: irrigation_zone16_total_time_yesterday
-    entity_id: switch.garden_irrigation_relay_zone16
+    entity_id: binary_sensor.irrigation_zone16_activity
     state: 'on'
     type: time
     end: >
       {{ today_at() }}
-    duration:
-      hours: 24
+    start: >
+      {{ today_at() - timedelta(days=1) }}
+
+# ============================================================
+# Zone activity mirrors for history_stats (HA 2026).
+# Native history_stats requires a static entity_id; these
+# virtual sensors follow the zone's user-selected switch.
+# No service calls or physical switching occur here.
+# ============================================================
+template:
+  - binary_sensor:
+      - name: Irrigation Zone1 Activity
+        unique_id: irrigation_zone1_activity
+        state: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone1') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone1_switch_entity_id') %}
+          {{ is_state(output,'on') }}
+        availability: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone1') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone1_switch_entity_id') %}
+          {{ output.startswith('switch.') and states(output) in ['on','off'] }}
+
+      - name: Irrigation Zone2 Activity
+        unique_id: irrigation_zone2_activity
+        state: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone2') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone2_switch_entity_id') %}
+          {{ is_state(output,'on') }}
+        availability: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone2') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone2_switch_entity_id') %}
+          {{ output.startswith('switch.') and states(output) in ['on','off'] }}
+
+      - name: Irrigation Zone3 Activity
+        unique_id: irrigation_zone3_activity
+        state: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone3') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone3_switch_entity_id') %}
+          {{ is_state(output,'on') }}
+        availability: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone3') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone3_switch_entity_id') %}
+          {{ output.startswith('switch.') and states(output) in ['on','off'] }}
+
+      - name: Irrigation Zone4 Activity
+        unique_id: irrigation_zone4_activity
+        state: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone4') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone4_switch_entity_id') %}
+          {{ is_state(output,'on') }}
+        availability: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone4') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone4_switch_entity_id') %}
+          {{ output.startswith('switch.') and states(output) in ['on','off'] }}
+
+      - name: Irrigation Zone5 Activity
+        unique_id: irrigation_zone5_activity
+        state: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone5') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone5_switch_entity_id') %}
+          {{ is_state(output,'on') }}
+        availability: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone5') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone5_switch_entity_id') %}
+          {{ output.startswith('switch.') and states(output) in ['on','off'] }}
+
+      - name: Irrigation Zone6 Activity
+        unique_id: irrigation_zone6_activity
+        state: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone6') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone6_switch_entity_id') %}
+          {{ is_state(output,'on') }}
+        availability: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone6') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone6_switch_entity_id') %}
+          {{ output.startswith('switch.') and states(output) in ['on','off'] }}
+
+      - name: Irrigation Zone7 Activity
+        unique_id: irrigation_zone7_activity
+        state: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone7') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone7_switch_entity_id') %}
+          {{ is_state(output,'on') }}
+        availability: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone7') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone7_switch_entity_id') %}
+          {{ output.startswith('switch.') and states(output) in ['on','off'] }}
+
+      - name: Irrigation Zone8 Activity
+        unique_id: irrigation_zone8_activity
+        state: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone8') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone8_switch_entity_id') %}
+          {{ is_state(output,'on') }}
+        availability: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone8') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone8_switch_entity_id') %}
+          {{ output.startswith('switch.') and states(output) in ['on','off'] }}
+
+      - name: Irrigation Zone9 Activity
+        unique_id: irrigation_zone9_activity
+        state: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone9') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone9_switch_entity_id') %}
+          {{ is_state(output,'on') }}
+        availability: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone9') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone9_switch_entity_id') %}
+          {{ output.startswith('switch.') and states(output) in ['on','off'] }}
+
+      - name: Irrigation Zone10 Activity
+        unique_id: irrigation_zone10_activity
+        state: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone10') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone10_switch_entity_id') %}
+          {{ is_state(output,'on') }}
+        availability: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone10') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone10_switch_entity_id') %}
+          {{ output.startswith('switch.') and states(output) in ['on','off'] }}
+
+      - name: Irrigation Zone11 Activity
+        unique_id: irrigation_zone11_activity
+        state: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone11') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone11_switch_entity_id') %}
+          {{ is_state(output,'on') }}
+        availability: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone11') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone11_switch_entity_id') %}
+          {{ output.startswith('switch.') and states(output) in ['on','off'] }}
+
+      - name: Irrigation Zone12 Activity
+        unique_id: irrigation_zone12_activity
+        state: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone12') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone12_switch_entity_id') %}
+          {{ is_state(output,'on') }}
+        availability: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone12') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone12_switch_entity_id') %}
+          {{ output.startswith('switch.') and states(output) in ['on','off'] }}
+
+      - name: Irrigation Zone13 Activity
+        unique_id: irrigation_zone13_activity
+        state: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone13') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone13_switch_entity_id') %}
+          {{ is_state(output,'on') }}
+        availability: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone13') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone13_switch_entity_id') %}
+          {{ output.startswith('switch.') and states(output) in ['on','off'] }}
+
+      - name: Irrigation Zone14 Activity
+        unique_id: irrigation_zone14_activity
+        state: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone14') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone14_switch_entity_id') %}
+          {{ is_state(output,'on') }}
+        availability: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone14') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone14_switch_entity_id') %}
+          {{ output.startswith('switch.') and states(output) in ['on','off'] }}
+
+      - name: Irrigation Zone15 Activity
+        unique_id: irrigation_zone15_activity
+        state: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone15') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone15_switch_entity_id') %}
+          {{ is_state(output,'on') }}
+        availability: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone15') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone15_switch_entity_id') %}
+          {{ output.startswith('switch.') and states(output) in ['on','off'] }}
+
+      - name: Irrigation Zone16 Activity
+        unique_id: irrigation_zone16_activity
+        state: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone16') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone16_switch_entity_id') %}
+          {{ is_state(output,'on') }}
+        availability: >
+          {% set active = is_state('input_text.irrigation_active_zone','zone16') %}
+          {% set output = states('input_text.irrigation_active_switch') if active and states('input_text.irrigation_active_switch').startswith('switch.') else states('input_text.irrigation_zone16_switch_entity_id') %}
+          {{ output.startswith('switch.') and states(output) in ['on','off'] }}
+

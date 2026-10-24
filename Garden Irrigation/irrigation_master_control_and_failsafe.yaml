@@ -9,6 +9,7 @@ input_boolean:
     icon: mdi:bomb
     
 
+    initial: false  # SAFETY: master control defaults OFF in test build
 #================
 #=== Automations
 #================
@@ -21,10 +22,10 @@ automation:
     id: irrigation_master_control_switch_on
     trigger:
       #=== If HA starts
-      - platform: homeassistant
+      - trigger: homeassistant
         event: start
 
-      - platform: state
+      - trigger: state
         entity_id: input_boolean.irrigation_master_control_switch
         to: 'on'
 
@@ -34,17 +35,71 @@ automation:
         state: 'on'
     
     action:
+      - variables:
+          irrigation_package_automation_ids: &irrigation_package_automation_ids
+            - irrigation_create_groups
+            - irrigation_cycle1_start_time_sunrise_offset
+            - irrigation_cycle1_start_time_sunset_offset
+            - irrigation_cycle2_start_time_sunrise_offset
+            - irrigation_cycle2_start_time_sunset_offset
+            - irrigation_initialise_rainfall_sensors
+            - irrigation_initialise_temperature_sensors
+            - irrigation_master_control_switch_off
+            - irrigation_master_control_switch_on
+            - irrigation_notify_about_cycle_wifi_interruption
+            - irrigation_notify_when_controller_goes_offline
+            - irrigation_notify_when_cycle_starts_or_stops
+            - irrigation_output_mode_initialisation
+            - irrigation_output_watchdog
+            - irrigation_rainfall_calculate_multiplier
+            - irrigation_rainfall_nightly_update
+            - irrigation_remote_control_button_pressed
+            - irrigation_remote_control_cancel
+            - irrigation_remote_control_queued_notification
+            - irrigation_remote_control_switch
+            - irrigation_remote_event_irrigation_remote_button_press
+            - irrigation_remote_event_irrigation_remote_cancel
+            - irrigation_set_default_controller_2_wifi_signal_sensor
+            - irrigation_set_default_controller_wifi_1_signal_sensor
+            - irrigation_set_default_current_temperature_sensor
+            - irrigation_set_default_forecast_high_temperature_sensor
+            - irrigation_set_default_forecast_rain_sensor
+            - irrigation_set_default_rainfall_between_24_and_48_hours_ago
+            - irrigation_set_default_rainfall_between_48_and_72_hours_ago
+            - irrigation_set_default_rainfall_between_72_and_96_hours_ago
+            - irrigation_set_default_rainfall_between_96_and_120_hours_ago
+            - irrigation_set_default_rainfall_last_twenty_four_hours_sensor
+            - irrigation_set_default_rainfall_today_sensor
+            - irrigation_set_default_rainfall_yesterday_sensor
+            - irrigation_set_default_raining_now_sensor
+            - irrigation_shutdown_cleanup
+            - irrigation_temperature_nightly_update
+            - irrigation_temperature_options_update_multiplier
+            - irrigation_temperature_update_highest_actual_temp_today
+            - irrigation_temperature_update_highest_forecast_high_temp_today
+            - irrigation_triggered
+            - irrigation_triggered_cycle_start
+            - irrigation_ui_duration_synchronisation
+            - irrigation_ui_set_default_current_status
+            - irrigation_ui_set_default_cycle_names
+            - irrigation_ui_set_default_font
+            - irrigation_ui_set_default_switch_entity_ids
+            - irrigation_ui_set_default_user_names
+            - irrigation_ui_set_default_zone_names
+            - irrigation_ui_show_weather_adjust_settings
+            - irrigation_warning_controller_available
+            - irrigation_warning_controller_unavailable
       #=== Turn ON Automations
-      - service: automation.turn_on
-        data_template:
+      - action: automation.turn_on
+        data:
           entity_id: >
-            {% for automation in states.automation if automation.object_id.startswith('irrigation') and
-                                                      'irrigation_remote_control' not in automation.object_id %}
+            {% for automation in states.automation if state_attr(automation.entity_id, 'id') in irrigation_package_automation_ids and
+                                                      'irrigation_remote_control' not in state_attr(automation.entity_id, 'id') %}
               {{- automation.entity_id }}{% if not loop.last %}, {% endif -%}
             {% endfor %}
 
       #===  Trigger Automations required for setting up globals
-      - service: automation.trigger
+      - action: automation.trigger
         entity_id: automation.irrigation_create_groups
 
 
@@ -53,12 +108,14 @@ automation:
   #==============================
   - alias: Irrigation Master Control Switch OFF
     id: irrigation_master_control_switch_off
+    initial_state: true
+    mode: single
     trigger:
       #=== If HA starts
-      - platform: homeassistant
+      - trigger: homeassistant
         event: start
 
-      - platform: state
+      - trigger: state
         entity_id: input_boolean.irrigation_master_control_switch
         to: 'off'
 
@@ -67,36 +124,110 @@ automation:
         entity_id: input_boolean.irrigation_master_control_switch
         state: 'off'
     
-    action:
+    action: &irrigation_stop_cleanup
+      - variables:
+          irrigation_package_automation_ids: *irrigation_package_automation_ids
+      # Stop the active worker before any final closing of mapped outputs.
+      - action: script.turn_off
+        target:
+          entity_id: script.irrigation_run_a_cycle
+      # Shutdown may begin with Master ON. Prevent restart or restored schedules.
+      - action: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.irrigation_master_control_switch
       #=== Turn OFF Automations
-      - service: automation.turn_off
-        data_template:
+      - action: automation.turn_off
+        data:
           entity_id: >
-            {% for automation in states.automation if automation.object_id.startswith('irrigation') and
-                                                      'irrigation_remote_control_switch' not in automation.object_id and
-                                                      'irrigation_master_control_switch' not in automation.object_id %}
+            {% for automation in states.automation if state_attr(automation.entity_id, 'id') in irrigation_package_automation_ids and
+                                                      'irrigation_remote_control_switch' not in state_attr(automation.entity_id, 'id') and
+                                                      'irrigation_master_control_switch' not in state_attr(automation.entity_id, 'id') and
+                                                      not state_attr(automation.entity_id, 'id').startswith(('irrigation_temperature_', 'irrigation_rainfall_')) and
+                                                      state_attr(automation.entity_id, 'id') not in ['irrigation_output_watchdog', 'irrigation_output_mode_initialisation', 'irrigation_shutdown_cleanup'] %}
               {{- automation.entity_id }}{% if not loop.last %}, {% endif -%}
             {% endfor %}
 
       #=== Turn OFF all schedules
-      - service: input_boolean.turn_off
+      - action: input_boolean.turn_off
         entity_id:
           - input_boolean.irrigation_cycle1_schedule_enabled
           - input_boolean.irrigation_cycle2_schedule_enabled
 
-      #=== Turn off all zone valves explicitly 
-      - service: switch.turn_off
-        data_template:
-          entity_id: > 
-            {% for switch_name in states.input_text if switch_name.object_id.startswith('irrigation_zone') and
-                                                       switch_name.object_id.endswith('switch_entity_id') and
-                                                       states(states(switch_name.entity_id)) != 'unknown' and
-                                                       states(states(switch_name.entity_id)) != 'none' -%}
-              {{ states(switch_name.entity_id) }}
-              {%- if not loop.last %}, {% endif %}
-            {%- endfor %}
+      # A direct call to a single-mode script returns early if it is already
+      # running. Await an existing CANCEL before starting this final cleanup.
+      - wait_template: "{{ is_state('script.irrigation_cancel_irrigation', 'off') }}"
+      # Shared cancellation closes the captured output, clears timers and flags.
+      - action: script.irrigation_cancel_irrigation
+      # A competing OFF can enter CANCEL after the wait above. Await that run
+      # as well: single-mode service acceptance is not completion confirmation.
+      - wait_template: "{{ is_state('script.irrigation_cancel_irrigation', 'off') }}"
 
       #=== Turn OFF remote control
-      - service: input_boolean.turn_off
+      - action: input_boolean.turn_off
         entity_id:
           - input_boolean.irrigation_remote_control
+
+
+  # Independent shutdown job cannot be rejected by an occupied Master OFF run.
+  # Reuse exactly the same stop sequence; HA awaits it before stopping scripts.
+  - alias: Irrigation Shutdown Cleanup
+    id: irrigation_shutdown_cleanup
+    initial_state: true
+    mode: single
+    trigger:
+      - trigger: homeassistant
+        event: shutdown
+    action: *irrigation_stop_cleanup
+
+  # Active output has a persisted deadline and can never outlive its worker.
+  - alias: Irrigation Output Watchdog
+    id: irrigation_output_watchdog
+    initial_state: true
+    mode: single
+    trigger:
+      - trigger: time_pattern
+        seconds: '/5'
+      - trigger: homeassistant
+        event: start
+    condition:
+      - condition: state
+        entity_id: input_boolean.irrigation_stop_in_progress
+        state: 'off'
+      - condition: template
+        value_template: >
+          {% set output = states('input_text.irrigation_active_switch') %}
+          {% set deadline = state_attr('input_datetime.irrigation_failsafe_deadline','timestamp') | float(0) %}
+          {% set worker = is_state('script.irrigation_run_a_cycle','on') %}
+          {% set manual = is_state('script.irrigation_run_a_single_zone_on_demand','on') %}
+          {% set starting = state_attr('automation.irrigation_triggered_cycle_start','current') | int(0) > 0 %}
+          {% set running = ['input_boolean.irrigation_cycle1_running',
+                            'input_boolean.irrigation_cycle2_running',
+                            'input_boolean.irrigation_cycle3_running'] | select('is_state','on') | list %}
+          {{ (output.startswith('switch.') and
+                (not worker or not is_state('input_boolean.irrigation_master_control_switch','on')
+                 or deadline <= as_timestamp(now())))
+             or (not worker and not starting and not manual and
+                 (running | length > 0 or states('input_text.irrigation_active_cycle') in ['cycle1','cycle2','cycle3']
+                  or states('input_text.irrigation_single_zone_backup').startswith('{'))) }}
+    action:
+      - action: script.irrigation_cancel_irrigation
+
+  # Preserve the original boolean/API, with a safe FIRST boot and restored mode.
+  # Always forcing disabled=true on every restart would prevent emergency OFF.
+  - alias: Irrigation Output Mode Initialisation
+    id: irrigation_output_mode_initialisation
+    initial_state: true
+    trigger:
+      - trigger: homeassistant
+        event: start
+    condition:
+      - condition: state
+        entity_id: input_boolean.irrigation_output_mode_initialized
+        state: 'off'
+    action:
+      - action: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.irrigation_disable_switches
+      - action: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.irrigation_output_mode_initialized

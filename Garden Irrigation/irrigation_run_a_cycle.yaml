@@ -18,27 +18,65 @@ script:
         description: Cycle to run
         example: cycle1
 
+    mode: single
     sequence:
+      - condition: state
+        entity_id: input_boolean.irrigation_output_mode_initialized
+        state: 'on'
+      - condition: state
+        entity_id: input_boolean.irrigation_master_control_switch
+        state: 'on'
+      - condition: template
+        value_template: "{{ cycle | default('') in ['cycle1', 'cycle2', 'cycle3'] }}"
+      - condition: state
+        entity_id: input_boolean.irrigation_stop_in_progress
+        state: 'off'
+      - condition: template
+        value_template: >
+          {{ is_state('input_boolean.irrigation_' ~ cycle ~ '_running','on')
+             and (not states('input_text.irrigation_active_switch').startswith('switch.')
+                  or is_state(states('input_text.irrigation_active_switch'),'off')) }}
+      - variables:
+          physical_run: "{{ is_state('input_boolean.irrigation_disable_switches','off') }}"
+      - action: input_text.set_value
+        target:
+          entity_id: input_text.irrigation_active_cycle
+        data:
+          value: "{{ cycle }}"
+
       #=== Short pause before starting
       - delay:
           seconds: 1
 
-      #=== Run all the zones in turn
+      #=== Run each configured zone, never beyond the original 16.
+      #=== Missing/invalid zone count means no watering.
       - repeat:
-          until:
+          count: >
+            {{ [[states('input_number.irrigation_number_of_zones') | int(0), 0] | max, 16] | min }}
+          sequence:
             - condition: template
               value_template: >
-                {{ states('input_number.irrigation_number_of_zones') | int == repeat.index }}
+                {{ is_state('input_boolean.irrigation_master_control_switch','on')
+                   and is_state('input_boolean.irrigation_stop_in_progress','off')
+                   and is_state('input_boolean.irrigation_' ~ cycle ~ '_running','on') }}
+            #=== Resolve zone entity once per zone, so changing mapping mid-run cannot redirect a relay.
+            - variables:
+                irrigation_zone_entity: "{{ states('input_text.irrigation_zone' ~ repeat.index ~ '_switch_entity_id') | trim }}"
+                zone_seconds: "{{ [[states('sensor.irrigation_' ~ cycle ~ '_zone' ~ repeat.index ~ '_actual_duration_in_seconds') | int(0), 0] | max, 7200] | min }}"
+            - variables:
+                irrigation_zone_entity_valid: >
+                  {{ irrigation_zone_entity.startswith('switch.')
+                     and irrigation_zone_entity in (states.switch | map(attribute='entity_id') | list) }}
 
-          sequence:
             #=== Write To Log
-            - service: script.irrigation_write_to_log
+            - action: script.irrigation_write_to_log
+              continue_on_error: true
               data:
                 log_event: ZONE_STARTING
                 zone: >
                   {{ repeat.index }}
                 seconds: >
-                  {{ states('sensor.irrigation_' ~ cycle ~ '_zone' ~ repeat.index ~ '_actual_duration_in_seconds') | int }}
+                  {{ zone_seconds }}
                 event_time: >
                   {{ now() }}
 
@@ -47,18 +85,19 @@ script:
                 - conditions:
                     condition: template
                     value_template: >
-                      {{ states('sensor.irrigation_' ~ cycle ~ '_zone' ~ repeat.index ~ '_actual_duration_in_seconds') | int != 0 }}
+                      {{ zone_seconds > 0 and (not physical_run or irrigation_zone_entity_valid) }}
 
                   sequence:
                     #=== Set FAILSAFE time to 10 seconds longer than the zone runtime
-                    - service: input_number.set_value
-                      data_template:        
+                    - action: input_number.set_value
+                      data:
                         entity_id: input_number.irrigation_failsafe_time_in_seconds
                         value: >
-                          {{ states('sensor.irrigation_' ~ cycle ~ '_zone' ~ repeat.index ~ '_actual_duration_in_seconds') | int + 10 }}
+                          {{ zone_seconds + 10 }}
 
                     #=== Write To Log
-                    - service: script.irrigation_write_to_log
+                    - action: script.irrigation_write_to_log
+                      continue_on_error: true
                       data:
                         log_event: FAILSAFE_SET
                         zone: >
@@ -67,53 +106,55 @@ script:
                           {{ now() }}
 
                     #=== Update Status with Zone being watered
-                    - service: input_text.set_value
-                      data_template:
+                    - action: input_text.set_value
+                      data:
                         entity_id: input_text.irrigation_current_status
                         value: Watering...
 
                     #=== Update last run details for this zone
-                    - service: input_text.set_value
-                      data_template:
+                    - action: input_text.set_value
+                      data:
                         entity_id: >
                           input_text.irrigation_zone{{ repeat.index }}_previous_duration_in_seconds
                         value: >
                             Watering
 
-                    #=== Is the controller unavailable and the switches are not disabled (used when testing)?
-                    - choose:
-                        #=== Controller is unavailable and switches are not disabled
-                        - conditions:
+                    # Availability follows this zone's mapped output. The two Wi-Fi
+                    # sensors are diagnostics; the original has no controller/zone map.
+                    - if:
+                        - condition: template
+                          value_template: "{{ physical_run }}"
+                      then:
+                        - wait_template: "{{ states(irrigation_zone_entity) in ['on','off'] }}"
+                          timeout:
+                            seconds: "{{ [[states('input_number.irrigation_controller_offline_wait') | int(1), 1] | max, 60] | min }}"
+                          continue_on_timeout: true
+                        - if:
                             - condition: template
-                              value_template: >
-                                {{ states(states('input_text.irrigation_external_sensor_controller_wifi')) == 'unavailable' }}
+                              value_template: "{{ not wait.completed }}"
+                          then:
+                            - action: input_boolean.turn_off
+                              target:
+                                entity_id: input_boolean.irrigation_master_control_switch
+                            - stop: Mapped output unavailable
+                              error: true
 
-                            - condition: state
-                              entity_id: input_boolean.irrigation_disable_switches
-                              state:  'off'
-      
-                          sequence:
-                            #=== Update Status
-                            - service: input_text.set_value
-                              data:
-                                entity_id: input_text.irrigation_current_status
-                                value: Waiting for offline controller...
-        
-                            #=== Give controller a chance to become available
-                            - delay: 
-                                seconds: >
-                                  {{ states('input_number.irrigation_controller_offline_wait') | int }}
-
+                    - action: input_text.set_value
+                      target:
+                        entity_id: input_text.irrigation_active_zone
+                      data:
+                        value: "{{ 'zone' ~ repeat.index }}"
                     #=== Start the timer
-                    - service: timer.start
-                      data_template:
+                    - action: timer.start
+                      data:
                         entity_id: >
                           timer.irrigation_zone{{ repeat.index }}_timer
                         duration: >
-                          {{ states('sensor.irrigation_' ~ cycle ~ '_zone' ~ repeat.index ~ '_actual_duration_in_seconds') | int }}
+                          {{ zone_seconds }}
 
                     #=== Write To Log
-                    - service: script.irrigation_write_to_log
+                    - action: script.irrigation_write_to_log
+                      continue_on_error: true
                       data:
                         log_event: ZONE_WATERING
                         zone: >
@@ -125,6 +166,8 @@ script:
                     - wait_template: >
                         {% set entity_id = 'timer.irrigation_zone' ~ repeat.index ~ '_timer' %}
                         {{ is_state(entity_id, 'active') }}
+                      timeout: "00:00:10"
+                      continue_on_timeout: false
 
                     #=== If switches are not disabled (used when testing)
                     - choose:
@@ -132,13 +175,60 @@ script:
                           condition: state
                           entity_id: input_boolean.irrigation_disable_switches
                           state:  'off'
-
+                          # Additional guard: skip unknown/unconfigured/non-switch entity IDs.
                         sequence:
+                          - condition: template
+                            value_template: "{{ irrigation_zone_entity_valid }}"
+                          - condition: template
+                            value_template: >
+                              {{ physical_run
+                                 and is_state('input_boolean.irrigation_master_control_switch','on')
+                                 and is_state('input_boolean.irrigation_stop_in_progress','off')
+                                 and is_state('input_boolean.irrigation_' ~ cycle ~ '_running','on') }}
+                          - action: input_datetime.set_datetime
+                            target:
+                              entity_id: input_datetime.irrigation_failsafe_deadline
+                            data:
+                              timestamp: "{{ as_timestamp(now()) + zone_seconds + 10 }}"
+                          - action: input_text.set_value
+                            target:
+                              entity_id: input_text.irrigation_active_switch
+                            data:
+                              value: "{{ irrigation_zone_entity }}"
+                          # Helper service calls above yield to other tasks.
+                          # Recheck immediately before dispatching a physical ON.
+                          - if:
+                              - condition: template
+                                value_template: >
+                                  {{ not (physical_run
+                                     and is_state('input_boolean.irrigation_disable_switches','off')
+                                     and is_state('input_boolean.irrigation_output_mode_initialized','on')
+                                     and is_state('input_boolean.irrigation_master_control_switch','on')
+                                     and is_state('input_boolean.irrigation_stop_in_progress','off')
+                                     and is_state('input_boolean.irrigation_' ~ cycle ~ '_running','on')
+                                     and states(irrigation_zone_entity) in ['on','off']) }}
+                            then:
+                              - action: input_boolean.turn_off
+                                target:
+                                  entity_id: input_boolean.irrigation_master_control_switch
+                              - stop: Output permission changed before opening zone
                           #=== Start watering
-                          - service: switch.turn_on
-                            data_template:
-                              entity_id: >
-                                {{ states('input_text.irrigation_zone' ~ repeat.index ~ '_switch_entity_id') }}
+                          - action: switch.turn_on
+                            continue_on_error: true
+                            target:
+                              entity_id: "{{ irrigation_zone_entity }}"
+                          - wait_template: "{{ is_state(irrigation_zone_entity,'on') }}"
+                            timeout: '00:00:05'
+                            continue_on_timeout: true
+                          - if:
+                              - condition: template
+                                value_template: "{{ not wait.completed }}"
+                            then:
+                              - action: input_boolean.turn_off
+                                target:
+                                  entity_id: input_boolean.irrigation_master_control_switch
+                              - stop: Output did not confirm ON
+                                error: true
 
                     #=== Wait for the timer to end
                     #===
@@ -153,15 +243,49 @@ script:
                     - wait_template: >
                         {% set entity_id = 'timer.irrigation_zone' ~ repeat.index ~ '_timer' %}
                         {{ is_state(entity_id, 'idle') }}
+                      timeout:
+                        seconds: >
+                          {{ zone_seconds + 10 }}
+                      continue_on_timeout: true
 
-                    #=== Stop Watering
-                    - service: switch.turn_off
-                      data_template:
-                        entity_id: >
-                          {{ states('input_text.irrigation_zone' ~ repeat.index ~ '_switch_entity_id') }}
+                    #=== Stop Watering; disabled switches means no output calls, including OFF.
+                    - if:
+                        - condition: template
+                          value_template: "{{ physical_run and is_state('input_boolean.irrigation_disable_switches', 'off') and is_state('input_boolean.irrigation_output_mode_initialized', 'on') and irrigation_zone_entity_valid }}"
+                      then:
+                        - action: switch.turn_off
+                          continue_on_error: true
+                          target:
+                            entity_id: "{{ irrigation_zone_entity }}"
+
+                    # Never proceed to another zone until closure is confirmed.
+                    - if:
+                        - condition: template
+                          value_template: "{{ physical_run }}"
+                      then:
+                        - wait_template: "{{ is_state(irrigation_zone_entity,'off') }}"
+                          timeout: '00:00:05'
+                          continue_on_timeout: true
+                        - if:
+                            - condition: template
+                              value_template: "{{ not wait.completed }}"
+                          then:
+                            - action: input_boolean.turn_off
+                              target:
+                                entity_id: input_boolean.irrigation_master_control_switch
+                            - stop: Output did not confirm OFF; watchdog retains snapshot
+                              error: true
+                    - action: input_text.set_value
+                      target:
+                        entity_id:
+                          - input_text.irrigation_active_switch
+                          - input_text.irrigation_active_zone
+                      data:
+                        value: ''
 
                     #=== Write To Log
-                    - service: script.irrigation_write_to_log
+                    - action: script.irrigation_write_to_log
+                      continue_on_error: true
                       data:
                         log_event: ZONE_STOPPING
                         zone: >
@@ -170,12 +294,12 @@ script:
                           {{ now() }}
 
                     #=== Update last run time for this zone
-                    - service: input_text.set_value
-                      data_template:
+                    - action: input_text.set_value
+                      data:
                         entity_id: >
                           input_text.irrigation_zone{{ repeat.index }}_previous_duration_in_seconds
                         value: >
-                          {% set duration = states('sensor.irrigation_' ~ cycle ~ '_zone' ~ repeat.index ~ '_actual_duration_in_seconds') %}
+                          {% set duration = zone_seconds %}
                           {% set today = now().strftime('%a') | lower %}
 
                           {% if cycle == 'cycle3' or
@@ -187,18 +311,18 @@ script:
                           {% endif %}
 
                     #=== Update last run total watering time
-                    - service: input_text.set_value
-                      data_template:
+                    - action: input_text.set_value
+                      data:
                         entity_id: >
                           input_text.irrigation_previous_total_watering_time
                         value: >
-                          {% set duration = states('sensor.irrigation_' ~ cycle ~ '_zone' ~ repeat.index ~ '_actual_duration_in_seconds') | int %}
-                          {% set current_total = states('input_text.irrigation_previous_total_watering_time') | float %}
+                          {% set duration = zone_seconds %}
+                          {% set current_total = states('input_text.irrigation_previous_total_watering_time') | float(0) %}
 
                           {{ (current_total + duration) | string }}
 
                     #=== Update Status
-                    - service: input_text.set_value
+                    - action: input_text.set_value
                       data:
                         entity_id: input_text.irrigation_current_status
                         value: Changing Zone...
@@ -206,11 +330,18 @@ script:
                     #=== Pause between zones (to allow HA state machine to stabalise and the physical valves to reset)
                     - delay:
                         seconds: >
-                            {{ states('input_number.irrigation_pause_between_zones_in_seconds') | int }}
+                            {{ states('input_number.irrigation_pause_between_zones_in_seconds') | int(0) }}
 
+      - action: input_text.set_value
+        target:
+          entity_id:
+            - input_text.irrigation_active_cycle
+            - input_text.irrigation_active_zone
+        data:
+          value: ''
       #=== CYCLE END PROCESSING
-      - service: input_boolean.turn_off
-        data_template:
+      - action: input_boolean.turn_off
+        data:
           entity_id: >
             input_boolean.irrigation_{{ cycle }}_running
 
@@ -221,24 +352,26 @@ script:
               value_template: >
                 {{ is_state('input_boolean.irrigation_' + cycle + '_schedule_today_only', 'on') }}
             sequence:
-              - service: homeassistant.turn_off
+              - action: homeassistant.turn_off
                 data:
                   entity_id:
                     - input_boolean.irrigation_{{ cycle }}_schedule_today_only
                     - input_boolean.irrigation_{{ cycle }}_schedule_enabled
 
       #=== Update Status to Idle
-      - service: input_text.set_value
+      - action: input_text.set_value
         data:
           entity_id: input_text.irrigation_current_status
           value: SYSTEM IDLE
 
       #=== Write To Log
-      - service: script.irrigation_write_to_log
+      - action: script.irrigation_write_to_log
+        continue_on_error: true
         data:
           log_event: CYCLE_ENDED
           cycle: >
             {{ cycle[-1] }}
           event_time: >
             {{ now() }}
+
 

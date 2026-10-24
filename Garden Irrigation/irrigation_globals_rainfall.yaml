@@ -21,7 +21,7 @@ template:
           {{ states(sensor_name) }}
         availability: >
           {% set sensor_name = states('input_text.irrigation_external_sensor_rainfall_today') %}
-          {{ is_number(states(sensor_name)) }}
+          {{ is_number(states(sensor_name)) and state_attr(sensor_name, 'unit_of_measurement') in [none, '', 'mm'] and states(sensor_name) | float(-1) >= 0 }}
         icon: mdi:weather-rainy
         unit_of_measurement: mm
         device_class: precipitation
@@ -33,7 +33,7 @@ template:
           {{ states(sensor_name) }}
         availability: >
           {% set sensor_name = states('input_text.irrigation_external_sensor_rainfall_yesterday') %}
-          {{ is_number(states(sensor_name)) }}
+          {{ is_number(states(sensor_name)) and state_attr(sensor_name, 'unit_of_measurement') in [none, '', 'mm'] and states(sensor_name) | float(-1) >= 0 }}
         icon: mdi:weather-rainy
         unit_of_measurement: mm
         device_class: precipitation
@@ -47,7 +47,7 @@ template:
           {{ states(sensor_name) }}
         availability: >
           {% set sensor_name = states('input_text.irrigation_external_sensor_rainfall_last_twenty_four_hours') %}
-          {{ is_number(states(sensor_name)) }}
+          {{ is_number(states(sensor_name)) and state_attr(sensor_name, 'unit_of_measurement') in [none, '', 'mm'] and states(sensor_name) | float(-1) >= 0 }}
         icon: mdi:weather-rainy
         unit_of_measurement: mm
         device_class: precipitation
@@ -59,7 +59,7 @@ template:
           {{ states(sensor_name) }}
         availability: >
           {% set sensor_name = states('input_text.irrigation_external_sensor_rainfall_between_24_and_48_hours_ago') %}
-          {{ is_number(states(sensor_name)) }}
+          {{ is_number(states(sensor_name)) and state_attr(sensor_name, 'unit_of_measurement') in [none, '', 'mm'] and states(sensor_name) | float(-1) >= 0 }}
         icon: mdi:weather-rainy
         unit_of_measurement: mm
         device_class: precipitation
@@ -71,7 +71,7 @@ template:
           {{ states(sensor_name) }}
         availability: >
           {% set sensor_name = states('input_text.irrigation_external_sensor_rainfall_between_48_and_72_hours_ago') %}
-          {{ is_number(states(sensor_name)) }}
+          {{ is_number(states(sensor_name)) and state_attr(sensor_name, 'unit_of_measurement') in [none, '', 'mm'] and states(sensor_name) | float(-1) >= 0 }}
         icon: mdi:weather-rainy
         unit_of_measurement: mm
         device_class: precipitation
@@ -83,7 +83,7 @@ template:
           {{ states(sensor_name) }}
         availability: >
           {% set sensor_name = states('input_text.irrigation_external_sensor_rainfall_between_72_and_96_hours_ago') %}
-          {{ is_number(states(sensor_name)) }}
+          {{ is_number(states(sensor_name)) and state_attr(sensor_name, 'unit_of_measurement') in [none, '', 'mm'] and states(sensor_name) | float(-1) >= 0 }}
         icon: mdi:weather-rainy
         unit_of_measurement: mm
         device_class: precipitation
@@ -95,7 +95,7 @@ template:
           {{ states(sensor_name) }}
         availability: >
           {% set sensor_name = states('input_text.irrigation_external_sensor_rainfall_between_96_and_120_hours_ago') %}
-          {{ is_number(states(sensor_name)) }}
+          {{ is_number(states(sensor_name)) and state_attr(sensor_name, 'unit_of_measurement') in [none, '', 'mm'] and states(sensor_name) | float(-1) >= 0 }}
         icon: mdi:weather-rainy
         unit_of_measurement: mm
         device_class: precipitation
@@ -109,19 +109,116 @@ template:
           {{ states(sensor_name) }}
         availability: >
           {% set sensor_name = states('input_text.irrigation_external_sensor_forecast_rain') %}
-          {{ is_number(states(sensor_name)) }}
+          {{ is_number(states(sensor_name)) and state_attr(sensor_name, 'unit_of_measurement') in [none, '', 'mm'] and states(sensor_name) | float(-1) >= 0 }}
         icon: mdi:weather-rainy
         unit_of_measurement: mm
         device_class: precipitation
 
 
   - binary_sensor:
+      - name: Irrigation Rainfall Data Ready
+        unique_id: irrigation_rainfall_data_ready
+        state: >-
+          {% set records = states('input_text.irrigation_rainfall_daily_records') | from_json([]) %}
+
+          {% set ns = namespace(valid={}) %}
+
+          {% for day in range(5) %}
+            {% set entity = 'sensor.irrigation_sensor_rainfall_' ~ ('today' if day == 0 else 'yesterday') if day < 2 else
+          'input_number.irrigation_rainfall_' ~ day %}
+            {% if day < 2 %}
+              {% set name = states('input_text.irrigation_external_sensor_rainfall_' ~ ('today' if day == 0 else 'yesterday'))
+          %}
+              {% set source = states[name] if name is match('^[a-z_]+\.[a-z0-9_]+$') else none %}
+              {% set ok = is_number(states(entity)) and 0 <= states(entity) | float(-1) <= 10000 and source is not none
+          and as_local(source.last_reported).date() == now().date() %}
+            {% else %}
+              {% set date = (now() - timedelta(days=day)).date().isoformat() %}
+              {% set matches = records | selectattr('0','eq',date) | list if records is sequence and records is not string
+          and records is not mapping else [] %}
+              {% set row = matches[0] if matches | length > 0 else [] %}
+              {% set value = row[1] if row | length == 2 else none %}
+              {% set ok = is_number(value) and is_number(states(entity)) and states(entity) | float(-1) == value | float(-2)
+          %}
+            {% endif %}
+            {% set ns.valid = dict(ns.valid, **{entity: ok}) %}
+          {% endfor %}
+
+          {% for name in ['last_twenty_four_hours','between_24_and_48_hours_ago','between_48_and_72_hours_ago','between_72_and_96_hours_ago','between_96_and_120_hours_ago']
+          %}
+            {% set entity = 'sensor.irrigation_sensor_rainfall_' ~ name %}
+            {% set ns.valid = dict(ns.valid, **{entity: is_number(states(entity)) and states(entity) | float(-1) >= 0})
+          %}
+          {% endfor %}
+
+          {% set mode = states('input_boolean.irrigation_rainfall_use_rolling_values') %}
+
+          {% set days = states('input_number.irrigation_days_of_rainfall_history_used') %}
+
+          {% set threshold = states('input_number.irrigation_rainfall_threshold') %}
+
+          {% set sources = ['sensor.irrigation_sensor_rainfall_last_twenty_four_hours','sensor.irrigation_sensor_rainfall_between_24_and_48_hours_ago','sensor.irrigation_sensor_rainfall_between_48_and_72_hours_ago','sensor.irrigation_sensor_rainfall_between_72_and_96_hours_ago','sensor.irrigation_sensor_rainfall_between_96_and_120_hours_ago']
+          if mode == 'on' else ['sensor.irrigation_sensor_rainfall_today','sensor.irrigation_sensor_rainfall_yesterday','input_number.irrigation_rainfall_2','input_number.irrigation_rainfall_3','input_number.irrigation_rainfall_4']
+          %}
+
+          {% set check = namespace(ready=mode in ['on','off'] and is_number(days) and 0 <= days | float(-1) <= 4 and is_number(threshold)
+          and threshold | float(0) > 0) %}
+
+          {% for entity in sources[:(days | int(0)) + 1] %}
+            {% if not ns.valid.get(entity,false) %}{% set check.ready=false %}{% endif %}
+          {% endfor %}
+
+          {% for day in range(1,(days | int(0))+1) %}
+            {% set percent = states('input_number.irrigation_rainfall_percentage_' ~ day) %}
+            {% if not is_number(percent) or not 0 <= percent | float(-1) <= 100 %}{% set check.ready=false %}{% endif
+          %}
+          {% endfor %}
+
+          {{ check.ready }}
+        attributes:
+          valid: >-
+            {% set records = states('input_text.irrigation_rainfall_daily_records') | from_json([]) %}
+
+            {% set ns = namespace(valid={}) %}
+
+            {% for day in range(5) %}
+              {% set entity = 'sensor.irrigation_sensor_rainfall_' ~ ('today' if day == 0 else 'yesterday') if day < 2
+            else 'input_number.irrigation_rainfall_' ~ day %}
+              {% if day < 2 %}
+                {% set name = states('input_text.irrigation_external_sensor_rainfall_' ~ ('today' if day == 0 else 'yesterday'))
+            %}
+                {% set source = states[name] if name is match('^[a-z_]+\.[a-z0-9_]+$') else none %}
+                {% set ok = is_number(states(entity)) and 0 <= states(entity) | float(-1) <= 10000 and source is not none
+            and as_local(source.last_reported).date() == now().date() %}
+              {% else %}
+                {% set date = (now() - timedelta(days=day)).date().isoformat() %}
+                {% set matches = records | selectattr('0','eq',date) | list if records is sequence and records is not
+            string and records is not mapping else [] %}
+                {% set row = matches[0] if matches | length > 0 else [] %}
+                {% set value = row[1] if row | length == 2 else none %}
+                {% set ok = is_number(value) and is_number(states(entity)) and states(entity) | float(-1) == value | float(-2)
+            %}
+              {% endif %}
+              {% set ns.valid = dict(ns.valid, **{entity: ok}) %}
+            {% endfor %}
+
+            {% for name in ['last_twenty_four_hours','between_24_and_48_hours_ago','between_48_and_72_hours_ago','between_72_and_96_hours_ago','between_96_and_120_hours_ago']
+            %}
+              {% set entity = 'sensor.irrigation_sensor_rainfall_' ~ name %}
+              {% set ns.valid = dict(ns.valid, **{entity: is_number(states(entity)) and states(entity) | float(-1) >=
+            0}) %}
+            {% endfor %}
+
+            {{ ns.valid }}
+          date: '{{ now().date().isoformat() }}'
       #=== Raining Now
       - name: Irrigation Sensor Raining Now
         unique_id: irrigation_sensor_raining_now
         state: >
           {% set sensor_name = states('input_text.irrigation_external_sensor_raining_now') %}
-          {{ states(sensor_name) | default('off') }}
+          {{ is_state(sensor_name, 'on') }}
+        availability: >
+          {{ states(states('input_text.irrigation_external_sensor_raining_now')) in ['on','off'] }}
         icon: mdi:weather-pouring
 
 
@@ -143,6 +240,10 @@ input_boolean:
 #=== Input Texts
 #================
 input_text:
+  # Completed days indexed by date, independent of missed midnight.
+  irrigation_rainfall_daily_records:
+    name: Irrigation Rainfall Daily Records
+    max: 255
 
   #==============================
   #=== User defined sensor names
@@ -245,21 +346,24 @@ input_number:
   irrigation_rainfall_2:
     name: Two days ago
     min: 0
-    max: 100
+    max: 10000
+    step: 0.1
     icon: mdi:weather-rainy
     unit_of_measurement: 'mm'
 
   irrigation_rainfall_3:
     name: Three days ago
     min: 0
-    max: 100
+    max: 10000
+    step: 0.1
     icon: mdi:weather-rainy
     unit_of_measurement: 'mm'
 
   irrigation_rainfall_4:
     name: Four days ago
     min: 0
-    max: 100
+    max: 10000
+    step: 0.1
     icon: mdi:weather-rainy
     unit_of_measurement: 'mm'
 
@@ -300,5 +404,6 @@ input_number:
     mode: box
     icon: mdi:weather-rainy
     unit_of_measurement: '%'
+
 
 

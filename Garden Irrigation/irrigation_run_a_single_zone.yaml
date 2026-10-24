@@ -18,6 +18,7 @@ script:
         description: Zone to irrigate
         example: zone1
 
+    mode: single
     sequence:
       #=== Only continue if Master Control Switch is on
       - condition: state
@@ -37,57 +38,58 @@ script:
         entity_id: input_boolean.irrigation_cycle3_running
         state: 'off'
 
-      #=== Save current settings
-      - service: scene.create
+      #=== Validate selected zone before changing Cycle 3 durations.
+      - condition: template
+        value_template: >
+          {% set selected = zone | default('') %}
+          {% set zone_number = selected[4:] | int(0) if selected.startswith('zone') else 0 %}
+          {{ selected == 'zone' ~ zone_number and
+             zone_number >= 1 and
+             zone_number <= [states('input_number.irrigation_number_of_zones') | int(0), 16] | min }}
+
+      - condition: state
+        entity_id: input_boolean.irrigation_stop_in_progress
+        state: 'off'
+      - condition: template
+        value_template: "{{ states('input_text.irrigation_single_zone_backup') in ['', 'unknown'] }}"
+
+      # Persist the exact 16 durations and schedule flags before altering them.
+      # Unlike a dynamic scene, this survives an HA restart.
+      - action: input_text.set_value
+        target:
+          entity_id: input_text.irrigation_single_zone_backup
         data:
-          scene_id: irrigation_cycle3
-          snapshot_entities:
-            - input_boolean.irrigation_cycle1_schedule_enabled
-            - input_boolean.irrigation_cycle2_schedule_enabled
-            - input_number.irrigation_cycle3_zone1_duration
-            - input_number.irrigation_cycle3_zone2_duration
-            - input_number.irrigation_cycle3_zone3_duration
-            - input_number.irrigation_cycle3_zone4_duration
-            - input_number.irrigation_cycle3_zone5_duration
-            - input_number.irrigation_cycle3_zone6_duration
-            - input_number.irrigation_cycle3_zone7_duration
-            - input_number.irrigation_cycle3_zone8_duration
-            - input_number.irrigation_cycle3_zone9_duration
-            - input_number.irrigation_cycle3_zone10_duration
-            - input_number.irrigation_cycle3_zone11_duration
-            - input_number.irrigation_cycle3_zone12_duration
-            - input_number.irrigation_cycle3_zone13_duration
-            - input_number.irrigation_cycle3_zone14_duration
-            - input_number.irrigation_cycle3_zone15_duration
-            - input_number.irrigation_cycle3_zone16_duration
+          value: >
+            {% set ns = namespace(d=[]) %}
+            {% for n in range(1,17) %}
+              {% set ns.d = ns.d + [states('input_number.irrigation_cycle3_zone' ~ n ~ '_duration') | float(0)] %}
+            {% endfor %}
+            {{ {'d': ns.d, 's': [is_state('input_boolean.irrigation_cycle1_schedule_enabled','on'),
+                                  is_state('input_boolean.irrigation_cycle2_schedule_enabled','on')]} | to_json }}
 
       #=== Disable schedules for Cycles 1 and 2
-      - service: input_boolean.turn_off
+      - action: input_boolean.turn_off
         entity_id:
           - input_boolean.irrigation_cycle1_schedule_enabled
           - input_boolean.irrigation_cycle2_schedule_enabled
 
       - repeat:
-          until:
-            - condition: template
-              value_template: >
-                {{ states('input_number.irrigation_number_of_zones') | int == repeat.index }}
-
+          count: 16
           sequence:
-            - service: input_number.set_value
-              data_template:
-                entity_id: >
-                  {% set zoneindex = 'zone' ~ repeat.index | string %}
-                  {% if zone != zoneindex %}
-                    {{ 'input_number.irrigation_cycle3_' ~ zoneindex ~ '_duration' }}
-                  {% else %}
-                    none
-                  {% endif %}
-                value: 0
+            - if:
+                - condition: template
+                  value_template: "{{ zone != 'zone' ~ repeat.index }}"
+              then:
+                - action: input_number.set_value
+                  target:
+                    entity_id: "{{ 'input_number.irrigation_cycle3_zone' ~ repeat.index ~ '_duration' }}"
+                  data:
+                    value: 0
 
 
       #=== Write To Log
-      - service: script.irrigation_write_to_log
+      - action: script.irrigation_write_to_log
+        continue_on_error: true
         data:
           log_event: SINGLE_ZONE_STARTING
           zone: >
@@ -95,8 +97,16 @@ script:
           event_time: >
             {{ now() }}
 
+      # Recheck after preparing settings: STOP may have arrived meanwhile.
+      - if:
+          - condition: template
+            value_template: "{{ not is_state('input_boolean.irrigation_master_control_switch','on') or not is_state('input_boolean.irrigation_stop_in_progress','off') }}"
+        then:
+          - action: script.irrigation_restore_single_zone_settings
+          - stop: Start cancelled
+
       #=== Start Cycle 3
-      - service: input_boolean.turn_on
+      - action: input_boolean.turn_on
         entity_id: input_boolean.irrigation_cycle3_running
 
       #=== Wait for Cycle 3 to start
@@ -108,6 +118,38 @@ script:
           {{ is_state('input_boolean.irrigation_cycle3_running', 'off') }}
 
       #=== Restore previous settings
-      - service: scene.turn_on
+      - action: script.irrigation_restore_single_zone_settings
+
+  irrigation_restore_single_zone_settings:
+    alias: Irrigation Restore Single Zone Settings
+    mode: single
+    sequence:
+      - variables:
+          saved: "{{ states('input_text.irrigation_single_zone_backup') | from_json({}) }}"
+      - condition: template
+        value_template: "{{ saved is mapping and saved.get('d',[]) | length == 16 and saved.get('s',[]) | length == 2 }}"
+      - repeat:
+          count: 16
+          sequence:
+            - action: input_number.set_value
+              target:
+                entity_id: "{{ 'input_number.irrigation_cycle3_zone' ~ repeat.index ~ '_duration' }}"
+              data:
+                value: "{{ saved['d'][repeat.index - 1] }}"
+      # Master OFF / restart always leaves schedules disabled.
+      - if:
+          - condition: state
+            entity_id: input_boolean.irrigation_master_control_switch
+            state: 'on'
+        then:
+          - repeat:
+              count: 2
+              sequence:
+                - action: "{{ 'input_boolean.turn_on' if saved['s'][repeat.index - 1] else 'input_boolean.turn_off' }}"
+                  target:
+                    entity_id: "{{ 'input_boolean.irrigation_cycle' ~ repeat.index ~ '_schedule_enabled' }}"
+      - action: input_text.set_value
+        target:
+          entity_id: input_text.irrigation_single_zone_backup
         data:
-          entity_id: scene.irrigation_cycle3
+          value: ''

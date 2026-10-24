@@ -25,11 +25,11 @@ automation:
     id: irrigation_notify_when_controller_goes_offline
     mode: queued
     trigger:
-      - platform: state
+      - trigger: state
         entity_id: sensor.esphome_irrigation_controller_wifi_signal
         to: unavailable
 
-      - platform: state
+      - trigger: state
         entity_id: sensor.esphome_irrigation_controller_wifi_signal
         from: unavailable
 
@@ -39,18 +39,22 @@ automation:
         state: 'on'
 
     action:
-      - service: script.notify
-        data_template:
-          show: true
-          notification_id: >
-            notifications_{{ now() | string }}
-          title: >
-            📶 Irrigation Controller 📶
-          message: >
-            sensor.esphome_irrigation_controller_wifi_signal
+      - if:
+          - condition: template
+            value_template: "{{ has_value('script.notify') }}"
+        then:
+          - action: script.notify
+            data:
+              show: true
+              notification_id: >
+                notifications_{{ now() | string }}
+              title: >
+                📶 Irrigation Controller 📶
+              message: >
+                sensor.esphome_irrigation_controller_wifi_signal
 
 
-            Signal Strength is {{ states('sensor.esphome_irrigation_controller_wifi_signal') | upper }}
+                Signal Strength is {{ states('sensor.esphome_irrigation_controller_wifi_signal') | upper }}
 
 
   #=========================================
@@ -60,11 +64,11 @@ automation:
   - alias: Irrigation Notify About Cycle WiFi Interruption
     id: irrigation_notify_about_cycle_wifi_interruption
     trigger:
-      - platform: state
+      - trigger: state
         entity_id: sensor.esphome_irrigation_controller_wifi_signal
         to: unavailable
 
-      - platform: state
+      - trigger: state
         entity_id: sensor.esphome_irrigation_controller_wifi_signal
         from: unavailable
 
@@ -117,28 +121,36 @@ automation:
           entity_id: input_boolean.irrigation_notify_user1
           state: 'on'
         then:
-          - service: script.notify
-            data_template:
-              tell: >
-                {{ states('input_text.notifications_user1_name') }}
-              type: app_notification
-              title: 🌼 Irrigation 🌼
-              message: >
-                {{ message }}
+          - if:
+              - condition: template
+                value_template: "{{ has_value('script.notify') }}"
+            then:
+              - action: script.notify
+                data:
+                  tell: >
+                    {{ states('input_text.notifications_user1_name') }}
+                  type: app_notification
+                  title: 🌼 Irrigation 🌼
+                  message: >
+                    {{ message }}
 
       - if:
           condition: state
           entity_id: input_boolean.irrigation_notify_user2
           state: 'on'
         then:
-          - service: script.notify
-            data_template:
-              tell: >
-                {{ states('input_text.notifications_user2_name') }}
-              type: app_notification
-              title: 🌼 Irrigation 🌼
-              message: >
-                {{ message }}
+          - if:
+              - condition: template
+                value_template: "{{ has_value('script.notify') }}"
+            then:
+              - action: script.notify
+                data:
+                  tell: >
+                    {{ states('input_text.notifications_user2_name') }}
+                  type: app_notification
+                  title: 🌼 Irrigation 🌼
+                  message: >
+                    {{ message }}
 
 
   #========================================
@@ -147,11 +159,11 @@ automation:
   - alias: Irrigation Notify When Cycle Starts Or Stops
     id: irrigation_notify_when_cycle_starts_or_stops
     trigger:
-      - platform: state
+      - trigger: state
         entity_id: input_boolean.irrigation_cycle1_running
         id: cycle1
 
-      - platform: state
+      - trigger: state
         entity_id: input_boolean.irrigation_cycle2_running
         id: cycle2
 
@@ -171,7 +183,7 @@ automation:
 
         {% if trigger.to_state.state == 'on' %}
           The {{ cycle_name }} cycle has started.
-          The total watering time should be about {{ (states('sensor.irrigation_' ~ trigger.id ~ '_duration_in_seconds') | int / 60) | int }} mins
+          The total watering time should be about {{ (states('sensor.irrigation_' ~ trigger.id ~ '_duration_in_seconds') | int(0) / 60) | int(0) }} mins
 
           Multipliers:
           Rain - {{ states('input_number.irrigation_rainfall_multiplier') }}
@@ -182,13 +194,13 @@ automation:
           Total Watering Today 
 
           --------------------
-          {% set zone_count = states('input_number.irrigation_number_of_zones') | int %}
+          {% set zone_count = states('input_number.irrigation_number_of_zones') | int(0) %}
           {%- for zones in range(zone_count) %}
             {%- set zone_name = states('input_text.irrigation_zone' ~ loop.index ~ '_name') %}
-            {%- set hours = states('sensor.irrigation_zone' ~ loop.index ~ '_total_time_today') | float %}
-            {%- set hrs = (hours // 1) | int %}
-            {%- set min = ((hours % 1) * 60) | int %}
-            {%- set sec = (((hours % 1) * 3600) % 60) | int %}
+            {%- set hours = states('sensor.irrigation_zone' ~ loop.index ~ '_total_time_today') | float(0) %}
+            {%- set hrs = (hours // 1) | int(0) %}
+            {%- set min = ((hours % 1) * 60) | int(0) %}
+            {%- set sec = (((hours % 1) * 3600) % 60) | int(0) %}
             {%- if hours > 1 %}
               {{ '{:<13}'.format(zone_name) }} - {{ '{:1d}h {:01d}m {:01d}s'.format(hrs, min, sec) }}
             {%- else %}
@@ -203,26 +215,35 @@ automation:
           entity_id: input_boolean.irrigation_notify_user1
           state: 'on'
         then:
-          - service: script.notify
-            data_template:
-              tell: >
-                {{ states('input_text.notifications_user1_name') | lower }}
-              type: app_notification
-              title: 🌼 Irrigation 🌼
-              message: >
-                {{ message }}
+          - if:
+              - condition: template
+                value_template: "{{ has_value('script.notify') }}"
+            then:
+              - action: script.notify
+                data:
+                  tell: >
+                    {{ states('input_text.notifications_user1_name') | lower }}
+                  type: app_notification
+                  title: 🌼 Irrigation 🌼
+                  message: >
+                    {{ message }}
 
       - if:
           condition: state
           entity_id: input_boolean.irrigation_notify_user2
           state: 'on'
         then:
-          - service: script.notify
-            data_template:
-              tell: >
-                {{ states('input_text.notifications_user2_name') | lower }}
-              type: app_notification
-              title: 🌼 Irrigation 🌼
-              message: >
-                {{ message }}
+          - if:
+              - condition: template
+                value_template: "{{ has_value('script.notify') }}"
+            then:
+              - action: script.notify
+                data:
+                  tell: >
+                    {{ states('input_text.notifications_user2_name') | lower }}
+                  type: app_notification
+                  title: 🌼 Irrigation 🌼
+                  message: >
+                    {{ message }}
+
 

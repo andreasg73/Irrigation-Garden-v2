@@ -1,10 +1,4 @@
-
-#=============
-#=== Recorder
-#=============
-recorder:
-
-  exclude:
-    entity_globs:
-      - input_text.*
-      - input_number.*
+{}
+# Recorder stays managed by the existing HA installation.
+# Original global input_* exclusions intentionally not imported.
+# Audit 2026-10-21: Recorder scope is intentionally not overridden by this package.

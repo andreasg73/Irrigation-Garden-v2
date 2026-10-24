@@ -16,17 +16,17 @@ automation:
     #==============
     trigger:
       #=== Cycle 1 Start Time
-      - platform: time
+      - trigger: time
         at: input_datetime.irrigation_cycle1_start_time
         id: cycle1
 
       #=== Cycle 2 Start Time
-      - platform: time
+      - trigger: time
         at: input_datetime.irrigation_cycle2_start_time
         id: cycle2
 
       #=== Cycle 3 Manual Run
-      - platform: state
+      - trigger: state
         entity_id: input_boolean.irrigation_cycle3_running
         to: 'on'
         id: cycle3
@@ -40,13 +40,14 @@ automation:
         entity_id: input_boolean.irrigation_master_control_switch
         state: 'on'
 
-      #=== Only continue if nothing is running
-      - condition: state
-        entity_id: 
-          - input_boolean.irrigation_cycle1_running
-          - input_boolean.irrigation_cycle2_running
-          - input_boolean.irrigation_cycle3_running
-        state: 'off'
+      #=== Cycle 3 is triggered BY setting its running flag ON.
+      #=== Do not reject that very trigger; still reject overlapping cycles.
+      - condition: template
+        value_template: >
+          {{ is_state('input_boolean.irrigation_cycle1_running', 'off') and
+             is_state('input_boolean.irrigation_cycle2_running', 'off') and
+             (trigger.id == 'cycle3' or
+              is_state('input_boolean.irrigation_cycle3_running', 'off')) }}
 
       #=== Check this cycle is enabled. NOTE: don't check this for cycle 3 
       - condition: template
@@ -85,7 +86,7 @@ automation:
                 trigger.id == 'cycle3' %}
             True
           {% elif states('input_boolean.irrigation_ignore_schedule_if_raining') == 'on' and
-                  states(states('input_text.irrigation_external_sensor_raining_now')) in ['off', 'unknown'] %}
+                  states(states('input_text.irrigation_external_sensor_raining_now')) == 'off' %}
             True
           {% else %}
             False
@@ -109,7 +110,7 @@ automation:
                 {{ states('input_text.irrigation_' ~ trigger.id ~ '_wait_for_entity_state') }}
 
           #=== Write To Log
-          - service: script.irrigation_write_to_log
+          - action: script.irrigation_write_to_log
             data:
               log_event: CYCLE_WAITING_FOR_ENTITY
               cycle: >
@@ -118,21 +119,20 @@ automation:
                 {{ now() }}
       
           - wait_template: >
-              {% set wait_for_entity_name_timeout_continue = states('input_text.irrigation_' ~ trigger.id ~ '_wait_for_entity_name_timeout_continue') %}
               {% if wait_for_entity_state.startswith('not') %}
                 {% set chosen_states = wait_for_entity_state.replace('not in', '')
                                                             .replace('not', '')
                                                             .replace(' ','').split(',') %}
-                {{ states(wait_for_entity_name) not in chosen_states }}
+                {{ has_value(wait_for_entity_name) and states(wait_for_entity_name) not in chosen_states }}
               {% else %}
                 {% set chosen_states = wait_for_entity_state.replace(' ','').split(',') %}
-                {{ states(wait_for_entity_name) in chosen_states }}
+                {{ has_value(wait_for_entity_name) and states(wait_for_entity_name) in chosen_states }}
               {% endif %}
             timeout: >
               {{ states('input_number.irrigation_' ~ trigger.id ~ '_wait_for_entity_name_timeout_duration') }}
 
           #=== Write To Log
-          - service: script.irrigation_write_to_log
+          - action: script.irrigation_write_to_log
             data:
               log_event: CYCLE_WAITING_FOR_ENTITY_COMPLETE
               cycle: >
@@ -147,10 +147,10 @@ automation:
               - condition: template
                 value_template: >
                   {% set timeout_continue = states('input_boolean.irrigation_' ~ trigger.id ~ '_wait_for_entity_name_timeout_continue') %}
-                  {{ not wait.completed and timeout_continue == 'off' }}
+                  {{ not wait.completed and timeout_continue != 'on' }}
             then:
               #=== Write To Log
-              - service: script.irrigation_write_to_log
+              - action: script.irrigation_write_to_log
                 data:
                   log_event: CYCLE_ABORTED_WAITING_FOR_ENTITY
                   cycle: >
@@ -159,25 +159,29 @@ automation:
                     {{ now() }}
 
               #=== Notify
-              - service: script.notify
-                data_template:
-                  show: true
-                  tell: >
-                    {{ states('input_text.notifications_user1_name') | lower }}
-                  type: app_notification
-                  title: Irrigation WARNING
-                  message: >
-                    {% set cycle_name =  states('input_text.irrigation_' ~ trigger.id ~ '_name') %}
-                    Cycle {{ trigger.id[-1] }} ({{ cycle_name }}) Cycle ABORTED - Wait for entity state timed out.
+              - if:
+                  - condition: template
+                    value_template: "{{ has_value('script.notify') }}"
+                then:
+                  - action: script.notify
+                    data:
+                      show: true
+                      tell: >
+                        {{ states('input_text.notifications_user1_name') | lower }}
+                      type: app_notification
+                      title: Irrigation WARNING
+                      message: >
+                        {% set cycle_name =  states('input_text.irrigation_' ~ trigger.id ~ '_name') %}
+                        Cycle {{ trigger.id[-1] }} ({{ cycle_name }}) Cycle ABORTED - Wait for entity state timed out.
 
-                    Entity: {{ wait_for_entity_name }}
+                        Entity: {{ wait_for_entity_name }}
                     
-                    Waiting for state: {{ wait_for_entity_state }}
+                        Waiting for state: {{ wait_for_entity_state }}
                     
-                    Current state: {{ states(wait_for_entity_name) }}
+                        Current state: {{ states(wait_for_entity_name) }}
 
 
-                    (See Irrigation Log)
+                        (See Irrigation Log)
 
               #=== STOP processing (End the cycle)
               - stop: Wait for entity state failed
@@ -191,7 +195,7 @@ automation:
                      states(wait_for_entity_name) not in wait_for_entity_state }}
             then:
               #=== Write To Log
-              - service: script.irrigation_write_to_log
+              - action: script.irrigation_write_to_log
                 data:
                   log_event: CYCLE_CONTINUES_UNEXPECTED_STATE
                   cycle: >
@@ -200,35 +204,54 @@ automation:
                     {{ now() }}
 
               #=== Notify
-              - service: script.notify
-                data_template:
-                  show: true
-                  tell: >
-                    {{ states('input_text.notifications_user1_name') | lower }}
-                  type: app_notification
-                  title: Irrigation WARNING
-                  message: >
-                    {% set cycle_name =  states('input_text.irrigation_' ~ trigger.id ~ '_name') %}
-                    Cycle {{ trigger.id[-1] }} ({{ cycle_name }}) Cycle continuing with unexpected state.
+              - if:
+                  - condition: template
+                    value_template: "{{ has_value('script.notify') }}"
+                then:
+                  - action: script.notify
+                    data:
+                      show: true
+                      tell: >
+                        {{ states('input_text.notifications_user1_name') | lower }}
+                      type: app_notification
+                      title: Irrigation WARNING
+                      message: >
+                        {% set cycle_name =  states('input_text.irrigation_' ~ trigger.id ~ '_name') %}
+                        Cycle {{ trigger.id[-1] }} ({{ cycle_name }}) Cycle continuing with unexpected state.
 
-                    Entity: {{ wait_for_entity_name }}
+                        Entity: {{ wait_for_entity_name }}
 
-                    Waiting For state: {{ wait_for_entity_state }}
+                        Waiting For state: {{ wait_for_entity_state }}
                     
-                    Current state: {{ states(wait_for_entity_name) }}
+                        Current state: {{ states(wait_for_entity_name) }}
 
 
-                    (See Irrigation Log)
+                        (See Irrigation Log)
 
+
+      # A schedule may have waited while another run began or STOP was requested.
+      - condition: template
+        value_template: >
+          {{ is_state('input_boolean.irrigation_master_control_switch','on')
+             and is_state('input_boolean.irrigation_stop_in_progress','off')
+             and (trigger.id == 'cycle3' or
+                  (is_state('input_boolean.irrigation_' ~ trigger.id ~ '_schedule_enabled','on') and
+                   (is_state('input_boolean.irrigation_ignore_schedule_if_raining','off') or
+                    (is_state('input_boolean.irrigation_ignore_schedule_if_raining','on') and
+                     is_state(states('input_text.irrigation_external_sensor_raining_now'),'off'))) and
+                   not is_state('script.irrigation_run_a_cycle','on') and
+                   is_state('input_boolean.irrigation_cycle1_running','off') and
+                   is_state('input_boolean.irrigation_cycle2_running','off') and
+                   is_state('input_boolean.irrigation_cycle3_running','off'))) }}
 
       #== Set the cycle to be running
-      - service: homeassistant.turn_on
+      - action: homeassistant.turn_on
         data:
           entity_id: >
             input_boolean.irrigation_{{ trigger.id }}_running
 
       #=== Write To Log
-      - service: script.irrigation_write_to_log
+      - action: script.irrigation_write_to_log
         data:
           log_event: CYCLE_STARTING
           cycle: >
@@ -288,4 +311,5 @@ automation:
       #             cycle: 3
       #             event_time: >
       #               {{ now() }}
+
 

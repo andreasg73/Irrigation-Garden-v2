@@ -3,6 +3,12 @@
 #=== Input Booleans
 #===================
 input_boolean:
+  irrigation_output_mode_initialized:
+    name: Irrigation Output Mode Initialized
+
+  irrigation_stop_in_progress:
+    name: Irrigation Stop In Progress
+    initial: false
 
   irrigation_testing_mode:
     name: Irrigation Testing Mode
@@ -13,10 +19,24 @@ input_boolean:
     icon: mdi:electric-switch
 
 
+    # Restore on subsequent boots so an interrupted physical run can be closed.
+    # The startup initializer explicitly selects disabled mode on the first boot.
 #================
 #=== Input Texts
 #================
 input_text:
+  irrigation_active_switch:
+    name: Irrigation Active Output Snapshot
+    max: 255
+  irrigation_active_cycle:
+    name: Irrigation Active Cycle Snapshot
+    max: 10
+  irrigation_active_zone:
+    name: Irrigation Active Zone Snapshot
+    max: 10
+  irrigation_single_zone_backup:
+    name: Irrigation Manual Zone Duration Backup
+    max: 255
 
   irrigation_current_status:
     name: Irrigation Status
@@ -168,7 +188,7 @@ template:
           {% else %}
             {% set day_today = as_timestamp(now()) | timestamp_custom('%a') | lower %}
             {% set day_tomorrow = as_timestamp(now() + timedelta(days=1)) | timestamp_custom('%a') | lower %}
-            {% set number_of_zones = states('input_number.irrigation_number_of_zones') | int %}
+            {% set number_of_zones = [[states('input_number.irrigation_number_of_zones') | int(0),0] | max,16] | min %}
 
             {% set ns = namespace(cycle1_runs_today = false,
                                   cycle1_runs_tomorrow = false,
@@ -187,25 +207,25 @@ template:
               {% set cycle2_zone_runs_today = states('input_boolean.irrigation_cycle2_zone' ~ (zone + 1) ~ '_' ~ day_today) %}
               {% set cycle2_zone_runs_tomorrow = states('input_boolean.irrigation_cycle2_zone' ~ (zone + 1) ~ '_' ~ day_tomorrow) %}
 
-              {% if cycle1_zone_duration != '0.0'  and
+              {% if cycle1_zone_duration | float(0) > 0  and
                     (cycle1_zone_runs_every_day == 'on' or 
                     cycle1_zone_runs_today == 'on') %}
                 {% set ns.cycle1_runs_today = true %}
               {% endif %}
 
-              {% if cycle2_zone_duration != '0.0'  and
+              {% if cycle2_zone_duration | float(0) > 0  and
                     (cycle2_zone_runs_every_day == 'on' or 
                     cycle2_zone_runs_today == 'on') %}
                 {% set ns.cycle2_runs_today = true %}
               {% endif %}
 
-              {% if cycle1_zone_duration != '0.0'  and
+              {% if cycle1_zone_duration | float(0) > 0  and
                     (cycle1_zone_runs_every_day == 'on' or 
                     cycle1_zone_runs_tomorrow == 'on') %}
                 {% set ns.cycle1_runs_tomorrow = true %}
               {% endif %}
 
-              {% if cycle2_zone_duration != '0.0'  and
+              {% if cycle2_zone_duration | float(0) > 0  and
                     (cycle2_zone_runs_every_day == 'on' or 
                     cycle2_zone_runs_tomorrow == 'on') %}
                 {% set ns.cycle2_runs_tomorrow = true %}
@@ -213,7 +233,7 @@ template:
 
             {% endfor %}
 
-            {% set time_now = states('sensor.time') %}
+            {% set time_now = now().strftime('%H:%M') %}
             {% set cycle1_schedule_enabled = states('input_boolean.irrigation_cycle1_schedule_enabled') %}
             {% set cycle2_schedule_enabled = states('input_boolean.irrigation_cycle2_schedule_enabled') %}
             {% set cycle1_start_time = states('input_datetime.irrigation_cycle1_start_time')[0:5] %}
@@ -232,22 +252,36 @@ template:
               {{ cycle2_name ~ ' cycle' }}
             {% elif cycle3_running == 'on' %}
               {{ cycle3_name ~ ' cycle' }}
-            {% elif cycle1_schedule_enabled == 'on' and
-                    ns.cycle1_runs_today and
-                    cycle1_start_time > time_now %}
-              {{ cycle1_name + ' cycle at ' + cycle1_start_time }}
-            {% elif cycle2_schedule_enabled == 'on' and
-                    ns.cycle2_runs_today and
-                    cycle2_start_time > time_now %}
-              {{ cycle2_name + ' cycle at ' + cycle2_start_time }}
-            {% elif cycle1_schedule_enabled == 'on' and
-                    ns.cycle1_runs_tomorrow %}
-              {{ 'Tomorrow at ' + cycle1_start_time }}
-            {% elif cycle2_schedule_enabled == 'on' and
-                    ns.cycle2_runs_tomorrow %}
-              {{ 'Tomorrow at ' + cycle2_start_time }}
             {% else %}
-              NO SCHEDULE TODAY OR TOMORROW
+              {% set upcoming = namespace(today=[], tomorrow=[]) %}
+              {% for n, enabled, runs_today, runs_tomorrow, start, name in
+                 [(1, cycle1_schedule_enabled, ns.cycle1_runs_today, ns.cycle1_runs_tomorrow, cycle1_start_time, cycle1_name),
+                  (2, cycle2_schedule_enabled, ns.cycle2_runs_today, ns.cycle2_runs_tomorrow, cycle2_start_time, cycle2_name)] %}
+                {% if enabled == 'on' and start is match('^[0-2][0-9]:[0-5][0-9]$') %}
+                  {% if runs_today and start > time_now %}
+                    {% set upcoming.today = upcoming.today + [[start,name]] %}
+                  {% endif %}
+                  {% if runs_tomorrow and not is_state('input_boolean.irrigation_cycle' ~ n ~ '_schedule_today_only','on') %}
+                    {% set upcoming.tomorrow = upcoming.tomorrow + [[start,name]] %}
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+              {% if upcoming.today %}
+                {% set next = (upcoming.today | sort)[0] %}
+                {{ next[1] ~ ' cycle at ' ~ next[0] }}
+              {% elif upcoming.tomorrow %}
+                {{ 'Tomorrow at ' ~ (upcoming.tomorrow | sort)[0][0] }}
+              {% else %}
+                NO SCHEDULE TODAY OR TOMORROW
+              {% endif %}
             {% endif %}
           {% endif %}
 
+
+
+# Deadline is persisted; restart never resumes watering automatically.
+input_datetime:
+  irrigation_failsafe_deadline:
+    name: Irrigation Failsafe Deadline
+    has_date: true
+    has_time: true

@@ -44,7 +44,7 @@ automation:
     id: irrigation_ui_show_weather_adjust_settings
     mode: queued
     trigger:
-      - platform: state
+      - trigger: state
         entity_id: 
           - input_boolean.irrigation_cycle1_adjust_for_rainfall
           - input_boolean.irrigation_cycle2_adjust_for_rainfall
@@ -53,7 +53,7 @@ automation:
         to: 'on'
 
     action:
-      - service: input_select.select_option
+      - action: input_select.select_option
         data:
           entity_id: input_select.irrigation_settings
           option: >
@@ -72,7 +72,7 @@ automation:
     id: irrigation_ui_duration_synchronisation
     mode: queued
     trigger: 
-      - platform: state
+      - trigger: state
         entity_id:
           - input_number.irrigation_cycle1_zone1_duration
           - input_number.irrigation_cycle1_zone1_duration_box
@@ -173,13 +173,21 @@ automation:
           - input_number.irrigation_cycle3_zone16_duration
           - input_number.irrigation_cycle3_zone16_duration_box          
 
+    # Ignore temporary loss of a source and stale queued events.
+    condition:
+      - condition: template
+        value_template: >
+          {{ trigger.to_state is not none
+             and is_number(trigger.to_state.state)
+             and is_number(states(trigger.entity_id))
+             and states(trigger.entity_id) == trigger.to_state.state }}
     action:
       #=== Keep input_number slider and box synchronised
-      - service: input_number.set_value
-        data_template:
+      - action: input_number.set_value
+        data:
           entity_id: >
             {% set cycle = 'cycle' ~ trigger.entity_id.split('cycle')[1][0] %}
-            {% set zone = 'zone' ~ trigger.entity_id.split('zone')[1][0] %}
+            {% set zone = 'zone' ~ trigger.entity_id.split('zone')[1].split('_')[0] %}
             {% if trigger.entity_id.endswith('box') %}
               input_number.irrigation_{{ cycle }}_{{ zone }}_duration
             {% else %}
@@ -187,10 +195,10 @@ automation:
             {% endif %}            
           value: >
             {% set cycle = 'cycle' ~ trigger.entity_id.split('cycle')[1][0] %}
-            {% set zone = 'zone' ~ trigger.entity_id.split('zone')[1][0] %}
+            {% set zone = 'zone' ~ trigger.entity_id.split('zone')[1].split('_')[0] %}
             {% if trigger.entity_id.endswith('box') %}
-              {% set value = states('input_number.irrigation_' ~ cycle ~ '_' ~ zone ~ '_duration_box') | float %}
+              {% set value = states('input_number.irrigation_' ~ cycle ~ '_' ~ zone ~ '_duration_box') | float(0) %}
             {% else %}
-              {% set value = states('input_number.irrigation_' ~ cycle ~ '_' ~ zone ~ '_duration') | float %}
+              {% set value = states('input_number.irrigation_' ~ cycle ~ '_' ~ zone ~ '_duration') | float(0) %}
             {% endif %}            
             {{ value }}
