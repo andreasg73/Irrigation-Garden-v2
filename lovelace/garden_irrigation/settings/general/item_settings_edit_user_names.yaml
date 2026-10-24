@@ -2,7 +2,7 @@
 type: conditional
 conditions:
   - condition: state
-    entity: script.notify
+    entity: script.irrigation_notify
     state_not: [unknown, unavailable]
 card:
   #==============================
@@ -17,7 +17,7 @@ card:
       color_type: blank-card
 
     - type: custom:button-card
-      name: "•  Edit user names "
+      name: "•  Notifications and optional features "
       icon: mdi:square-edit-outline
       size: 60%
       styles:
@@ -43,7 +43,7 @@ card:
         browser_mod:
           service: browser_mod.popup
           data:
-            title: User names
+            title: Notifications and optional features
             content:
               type: vertical-stack
               cards:
@@ -59,10 +59,24 @@ card:
                       }
                 - type: entities
                   entities:
-                    - entity: input_text.notifications_user1_name
+                    - entity: input_text.irrigation_notification_user1_name
                       name: User 1
-                    - entity: input_text.notifications_user2_name
+                    - entity: input_text.irrigation_notification_user2_name
                       name: User 2
+                    - entity: input_text.irrigation_notification_script
+                      name: Notification script
+                    - entity: input_text.irrigation_log_notify_entity
+                      name: File notification entity
+                    - entity: input_text.irrigation_announcement_script
+                      name: Announcement script
+                    - entity: input_text.irrigation_announcement_player
+                      name: Announcement media player
+                    - entity: input_text.irrigation_startup_ready_entity
+                      name: Optional startup-ready entity
+                    - entity: input_text.irrigation_ha_stopping_entity
+                      name: Optional shutdown entity
+                    - entity: input_text.irrigation_external_sensor_weather_outlook
+                      name: Weather outlook entity
                   card_mod:
                     style: >
                       ha-card {
@@ -79,7 +93,7 @@ card:
                       }
                 - type: markdown
                   content: >
-                    input_text.notifications_user[1, 2]_name
+                    input_text.irrigation_notification_user[1, 2]_name
                   card_mod:
                     style: >
                       ha-card {
@@ -92,11 +106,10 @@ card:
                     and can be used in your own notification processing as approriate.
 
 
-                    When a notification is issued, 'script.notify' is called.
+                    Set an existing notification script above to enable optional delivery.
 
 
-                    This script is <b>NOT</b> inlcuded in this package,
-                    you will need to write your own.
+                    Unconfigured optional features are skipped. No messages are sent until a destination is configured.
                   card_mod:
                     style: >
                       ha-card {
