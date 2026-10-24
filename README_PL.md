@@ -4,6 +4,10 @@ Modernizacja **oryginalnego [Kloggy / HA-Irrigation-Version2](https://github.com
 
 Nazwa projektu na GitHubie: **Irrigation Garden v2**. Po instalacji panel nazywa się **Irrigation Garden** po angielsku albo **Podlewanie Ogrodu** po polsku — bez dopisku v2.
 
+## Instalacja przez HACS
+
+Repozytorium można dodać w HACS jako **niestandardową integrację**. Instalator dostarcza ten sam silnik i panel EN/PL; aktywacja wymaga jednego wpisu YAML. [Instrukcja HACS i migracji istniejącej instalacji](docs/HACS_INSTALLATION.md#polski). Projekt nie jest w domyślnym katalogu HACS.
+
 ## Co zawiera ta wersja
 
 - 27 oryginalnych, zmodernizowanych pakietów silnika, dwa pakiety logowania i 41 źródeł panelu.
