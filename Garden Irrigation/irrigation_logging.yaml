@@ -18,7 +18,7 @@ script:
 
       # File notifications are configured separately through HA's File integration.
       - condition: template
-        value_template: "{{ 'notify.log_irrigation' in (states.notify | map(attribute='entity_id') | list) and not is_state('notify.log_irrigation','unavailable') }}"
+        value_template: "{{ states('input_text.irrigation_log_notify_entity') in (states.notify | map(attribute='entity_id') | list) and has_value(states('input_text.irrigation_log_notify_entity')) }}"
 
       - variables:
           #=== Event Time With Millisceonds
@@ -32,8 +32,7 @@ script:
                 value_template: >
                   {{ log_event == 'CONTROLLER_UNAVAILABLE' }}
             sequence:
-              - action: notify.send_message
-                entity_id: notify.log_irrigation
+              - action: script.irrigation_log_message
                 data:
                   message: >
                     {{ event_time }} - WARNING - Controller UNAVAILABLE
@@ -44,8 +43,7 @@ script:
                 value_template: >
                   {{ log_event == 'CONTROLLER_AVAILABLE' }}
             sequence:
-              - action: notify.send_message
-                entity_id: notify.log_irrigation
+              - action: script.irrigation_log_message
                 data:
                   message: >
                     {% set unavailable_formatted = controller_offline_for | default(timedelta(seconds=unavailable_seconds | default(0) | float(0))) %}
@@ -57,8 +55,7 @@ script:
                 value_template: >
                   {{ log_event == 'SINGLE_ZONE_STARTING' }}
             sequence:
-              - action: notify.send_message
-                entity_id: notify.log_irrigation
+              - action: script.irrigation_log_message
                 data:
                   message: >
                     {% set zone_name = states('input_text.irrigation_zone' ~ zone ~ '_name') %}
@@ -70,8 +67,7 @@ script:
                 value_template: >
                   {{ log_event == 'FAILSAFE_SET' }}
             sequence:
-              - action: notify.send_message
-                entity_id: notify.log_irrigation
+              - action: script.irrigation_log_message
                 data:
                   message: >
                     {% set failsafe_time = states('input_number.irrigation_failsafe_time_in_seconds') %}
@@ -83,8 +79,7 @@ script:
                 value_template: >
                   {{ log_event == 'CYCLE_WAITING_FOR_ENTITY' }}
             sequence:
-              - action: notify.send_message
-                entity_id: notify.log_irrigation
+              - action: script.irrigation_log_message
                 data:
                   message: >
                     {% set cycle_name = states('input_text.irrigation_cycle' ~ cycle ~ '_name') %}
@@ -101,8 +96,7 @@ script:
                 value_template: >
                   {{ log_event == 'CYCLE_WAITING_FOR_ENTITY_COMPLETE' }}
             sequence:
-              - action: notify.send_message
-                entity_id: notify.log_irrigation
+              - action: script.irrigation_log_message
                 data:
                   message: >
                     {% set cycle_name =  states('input_text.irrigation_cycle' ~ cycle ~ '_name') %}
@@ -117,8 +111,7 @@ script:
                 value_template: >
                   {{ log_event == 'CYCLE_ABORTED_WAITING_FOR_ENTITY' }}
             sequence:
-              - action: notify.send_message
-                entity_id: notify.log_irrigation
+              - action: script.irrigation_log_message
                 data:
                   message: >
                     {% set cycle_name =  states('input_text.irrigation_cycle' ~ cycle ~ '_name') %}
@@ -132,8 +125,7 @@ script:
                 value_template: >
                   {{ log_event == 'CYCLE_CONTINUES_UNEXPECTED_STATE' }}
             sequence:
-              - action: notify.send_message
-                entity_id: notify.log_irrigation
+              - action: script.irrigation_log_message
                 data:
                   message: >
                     {% set cycle_name =  states('input_text.irrigation_cycle' ~ cycle ~ '_name') %}
@@ -147,8 +139,7 @@ script:
                 value_template: >
                   {{ log_event == 'CYCLE_STARTING' }}
             sequence:
-              - action: notify.send_message
-                entity_id: notify.log_irrigation
+              - action: script.irrigation_log_message
                 data:
                   message: >
                     {% set cycle_name =  states('input_text.irrigation_cycle' ~ cycle ~ '_name') %}
@@ -160,8 +151,7 @@ script:
                 value_template: >
                   {{ log_event == 'CYCLE_ENDED' }}
             sequence:
-              - action: notify.send_message
-                entity_id: notify.log_irrigation
+              - action: script.irrigation_log_message
                 data:
                   message: >
                     {% set cycle_name =  states('input_text.irrigation_cycle' ~ cycle ~ '_name') %}
@@ -175,8 +165,7 @@ script:
                 value_template: >
                   {{ log_event == 'ZONE_STARTING' }}
             sequence:
-              - action: notify.send_message
-                entity_id: notify.log_irrigation
+              - action: script.irrigation_log_message
                 data:
                   message: >
                     {% set zone_number = zone | string | replace('zone','') %}
@@ -193,8 +182,7 @@ script:
                 value_template: >
                   {{ log_event == 'ZONE_WATERING' }}
             sequence:
-              - action: notify.send_message
-                entity_id: notify.log_irrigation
+              - action: script.irrigation_log_message
                 data:
                   message: >
                     {% set zone_number = zone | string | replace('zone','') %}
@@ -207,8 +195,7 @@ script:
                 value_template: >
                   {{ log_event == 'ZONE_STOPPING' }}
             sequence:
-              - action: notify.send_message
-                entity_id: notify.log_irrigation
+              - action: script.irrigation_log_message
                 data:
                   message: >
                     {% set zone_number = zone | string | replace('zone','') %}
@@ -216,10 +203,10 @@ script:
                     {{ event_time }} - Zone {{ zone }} ({{ zone_name }}) stopping
 
         default:
-          - action: notify.send_message
-            entity_id: notify.log_irrigation
+          - action: script.irrigation_log_message
             data:
               message: >
                 {{ event_time }} - {{ log_event | default('Unknown Log Event') }} (Initiated_by: {{ initiated_by | default('Not Given') }})
+
 
 

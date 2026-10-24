@@ -32,9 +32,7 @@ automation:
       - action: input_text.set_value
         data:
           entity_id: input_text.irrigation_external_sensor_rainfall_today
-          value: sensor.rain_gauge
-
-
+          value: Not set
   #==========================================
   #=== Set Default Rainfall Yesterday Sensor
   #==========================================
@@ -64,9 +62,7 @@ automation:
       - action: input_text.set_value
         data:
           entity_id: input_text.irrigation_external_sensor_rainfall_yesterday
-          value: sensor.rain_gauge_yesterday
-
-
+          value: Not set
   #=======================================================
   #=== Set Default Rainfall Last Twenty Four Hours Sensor
   #=======================================================
@@ -96,8 +92,7 @@ automation:
       - action: input_text.set_value
         data:
           entity_id: input_text.irrigation_external_sensor_rainfall_last_twenty_four_hours
-          value: sensor.rain_gauge_rainfall_last_twenty_four_hours
-
+          value: Not set
   #=====================================================
   #=== Set Default Rainfall Between 24 and 48 Hours Ago
   #=====================================================
@@ -127,8 +122,7 @@ automation:
       - action: input_text.set_value
         data:
           entity_id: input_text.irrigation_external_sensor_rainfall_between_24_and_48_hours_ago
-          value: sensor.rain_gauge_rainfall_between_24_and_48_hours_ago
-
+          value: Not set
   #=====================================================
   #=== Set Default Rainfall Between 48 and 72 Hours Ago
   #=====================================================
@@ -158,8 +152,7 @@ automation:
       - action: input_text.set_value
         data:
           entity_id: input_text.irrigation_external_sensor_rainfall_between_48_and_72_hours_ago
-          value: sensor.rain_gauge_rainfall_between_48_and_72_hours_ago
-
+          value: Not set
   #=====================================================
   #=== Set Default Rainfall Between 72 and 96 Hours Ago
   #=====================================================
@@ -189,8 +182,7 @@ automation:
       - action: input_text.set_value
         data:
           entity_id: input_text.irrigation_external_sensor_rainfall_between_72_and_96_hours_ago
-          value: sensor.rain_gauge_rainfall_between_72_and_96_hours_ago
-
+          value: Not set
   #======================================================
   #=== Set Default Rainfall Between 96 and 120 Hours Ago
   #======================================================
@@ -220,9 +212,7 @@ automation:
       - action: input_text.set_value
         data:
           entity_id: input_text.irrigation_external_sensor_rainfall_between_96_and_120_hours_ago
-          value: sensor.rain_gauge_rainfall_between_96_and_120_hours_ago
-
-
+          value: Not set
   #===================================
   #=== Set Default Raining Now Sensor
   #===================================
@@ -252,9 +242,7 @@ automation:
       - action: input_text.set_value
         data:
           entity_id: input_text.irrigation_external_sensor_raining_now
-          value: binary_sensor.raining_now
-
-
+          value: Not set
   #=====================================
   #=== Set Default Forecast Rain Sensor
   #=====================================
@@ -284,9 +272,7 @@ automation:
       - action: input_text.set_value
         data:
           entity_id: input_text.irrigation_external_sensor_forecast_rain
-          value: sensor.openweathermap_forecast_precipitation
-
-
+          value: Not set
   #===================================================
   #=== Initialise the Rainfall Sensors when HA starts
   #===================================================
@@ -550,3 +536,4 @@ script:
         entity_id: automation.irrigation_rainfall_calculate_multiplier
       data:
         skip_condition: false
+

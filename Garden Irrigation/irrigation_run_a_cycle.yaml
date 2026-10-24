@@ -313,8 +313,7 @@ script:
                     #=== Update last run total watering time
                     - action: input_text.set_value
                       data:
-                        entity_id: >
-                          input_text.irrigation_previous_total_watering_time
+                        entity_id: input_text.irrigation_previous_total_watering_time
                         value: >
                           {% set duration = zone_seconds %}
                           {% set current_total = states('input_text.irrigation_previous_total_watering_time') | float(0) %}
@@ -373,5 +372,6 @@ script:
             {{ cycle[-1] }}
           event_time: >
             {{ now() }}
+
 
 

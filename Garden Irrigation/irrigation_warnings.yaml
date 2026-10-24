@@ -41,11 +41,11 @@ automation:
     condition:
       #=== Don't run if HA is shutting down as that causes false positives
       - condition: template
-        value_template: "{{ not is_state('input_boolean.system_ha_stopping','on') }}"
+        value_template: "{{ not is_state(states('input_text.irrigation_ha_stopping_entity'),'on') }}"
 
       #=== Only run if HA start delay is complete
       - condition: template
-        value_template: "{{ states('binary_sensor.system_ha_start_delay_complete') in ['on','unknown'] }}"
+        value_template: "{{ states(states('input_text.irrigation_startup_ready_entity')) in ['on','unknown'] }}"
 
     action:
       # #=== Update the time controller became Unavailable
@@ -68,9 +68,9 @@ automation:
       #=== Persistent Notification
       - if:
           - condition: template
-            value_template: "{{ has_value('script.notify') and is_state('input_boolean.irrigation_ha_notify_of_controller_wifi_events','on') }}"
+            value_template: "{{ has_value('script.irrigation_notify') and is_state('input_boolean.irrigation_ha_notify_of_controller_wifi_events','on') }}"
         then:
-          - action: script.notify
+          - action: script.irrigation_notify
             data:
               show: true
               title: ⚠️ Irrigation Warning ⚠️
@@ -91,12 +91,12 @@ automation:
         then:
           - if:
               - condition: template
-                value_template: "{{ has_value('script.notify') }}"
+                value_template: "{{ has_value('script.irrigation_notify') }}"
             then:
-              - action: script.notify
+              - action: script.irrigation_notify
                 data:
                   tell: >
-                    {{ states('input_text.notifications_user1_name') }}
+                    {{ states('input_text.irrigation_notification_user1_name') }}
                   type: app_notification
                   title: ⚠️ Irrigation Warning ⚠️
                   message: >
@@ -115,12 +115,12 @@ automation:
         then:
           - if:
               - condition: template
-                value_template: "{{ has_value('script.notify') }}"
+                value_template: "{{ has_value('script.irrigation_notify') }}"
             then:
-              - action: script.notify
+              - action: script.irrigation_notify
                 data:
                   tell: >
-                    {{ states('input_text.notifications_user2_name') }}
+                    {{ states('input_text.irrigation_notification_user2_name') }}
                   type: app_notification
                   title: ⚠️ Irrigation Warning ⚠️
                   message: >
@@ -155,7 +155,7 @@ automation:
     condition:
       #=== Only run if HA start delay is complete
       - condition: template
-        value_template: "{{ states('binary_sensor.system_ha_start_delay_complete') in ['on','unknown'] }}"
+        value_template: "{{ states(states('input_text.irrigation_startup_ready_entity')) in ['on','unknown'] }}"
 
     action:
       #=== Write To Log
@@ -174,9 +174,9 @@ automation:
       #=== Persistent Notification
       - if:
           - condition: template
-            value_template: "{{ has_value('script.notify') and is_state('input_boolean.irrigation_ha_notify_of_controller_wifi_events','on') }}"
+            value_template: "{{ has_value('script.irrigation_notify') and is_state('input_boolean.irrigation_ha_notify_of_controller_wifi_events','on') }}"
         then:
-          - action: script.notify
+          - action: script.irrigation_notify
             data:
               show: true
               title: ⚠️ Irrigation Warning ⚠️
@@ -192,5 +192,6 @@ automation:
               #   Irrigation Controller is now AVAILABLE (after {{ unavailable_formatted }})
 
               #   At: {{ now().isoformat() }}
+
 
 

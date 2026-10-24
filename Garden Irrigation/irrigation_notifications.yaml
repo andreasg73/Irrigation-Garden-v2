@@ -26,12 +26,12 @@ automation:
     mode: queued
     trigger:
       - trigger: state
-        entity_id: sensor.esphome_irrigation_controller_wifi_signal
-        to: unavailable
+        entity_id: binary_sensor.irrigation_controllers_available
+        to: 'off'
 
       - trigger: state
-        entity_id: sensor.esphome_irrigation_controller_wifi_signal
-        from: unavailable
+        entity_id: binary_sensor.irrigation_controllers_available
+        from: 'off'
 
     condition:
       - condition: state
@@ -41,9 +41,9 @@ automation:
     action:
       - if:
           - condition: template
-            value_template: "{{ has_value('script.notify') }}"
+            value_template: "{{ has_value('script.irrigation_notify') }}"
         then:
-          - action: script.notify
+          - action: script.irrigation_notify
             data:
               show: true
               notification_id: >
@@ -51,10 +51,10 @@ automation:
               title: >
                 📶 Irrigation Controller 📶
               message: >
-                sensor.esphome_irrigation_controller_wifi_signal
+                Configured irrigation controllers
 
 
-                Signal Strength is {{ states('sensor.esphome_irrigation_controller_wifi_signal') | upper }}
+                Availability is {{ states('binary_sensor.irrigation_controllers_available') | upper }}
 
 
   #=========================================
@@ -65,12 +65,12 @@ automation:
     id: irrigation_notify_about_cycle_wifi_interruption
     trigger:
       - trigger: state
-        entity_id: sensor.esphome_irrigation_controller_wifi_signal
-        to: unavailable
+        entity_id: binary_sensor.irrigation_controllers_available
+        to: 'off'
 
       - trigger: state
-        entity_id: sensor.esphome_irrigation_controller_wifi_signal
-        from: unavailable
+        entity_id: binary_sensor.irrigation_controllers_available
+        from: 'off'
 
     condition:
       - condition: state
@@ -104,7 +104,7 @@ automation:
 
     variables:
       message: >
-        {% if trigger.to_state.state == 'unavailable' %}
+        {% if trigger.to_state.state == 'off' %}
           Irrigation Warning:
           
           Controller is OFFLINE ({{now().strftime('%H:%M:%S')}}).
@@ -123,12 +123,12 @@ automation:
         then:
           - if:
               - condition: template
-                value_template: "{{ has_value('script.notify') }}"
+                value_template: "{{ has_value('script.irrigation_notify') }}"
             then:
-              - action: script.notify
+              - action: script.irrigation_notify
                 data:
                   tell: >
-                    {{ states('input_text.notifications_user1_name') }}
+                    {{ states('input_text.irrigation_notification_user1_name') }}
                   type: app_notification
                   title: 🌼 Irrigation 🌼
                   message: >
@@ -141,12 +141,12 @@ automation:
         then:
           - if:
               - condition: template
-                value_template: "{{ has_value('script.notify') }}"
+                value_template: "{{ has_value('script.irrigation_notify') }}"
             then:
-              - action: script.notify
+              - action: script.irrigation_notify
                 data:
                   tell: >
-                    {{ states('input_text.notifications_user2_name') }}
+                    {{ states('input_text.irrigation_notification_user2_name') }}
                   type: app_notification
                   title: 🌼 Irrigation 🌼
                   message: >
@@ -217,12 +217,12 @@ automation:
         then:
           - if:
               - condition: template
-                value_template: "{{ has_value('script.notify') }}"
+                value_template: "{{ has_value('script.irrigation_notify') }}"
             then:
-              - action: script.notify
+              - action: script.irrigation_notify
                 data:
                   tell: >
-                    {{ states('input_text.notifications_user1_name') | lower }}
+                    {{ states('input_text.irrigation_notification_user1_name') | lower }}
                   type: app_notification
                   title: 🌼 Irrigation 🌼
                   message: >
@@ -235,15 +235,167 @@ automation:
         then:
           - if:
               - condition: template
-                value_template: "{{ has_value('script.notify') }}"
+                value_template: "{{ has_value('script.irrigation_notify') }}"
             then:
-              - action: script.notify
+              - action: script.irrigation_notify
                 data:
                   tell: >
-                    {{ states('input_text.notifications_user2_name') | lower }}
+                    {{ states('input_text.irrigation_notification_user2_name') | lower }}
                   type: app_notification
                   title: 🌼 Irrigation 🌼
                   message: >
                     {{ message }}
 
+
+
+# Optional external dependencies. Blank/unknown means not configured.
+input_text:
+  irrigation_notification_script:
+    name: Notification script
+    min: 0
+    max: 255
+  irrigation_notification_user1_name:
+    name: Notification recipient 1
+    min: 0
+    max: 255
+  irrigation_notification_user2_name:
+    name: Notification recipient 2
+    min: 0
+    max: 255
+  irrigation_log_notify_entity:
+    name: File notification entity
+    min: 0
+    max: 255
+  irrigation_announcement_script:
+    name: Announcement script
+    min: 0
+    max: 255
+  irrigation_announcement_player:
+    name: Announcement media player
+    min: 0
+    max: 255
+  irrigation_startup_ready_entity:
+    name: Optional startup-ready entity
+    min: 0
+    max: 255
+  irrigation_ha_stopping_entity:
+    name: Optional shutdown entity
+    min: 0
+    max: 255
+  irrigation_external_sensor_weather_outlook:
+    name: Weather outlook entity
+    min: 0
+    max: 255
+
+script:
+  irrigation_notify:
+    alias: Irrigation Optional Notification
+    mode: queued
+    max: 20
+    fields:
+      show:
+        description: Forwarded optional show
+      tell:
+        description: Forwarded optional tell
+      type:
+        description: Forwarded optional type
+      title:
+        description: Forwarded optional title
+      message:
+        description: Forwarded optional message
+      notification_id:
+        description: Forwarded optional notification_id
+      mobile_app_tag:
+        description: Forwarded optional mobile_app_tag
+    sequence:
+    - variables:
+        destination: '{{ states(''input_text.irrigation_notification_script'') | trim }}'
+        payload: '{% set p = namespace(data={}) %}
+
+          {% if show is defined %}{% set p.data = dict(p.data, show=show) %}{% endif %}
+
+          {% if tell is defined %}{% set p.data = dict(p.data, tell=tell) %}{% endif %}
+
+          {% if type is defined %}{% set p.data = dict(p.data, type=type) %}{% endif %}
+
+          {% if title is defined %}{% set p.data = dict(p.data, title=title) %}{% endif %}
+
+          {% if message is defined %}{% set p.data = dict(p.data, message=message) %}{% endif %}
+
+          {% if notification_id is defined %}{% set p.data = dict(p.data, notification_id=notification_id) %}{%
+          endif %}
+
+          {% if mobile_app_tag is defined %}{% set p.data = dict(p.data, mobile_app_tag=mobile_app_tag) %}{% endif
+          %}
+
+          {{ p.data }}'
+    - condition: template
+      value_template: '{{ destination.startswith(''script.'') and destination != this.entity_id and has_value(destination)
+        }}'
+    - action: script.turn_on
+      target:
+        entity_id: '{{ destination }}'
+      data:
+        variables: '{{ payload }}'
+      continue_on_error: true
+  irrigation_announce:
+    alias: Irrigation Optional Announcement
+    mode: queued
+    max: 20
+    fields:
+      announcement:
+        description: Forwarded optional announcement
+      initiated_by:
+        description: Forwarded optional initiated_by
+      media_players:
+        description: Forwarded optional media_players
+    sequence:
+    - variables:
+        destination: '{{ states(''input_text.irrigation_announcement_script'') | trim }}'
+        payload: '{% set p = namespace(data={}) %}
+
+          {% if announcement is defined %}{% set p.data = dict(p.data, announcement=announcement) %}{% endif %}
+
+          {% if initiated_by is defined %}{% set p.data = dict(p.data, initiated_by=initiated_by) %}{% endif %}
+
+          {% if media_players is defined %}{% set p.data = dict(p.data, media_players=media_players) %}{% endif
+          %}
+
+          {{ p.data }}'
+    - condition: template
+      value_template: '{{ destination.startswith(''script.'') and destination != this.entity_id and has_value(destination)
+        and media_players is defined and media_players | count > 0 and (media_players | map(attribute=''entity_id'')
+        | select(''has_value'') | list | count == media_players | count) }}'
+    - action: script.turn_on
+      target:
+        entity_id: '{{ destination }}'
+      data:
+        variables: '{{ payload }}'
+      continue_on_error: true
+  irrigation_log_message:
+    alias: Irrigation Optional Log Message
+    mode: queued
+    max: 50
+    fields:
+      message:
+        required: true
+    sequence:
+    - variables:
+        destination: '{{ states(''input_text.irrigation_log_notify_entity'') | trim }}'
+    - condition: template
+      value_template: '{{ destination.startswith(''notify.'') and has_value(destination) }}'
+    - action: notify.send_message
+      target:
+        entity_id: '{{ destination }}'
+      data:
+        message: '{{ message }}'
+      continue_on_error: true
+
+template:
+- sensor:
+  - name: Irrigation Weather Outlook
+    unique_id: irrigation_weather_outlook
+    icon: mdi:weather-cloudy
+    state: '{% set source = states(''input_text.irrigation_external_sensor_weather_outlook'') | trim %}{{ states(source)
+      if has_value(source) else ''Not configured'' }}'
 

@@ -180,14 +180,14 @@ automation:
       #=== Announce
       - if:
           - condition: template
-            value_template: "{{ has_value('script.announcement') }}"
+            value_template: "{{ has_value('script.irrigation_announce') }}"
         then:
-          - action: script.announcement
+          - action: script.irrigation_announce
             data:
               initiated_by: >
                 {{ this.entity_id }}
               media_players:
-                - entity_id: media_player.sonos_kitchen
+                - entity_id: "{{ states('input_text.irrigation_announcement_player') }}"
               announcement:
                 - tts: Irrigation cancelled
 
@@ -222,14 +222,14 @@ automation:
     action:
       - if:
           - condition: template
-            value_template: "{{ has_value('script.announcement') }}"
+            value_template: "{{ has_value('script.irrigation_announce') }}"
         then:
-          - action: script.announcement
+          - action: script.irrigation_announce
             data:
               initiated_by: >
                 {{ this.entity_id }}
               media_players:
-                - entity_id: media_player.sonos_kitchen
+                - entity_id: "{{ states('input_text.irrigation_announcement_player') }}"
                   quiet_time_volume: USE_TARGET_VOLUME
               announcement:
                 - tts: >
@@ -343,14 +343,14 @@ automation:
               sequence:
                 - if:
                     - condition: template
-                      value_template: "{{ has_value('script.announcement') }}"
+                      value_template: "{{ has_value('script.irrigation_announce') }}"
                   then:
-                    - action: script.announcement
+                    - action: script.irrigation_announce
                       data:
                         initiated_by: >
                           {{ this.entity_id }}
                         media_players:
-                          - entity_id: media_player.sonos_kitchen
+                          - entity_id: "{{ states('input_text.irrigation_announcement_player') }}"
                         announcement:
                           - tts: The irrigation appears to be already running
 
@@ -639,14 +639,14 @@ script:
             sequence:
               - if:
                   - condition: template
-                    value_template: "{{ has_value('script.announcement') }}"
+                    value_template: "{{ has_value('script.irrigation_announce') }}"
                 then:
-                  - action: script.announcement
+                  - action: script.irrigation_announce
                     data:
                       initiated_by: >
                         {{ this.entity_id }}
                       media_players:
-                        - entity_id: media_player.sonos_kitchen
+                        - entity_id: "{{ states('input_text.irrigation_announcement_player') }}"
                           target_volume: 0.35
                           quiet_time_volume: 0.25
                       announcement:
@@ -654,14 +654,14 @@ script:
 
       - if:
           - condition: template
-            value_template: "{{ has_value('script.announcement') }}"
+            value_template: "{{ has_value('script.irrigation_announce') }}"
         then:
-          - action: script.announcement
+          - action: script.irrigation_announce
             data:
               initiated_by: >
                 {{ this.entity_id }}
               media_players:
-                - entity_id: media_player.sonos_kitchen
+                - entity_id: "{{ states('input_text.irrigation_announcement_player') }}"
                   target_volume: 0.35
                   quiet_time_volume: 0.25
               announcement:
@@ -731,4 +731,5 @@ script:
           entity_id: input_number.irrigation_cycle3_zone4_duration
           value: >
             {{ states('input_number.irrigation_remote_control_zone4_duration') }}
+
 

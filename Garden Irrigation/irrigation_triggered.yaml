@@ -161,13 +161,13 @@ automation:
               #=== Notify
               - if:
                   - condition: template
-                    value_template: "{{ has_value('script.notify') }}"
+                    value_template: "{{ has_value('script.irrigation_notify') }}"
                 then:
-                  - action: script.notify
+                  - action: script.irrigation_notify
                     data:
                       show: true
                       tell: >
-                        {{ states('input_text.notifications_user1_name') | lower }}
+                        {{ states('input_text.irrigation_notification_user1_name') | lower }}
                       type: app_notification
                       title: Irrigation WARNING
                       message: >
@@ -206,13 +206,13 @@ automation:
               #=== Notify
               - if:
                   - condition: template
-                    value_template: "{{ has_value('script.notify') }}"
+                    value_template: "{{ has_value('script.irrigation_notify') }}"
                 then:
-                  - action: script.notify
+                  - action: script.irrigation_notify
                     data:
                       show: true
                       tell: >
-                        {{ states('input_text.notifications_user1_name') | lower }}
+                        {{ states('input_text.irrigation_notification_user1_name') | lower }}
                       type: app_notification
                       title: Irrigation WARNING
                       message: >
@@ -311,5 +311,6 @@ automation:
       #             cycle: 3
       #             event_time: >
       #               {{ now() }}
+
 
 

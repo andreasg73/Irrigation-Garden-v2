@@ -32,9 +32,7 @@ automation:
       - action: input_text.set_value
         data:
           entity_id: input_text.irrigation_external_sensor_forecast_high_temp
-          value:  sensor.openweathermap_forecast_temperature
-
-
+          value: Not set
   #===========================================
   #=== Set Default Current Temperature Sensor
   #===========================================
@@ -64,9 +62,7 @@ automation:
       - action: input_text.set_value
         data:
           entity_id: input_text.irrigation_external_sensor_current_temp
-          value: sensor.openweathermap_temperature
-
-
+          value: Not set
   #======================================================
   #=== Initialise the Temperature Sensors when HA starts
   #======================================================
@@ -369,3 +365,4 @@ script:
             data:
               value: '{{ values[0] }}'
     - action: script.irrigation_temperature_calculate_multiplier
+
