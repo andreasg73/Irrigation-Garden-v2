@@ -31,5 +31,10 @@ jobs:
         with:
           python-version: '3.14'
       - uses: astral-sh/setup-uv@v6
-      - run: uv pip install --system homeassistant==2026.10.2 pytest pytest-asyncio
-      - run: python -m pytest tests/hacs -q
+      - run: uv venv .venv
+      - run: uv pip install --python .venv/bin/python homeassistant==2026.10.2 pytest pytest-asyncio
+      # HA installs optional integration requirements through uv subprocesses;
+      # activate the environment so those subprocesses target the same Python.
+      - run: |
+          source .venv/bin/activate
+          python -m pytest tests/hacs -q
