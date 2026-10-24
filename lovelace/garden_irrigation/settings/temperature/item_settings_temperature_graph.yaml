@@ -1,47 +1,43 @@
-
-#===============================================
-#=== FORECAST HIGH VS. ACTUAL TEMPERATURE GRAPH
-#===============================================
-type: custom:mini-graph-card
+# The author's optional sensor.night_or_day adds graph shading when present.
+# Keep the original graph usable without that unrelated global helper.
+type: custom:config-template-card
 entities:
-  #=== FORECAST
-  - entity: sensor.irrigation_sensor_forecast_high_temp
-    color: IndianRed
-    show_legend: false
-  #=== ACTUAL
-  - entity: sensor.irrigation_sensor_current_temp
-    color: SteelBlue
-    show_legend: false
-  #=== DAY/NIGHT
-  - entity: sensor.night_or_day
-    name: Night
-    y_axis: secondary
-    color: black
-    show_line: false
-    show_points: false
-    show_legend: false
-# lower_bound: 0
-line_width: 2
-hours_to_show: 48
-points_per_hour: 4
-aggregate_func: min
-show:
-  fill: fade
-  name: false
-  state: false
-  labels: true
-  points: false
-  labels_secondary: false
-  icon: false
-tap_action:
-  action: none
-card_mod:
-  style: >
-    ha-card {
-      background: none;
-      border-radius: 0px;
-    }
-    .flex {
-      padding: 0em
-    }
+  - sensor.irrigation_sensor_forecast_high_temp
+  - sensor.irrigation_sensor_current_temp
+  - sensor.night_or_day
+variables:
+  GRAPH_ENTITIES: >-
+    [{"entity": "sensor.irrigation_sensor_forecast_high_temp", "color": "IndianRed", "show_legend": false}, {"entity": "sensor.irrigation_sensor_current_temp", "color": "SteelBlue", "show_legend": false}, {"entity": "sensor.night_or_day", "name": "Night", "y_axis": "secondary", "color": "black", "show_line": false, "show_points": false, "show_legend": false}].filter(item => item.entity !== 'sensor.night_or_day' || states[item.entity] !== undefined)
+card:
+
+  #===============================================
+  #=== FORECAST HIGH VS. ACTUAL TEMPERATURE GRAPH
+  #===============================================
+  type: custom:mini-graph-card
+  entities: "${ GRAPH_ENTITIES }"
+  # lower_bound: 0
+  line_width: 2
+  hours_to_show: 48
+  points_per_hour: 4
+  aggregate_func: min
+  show:
+    fill: fade
+    name: false
+    state: false
+    labels: true
+    points: false
+    labels_secondary: false
+    icon: false
+  tap_action:
+    action: none
+  card_mod:
+    style: >
+      ha-card {
+        background: none;
+        border-radius: 0px;
+      }
+      .flex {
+        padding: 0em
+      }
+
 

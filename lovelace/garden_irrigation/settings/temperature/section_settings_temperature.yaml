@@ -70,6 +70,15 @@ entities:
             name: "Current Multiplier ( ℹ️ )"
             label: Calculated based on temperature and baseline
 
+      # Keep missing calendar days visible without inventing zero temperatures.
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.irrigation_temperature_data_ready
+            state: 'off'
+        card:
+          type: markdown
+          content: Temperature data is incomplete for the selected days. The last valid correction is retained.
+
       #=== HIGHEST FORECAST HIGH TEMPERATURE TODAY
       - !include
           - ../item_settings_line.yaml
@@ -150,4 +159,5 @@ entities:
             name: Four days ago
             round: 1
             tap_action: none
+
 
