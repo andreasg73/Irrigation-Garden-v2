@@ -1,0 +1,63 @@
+"""Native weather data paths and nightly action sequences; virtual sources only."""
+import asyncio,json,tempfile,logging,hashlib
+from pathlib import Path
+from runtime_fixture import create_hass,ROOT
+async def main():
+ h,calls=await create_hass(Path(tempfile.mkdtemp(prefix='kloggy-weather-')));out=[]
+ def st(e):return h.states.get(e).state if h.states.get(e) else None
+ async def svc(d,s,**data):await h.services.async_call(d,s,data,blocking=True)
+ async def number(n,v):await svc('input_number','set_value',entity_id='input_number.irrigation_'+n,value=v)
+ async def text(n,v):await svc('input_text','set_value',entity_id='input_text.irrigation_'+n,value=v)
+ async def boolean(n,v):await svc('input_boolean','turn_on' if v else 'turn_off',entity_id='input_boolean.irrigation_'+n)
+ async def settle():await h.async_block_till_done();await asyncio.sleep(.05)
+ def check(id,truth,detail=None):out.append({'id':id,'passed':bool(truth),'detail':detail})
+ try:
+  await settle();await boolean('master_control_switch',True);await settle()
+  await text('external_sensor_current_temp','sensor.fixture_temperature');await text('external_sensor_forecast_high_temp','sensor.fixture_forecast')
+  h.states.async_set('sensor.fixture_temperature','20',{'unit_of_measurement':'°C'});h.states.async_set('sensor.fixture_forecast','25',{'unit_of_measurement':'°C'});await settle()
+  await number('temperature_baseline',25);await number('days_of_temp_history_used',0)
+  await svc('input_select','select_option',entity_id='input_select.irrigation_high_temp_options',option='Use Actual');await settle()
+  check('temperature.actual_initial',st('input_number.irrigation_temp_multiplier')=='0.8',st('input_number.irrigation_temp_multiplier'))
+  h.states.async_set('sensor.fixture_temperature','30',{'unit_of_measurement':'°C'});await settle()
+  check('temperature.rise_updates_multiplier',st('input_number.irrigation_temp_multiplier')=='1.2',st('input_number.irrigation_temp_multiplier'))
+  before_history=[st(f'input_number.irrigation_high_temp_{n}') for n in range(1,5)]
+  h.states.async_set('sensor.fixture_temperature','10',{'unit_of_measurement':'°C'});h.states.async_set('sensor.fixture_forecast','15',{'unit_of_measurement':'°C'});await settle()
+  await svc('automation','trigger',entity_id='automation.irrigation_temperature_nightly_update',skip_condition=False)
+  check('temperature.same_day_no_history_shift',[st(f'input_number.irrigation_high_temp_{n}') for n in range(1,5)]==before_history)
+  check('temperature.same_day_maxima_retained',st('input_number.irrigation_temperature_highest_actual_temp_today')=='30.0' and st('input_number.irrigation_temperature_highest_forecast_high_temp_today')=='25.0')
+  h.states.async_set('sensor.fixture_temperature','unavailable');h.states.async_set('sensor.fixture_forecast','unknown');await settle()
+  await svc('automation','trigger',entity_id='automation.irrigation_temperature_nightly_update',skip_condition=False);await settle()
+  check('temperature.same_day_outage_keeps_captured_max',all(st('input_boolean.irrigation_temperature_'+kind+'_reset_pending')=='off' for kind in ['actual','forecast']))
+  h.states.async_set('sensor.fixture_temperature','-5',{'unit_of_measurement':'°C'});h.states.async_set('sensor.fixture_forecast','-2',{'unit_of_measurement':'°C'});await settle()
+  check('temperature.same_day_lower_does_not_reset',st('input_number.irrigation_temperature_highest_actual_temp_today')=='30.0' and st('input_number.irrigation_temperature_highest_forecast_high_temp_today')=='25.0')
+  check('temperature.pending_cleared',all(st('input_boolean.irrigation_temperature_'+kind+'_reset_pending')=='off' for kind in ['actual','forecast']))
+  check('temperature.same_day_multiplier_retained',float(st('input_number.irrigation_temp_multiplier'))==1.2)
+  h.states.async_set('sensor.fixture_temperature','55',{'unit_of_measurement':'°F'});await settle()
+  check('temperature.wrong_units_unavailable',st('sensor.irrigation_sensor_current_temp')=='unavailable')
+  check('temperature.wrong_units_no_max_update',st('input_number.irrigation_temperature_highest_actual_temp_today')=='30.0')
+  h.states.async_set('sensor.fixture_temperature','12');await settle()
+  check('temperature.legacy_unitless_supported',float(st('sensor.irrigation_sensor_current_temp'))==12)
+  await number('temp_multiplier',.77)
+  h.states.async_set('input_number.irrigation_temperature_highest_actual_temp_today','unavailable');await settle()
+  await svc('script','irrigation_temperature_calculate_multiplier');await settle()
+  check('temperature.missing_max_retains_multiplier',float(st('input_number.irrigation_temp_multiplier'))==.77)
+  await text('external_sensor_raining_now','binary_sensor.fixture_raining')
+  for value,expected in [('on','on'),('off','off'),('unknown','unavailable'),('unavailable','unavailable')]:
+   h.states.async_set('binary_sensor.fixture_raining',value);await settle()
+   check('rain.raining_proxy_'+value,st('binary_sensor.irrigation_sensor_raining_now')==expected)
+  await text('external_sensor_rainfall_yesterday','sensor.fixture_yesterday');h.states.async_set('sensor.fixture_yesterday','3',{'unit_of_measurement':'mm'});await settle()
+  for n,v in [(2,7),(3,8),(4,9)]:await number(f'rainfall_{n}',v)
+  await svc('automation','trigger',entity_id='automation.irrigation_rainfall_nightly_update',skip_condition=False)
+  check('rain.same_day_no_history_shift',[float(st(f'input_number.irrigation_rainfall_{n}')) for n in [2,3,4]]==[7,8,9])
+  h.states.async_set('sensor.fixture_yesterday','unavailable');await settle()
+  await svc('automation','trigger',entity_id='automation.irrigation_rainfall_nightly_update',skip_condition=False)
+  check('rain.missing_no_shift',[float(st(f'input_number.irrigation_rainfall_{n}')) for n in [2,3,4]]==[7,8,9])
+  h.states.async_set('sensor.fixture_yesterday','2',{'unit_of_measurement':'in'});await settle()
+  check('rain.wrong_units_unavailable',st('sensor.irrigation_sensor_rainfall_yesterday')=='unavailable')
+  await svc('automation','trigger',entity_id='automation.irrigation_rainfall_nightly_update',skip_condition=False)
+  check('rain.wrong_units_no_shift',[float(st(f'input_number.irrigation_rainfall_{n}')) for n in [2,3,4]]==[7,8,9])
+  check('weather.no_switch_calls',calls==[])
+ finally:
+  await h.async_stop();(ROOT/'tests/weather_pipeline_results.json').write_text(json.dumps({'layer':'HA native components; same-day idempotence/source units. Dated rollover is covered independently in test_temperature_calendar.py; dated rainfall tested separately in test_rainfall_calendar.py','results':out,'source_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (ROOT/'Garden Irrigation').glob('irrigation*temperature.yaml')}},indent=2));print(json.dumps(out))
+ assert all(r['passed'] for r in out)
+logging.basicConfig(level=logging.ERROR);asyncio.run(main())
