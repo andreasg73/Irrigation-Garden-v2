@@ -4,6 +4,8 @@ The panel now builds from all 248 EN/PL catalog entries. Complete scheduler mess
 
 This update includes the previously interrupted removal of references to optional entities from the original author's installation. The installed panel has 575 static entity references; all resolve in the checked installation. Unconfigured external data remain unconfigured. No physical output was operated during this continuation.
 
+The replacement helpers and adapters, their exact entity IDs, destination-script contracts and weather-description behavior are documented in [Optional features / Funkcje opcjonalne](docs/OPTIONAL_FEATURES.md). Upgrades must include the updated packages as well as the dashboard; changing only the panel does not install the added helpers or scripts.
+
 Validation: 11 Python contracts, 1330 JavaScript syntax checks, 13 JavaScript behavior cases, generated YAML/JSON equality and live native-loader equality. Active HA 2026.10.2 configuration check is valid and Spook reports no active repairs. These live checks describe one installation; they do not certify another installation or physical commissioning. No new full engine runtime campaign was executed for the earlier optional-adapter edits.
 
 The frozen English baseline in tests/fixtures/stage41-english-before.json records the source state recovered at the start of this continuation. The previous stage37 baseline is retained; its equality check fails against the new optional-feature configuration and selectors, so it is not claimed as a regression pass for that changed source structure.

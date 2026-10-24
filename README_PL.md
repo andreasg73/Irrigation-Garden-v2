@@ -12,6 +12,7 @@ Nazwa projektu na GitHubie: **Irrigation Garden v2**. Po instalacji panel nazywa
 - Poprawki historii, opadów i temperatury oraz brakujących danych.
 - Oryginalny panel budowany bez `lovelace_gen`.
 - Wymienne słowniki INI EN/PL po 248 wiadomości, gotowe panele oraz narzędzia i testy.
+- Własne, konfigurowalne adaptery powiadomień i logowania oraz lokalny pośrednik opisu pogody, zastępujące odwołania do prywatnych encji autora. [Co dodano i jak to skonfigurować](docs/OPTIONAL_FEATURES.md#polski).
 
 Jest to **wersja rozwojowa**. Zgodność sprawdzono z HA 2026.10.2; nie deklarujemy sprawdzenia każdej przyszłej wersji ani niezawodności każdego sterownika fizycznego. Przed migracją wykonaj kopię i sprawdź działanie na wirtualnych zaworach. Wymagania i pełna instalacja: [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
