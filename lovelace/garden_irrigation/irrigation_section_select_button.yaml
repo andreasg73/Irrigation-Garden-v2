@@ -31,7 +31,14 @@ styles:
         [[[
           return states['input_text.irrigation_ui_font_family'].state
         ]]]
-    - font-size: 16px
+    - font-size: 14px
+    - min-height: 2.8em
+  name:
+    - white-space: normal
+    - text-overflow: unset
+    - overflow-wrap: anywhere
+    - text-align: left
+    - text-align: center
 state:
   - value: {{ option }}
     styles:
