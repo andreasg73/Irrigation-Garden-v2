@@ -1,6 +1,7 @@
 """Validate the actual include chain with HA's complete check_config command."""
 import json
 from pathlib import Path
+import re
 import subprocess
 import sys
 
@@ -23,7 +24,12 @@ def test_native_package_configuration(tmp_path, language):
     )
     result = subprocess.run([sys.executable, "-m", "homeassistant", "--script", "check_config", "-c", str(tmp_path), "--json"], capture_output=True, text=True, timeout=240)
     assert result.returncode == 0, result.stderr + result.stdout
-    report = json.loads(result.stdout)
+    # A fresh HA environment can log dependency installation on stdout before
+    # emitting its JSON result. Keep those logs in the error checks below.
+    start = re.search(r'(?m)^\{\s*\n\s*"config_dir"\s*:', result.stdout)
+    assert start is not None, result.stdout + result.stderr
+    report = json.loads(result.stdout[start.start():])
     assert report["total_errors"] == report["total_warnings"] == 0, report
     assert "lovelace" in report["components"] and "script" in report["components"]
-    assert not any(word in result.stderr for word in ("ERROR:", "Invalid config", "Traceback")), result.stderr
+    output = result.stdout + result.stderr
+    assert not any(word in output for word in ("ERROR:", "Invalid config", "Traceback")), output
