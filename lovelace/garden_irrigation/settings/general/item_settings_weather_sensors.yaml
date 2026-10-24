@@ -39,6 +39,8 @@ tap_action:
         cards:
           - type: markdown
             content: >
+              Temperature sensors must use °C and rainfall totals mm. Sensors with other units are not used.
+
               For the 'Weather Outlook' on the Cycles page you need to create the following sensor:
             card_mod:
               style: >
@@ -197,4 +199,5 @@ tap_action:
           .mdc-dialog .mdc-dialog__container .mdc-dialog__surface {
               font-family: {% raw %}{{ states('input_text.irrigation_ui_font_family') }}{% endraw %};
             }
+
 
