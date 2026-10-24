@@ -36,9 +36,9 @@ entities:
         show_icon: false
         styles:
           grid:
-            - grid-template-areas: '"l n clash_icon warning"'
-            - grid-template-columns: min-content min-content 10% 1fr  
-            - grid-template-rows: 1fr
+            - grid-template-areas: '"l clash_icon warning" "n n n"'
+            - grid-template-columns: minmax(0, 1fr) 24px auto  
+            - grid-template-rows: min-content min-content
           card:
             - font-family: >
                 [[[
@@ -47,6 +47,10 @@ entities:
             - background: none
             - padding: 0.3em 0em 0em 0.5em
           name:
+            - white-space: normal
+            - text-overflow: unset
+            - text-align: left
+            - overflow-wrap: anywhere
             - justify-self: start
             - align-self: start
             - padding: 0em 0.5em
@@ -115,7 +119,7 @@ entities:
               style:
                 $: |
                   .mdc-dialog .mdc-dialog__container .mdc-dialog__surface {
-                      font-family: {% raw %}{{ states('input_text.irrigation_ui_font_family') }}{% endraw %};
+                      font-family: {{ states('input_text.irrigation_ui_font_family') }};
                     }
 
 
@@ -193,7 +197,7 @@ entities:
                 [[[
                   if (states['input_boolean.irrigation_cycle1_running'].state == 'off' &&
                       states['input_boolean.irrigation_cycle2_running'].state == 'off' &&
-                      states['input_boolean.irrigation_cycle3_running'].state == 'of')
+                      states['input_boolean.irrigation_cycle3_running'].state == 'off')
                     return 'none';
                 ]]]
           icon:
