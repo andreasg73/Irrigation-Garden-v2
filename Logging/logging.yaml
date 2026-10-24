@@ -71,17 +71,12 @@ automation:
 
     condition:
       - condition: template
-        value_template: "{{ trigger.from_state is not none and trigger.to_state is not none and trigger.to_state.state in ['on','off'] and 'notify.log_irrigation' in (states.notify | map(attribute='entity_id') | list) }}"
+        value_template: "{{ trigger.from_state is not none and trigger.to_state is not none and trigger.to_state.state in ['on','off'] and states('input_text.irrigation_log_notify_entity') in (states.notify | map(attribute='entity_id') | list) }}"
 
     action:
       #=== Write To The Log
-      - service: notify.send_message
+      - service: script.irrigation_log_message
         data:
-          entity_id: >
-            {% set log_type = trigger.entity_id.split('.')[1] %}
-            {% set log_type = log_type.replace('logging_', '') %}
-            {% set log_type = log_type.replace('_level', '') %}
-            notify.log_{{ log_type }}
           message: >
             {{ as_timestamp(trigger.to_state.last_changed) | timestamp_custom('%X.%f') }} Logging set to: {{ trigger.to_state.state }} (from: {{ trigger.from_state.state }})
             {{ '\n' }}{{ '{:>27}'.format(' ')}}--------------------
@@ -100,7 +95,7 @@ automation:
     variables:
       #=== List of log names
       log_names: >
-        {{ ['irrigation'] if 'notify.log_irrigation' in (states.notify | map(attribute='entity_id') | list) else [] }}
+        {{ ['irrigation'] if states('input_text.irrigation_log_notify_entity') in (states.notify | map(attribute='entity_id') | list) else [] }}
 
     action:
       - repeat:
@@ -115,22 +110,10 @@ automation:
                       states('input_select.logging_' ~ repeat.item ~ '_level') not in ['None', 'unknown'] or
                       states('input_boolean.logging_' ~ repeat.item) == 'on'
                     }}
-
-                #=== Check hoiday mode for Holiday Mode log 
-                - condition: template
-                  value_template: >
-                    {% if repeat.item == 'holiday_mode' and
-                          states('binary_sensor.holiday_mode') == 'off' %}
-                      false
-                    {% else %}
-                      true
-                    {% endif %}
               then:
                 #=== Add HA Start seperator
-                - service: notify.send_message
+                - service: script.irrigation_log_message
                   data:
-                    entity_id: >
-                      notify.log_{{ repeat.item }}
                     message: >
                       {{ as_timestamp(now()) | timestamp_custom('%X.%f') }} ===== Home Assistant Restart =====
 
@@ -147,7 +130,7 @@ automation:
     variables:
       #=== List of log names
       log_names: >
-        {{ ['irrigation'] if 'notify.log_irrigation' in (states.notify | map(attribute='entity_id') | list) else [] }}
+        {{ ['irrigation'] if states('input_text.irrigation_log_notify_entity') in (states.notify | map(attribute='entity_id') | list) else [] }}
 
     action:
       - repeat:
@@ -163,22 +146,10 @@ automation:
                       states('input_select.logging_' ~ repeat.item ~ '_level') not in ['None', 'unknown'] or
                       states('input_boolean.logging_' ~ repeat.item) == 'on'
                     }}
-
-                #=== Check hoiday mode for Holiday Mode log 
-                - condition: template
-                  value_template: >
-                    {% if repeat.item == 'holiday_mode' and
-                          states('binary_sensor.holiday_mode') == 'off' %}
-                      false
-                    {% else %}
-                      true
-                    {% endif %}
               then:
                 #=== Add New Day seperator
-                - service: notify.send_message
+                - service: script.irrigation_log_message
                   data:
-                    entity_id: >
-                      notify.log_{{ repeat.item }}
                     message: >
                       -------------------------------------------------------------------------------
 
@@ -198,9 +169,9 @@ automation:
       #=== Create Persistent notification for logs size
       - if:
           - condition: template
-            value_template: "{{ has_value('script.notify') }}"
+            value_template: "{{ has_value('script.irrigation_notify') }}"
         then:
-          - service: script.notify
+          - service: script.irrigation_notify
             data:
               show: True
               notification_id: logging_on_warning
@@ -313,4 +284,5 @@ script:
               data:
                 entity_id: >
                   {{ 'sensor.logging_my_log_' ~ log_name ~ '_first_line' }}
+
 
