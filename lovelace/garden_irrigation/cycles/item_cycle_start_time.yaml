@@ -136,9 +136,66 @@ tap_action:
               - type: divider
 
               #=== Start Time Mode
-              - entity: input_select.irrigation_cycle{{ cycle }}_start_time_type
-                name: Start Time Mode
-                icon: mdi:theme-light-dark
+              - type: custom:hui-element
+                card_type: vertical-stack
+                cards:
+                - type: custom:button-card
+                  entity: input_select.irrigation_cycle{{ cycle }}_start_time_type
+                  name: Actual Time
+                  show_icon: false
+                  tap_action:
+                    action: call-service
+                    service: input_select.select_option
+                    service_data:
+                      entity_id: input_select.irrigation_cycle{{ cycle }}_start_time_type
+                      option: Actual Time
+                  state:
+                  - value: Actual Time
+                    styles:
+                      card:
+                      - border: 1px solid var(--accent-color)
+                  styles:
+                    card:
+                    - padding: 10px
+                    - font-size: 14px
+                - type: custom:button-card
+                  entity: input_select.irrigation_cycle{{ cycle }}_start_time_type
+                  name: Sunrise Offset
+                  show_icon: false
+                  tap_action:
+                    action: call-service
+                    service: input_select.select_option
+                    service_data:
+                      entity_id: input_select.irrigation_cycle{{ cycle }}_start_time_type
+                      option: Sunrise Offset
+                  state:
+                  - value: Sunrise Offset
+                    styles:
+                      card:
+                      - border: 1px solid var(--accent-color)
+                  styles:
+                    card:
+                    - padding: 10px
+                    - font-size: 14px
+                - type: custom:button-card
+                  entity: input_select.irrigation_cycle{{ cycle }}_start_time_type
+                  name: Sunset Offset
+                  show_icon: false
+                  tap_action:
+                    action: call-service
+                    service: input_select.select_option
+                    service_data:
+                      entity_id: input_select.irrigation_cycle{{ cycle }}_start_time_type
+                      option: Sunset Offset
+                  state:
+                  - value: Sunset Offset
+                    styles:
+                      card:
+                      - border: 1px solid var(--accent-color)
+                  styles:
+                    card:
+                    - padding: 10px
+                    - font-size: 14px
 
               #=== Actual Time
               - type: custom:hui-element
