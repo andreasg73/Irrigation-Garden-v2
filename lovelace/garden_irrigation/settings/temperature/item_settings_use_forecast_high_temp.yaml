@@ -62,7 +62,66 @@ cards:
                         }
                   - type: entities
                     entities:
-                      - entity: input_select.irrigation_high_temp_options
+                      - type: custom:hui-element
+                        card_type: vertical-stack
+                        cards:
+                        - type: custom:button-card
+                          entity: input_select.irrigation_high_temp_options
+                          name: Use Forecast
+                          show_icon: false
+                          tap_action:
+                            action: call-service
+                            service: input_select.select_option
+                            service_data:
+                              entity_id: input_select.irrigation_high_temp_options
+                              option: Use Forecast
+                          state:
+                          - value: Use Forecast
+                            styles:
+                              card:
+                              - border: 1px solid var(--accent-color)
+                          styles:
+                            card:
+                            - padding: 10px
+                            - font-size: 14px
+                        - type: custom:button-card
+                          entity: input_select.irrigation_high_temp_options
+                          name: Use Actual
+                          show_icon: false
+                          tap_action:
+                            action: call-service
+                            service: input_select.select_option
+                            service_data:
+                              entity_id: input_select.irrigation_high_temp_options
+                              option: Use Actual
+                          state:
+                          - value: Use Actual
+                            styles:
+                              card:
+                              - border: 1px solid var(--accent-color)
+                          styles:
+                            card:
+                            - padding: 10px
+                            - font-size: 14px
+                        - type: custom:button-card
+                          entity: input_select.irrigation_high_temp_options
+                          name: Use Highest
+                          show_icon: false
+                          tap_action:
+                            action: call-service
+                            service: input_select.select_option
+                            service_data:
+                              entity_id: input_select.irrigation_high_temp_options
+                              option: Use Highest
+                          state:
+                          - value: Use Highest
+                            styles:
+                              card:
+                              - border: 1px solid var(--accent-color)
+                          styles:
+                            card:
+                            - padding: 10px
+                            - font-size: 14px
                     card_mod:
                       style: >
                         ha-card {
