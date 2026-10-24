@@ -13,7 +13,7 @@ Modernization of the **original [Kloggy / HA-Irrigation-Version2](https://github
 - Updated HA templates and service handling, bounded waits, STOP/Master OFF cleanup, output acknowledgments, watchdog and restart/shutdown cleanup.
 - Dynamic zone activity/history, dated rainfall and temperature history, unavailable-source handling and guarded optional dependencies.
 - Original Lovelace compiled offline without `lovelace_gen`.
-- Replaceable UTF-8 INI catalogs: English and Polish, 210 messages each. Missing translations fall back to English. Languages are selected when building.
+- Replaceable UTF-8 INI catalogs: English and Polish, 248 messages each. Missing translations fall back to English. Languages are selected when building.
 
 ## Names
 

@@ -11,7 +11,7 @@ Nazwa projektu na GitHubie: **Irrigation Garden v2**. Po instalacji panel nazywa
 - Poprawki zgodności z HA, szablonów, STOP/Master OFF, timerów, potwierdzania wyjść i sprzątania przy restarcie/zatrzymaniu HA.
 - Poprawki historii, opadów i temperatury oraz brakujących danych.
 - Oryginalny panel budowany bez `lovelace_gen`.
-- Wymienne słowniki INI EN/PL po 210 wiadomości, gotowe panele oraz narzędzia i testy.
+- Wymienne słowniki INI EN/PL po 248 wiadomości, gotowe panele oraz narzędzia i testy.
 
 Jest to **wersja rozwojowa**. Zgodność sprawdzono z HA 2026.10.2; nie deklarujemy sprawdzenia każdej przyszłej wersji ani niezawodności każdego sterownika fizycznego. Przed migracją wykonaj kopię i sprawdź działanie na wirtualnych zaworach. Wymagania i pełna instalacja: [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
