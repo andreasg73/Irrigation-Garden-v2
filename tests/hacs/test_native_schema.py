@@ -29,7 +29,7 @@ def test_native_package_configuration(tmp_path, language):
     start = re.search(r'(?m)^\{\s*\n\s*"config_dir"\s*:', result.stdout)
     assert start is not None, result.stdout + result.stderr
     report = json.loads(result.stdout[start.start():])
-    assert report["total_errors"] == report["total_warnings"] == 0, report
+    assert report["total_errors"] == report["total_warnings"] == 0, json.dumps(report, indent=2)
     assert "lovelace" in report["components"] and "script" in report["components"]
     output = result.stdout + result.stderr
     assert not any(word in output for word in ("ERROR:", "Invalid config", "Traceback")), output
