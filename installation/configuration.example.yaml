@@ -1,0 +1,17 @@
+# Merge these keys into your existing configuration; do not duplicate root keys.
+# This example assumes this repository is installed at /config/irrigation_garden_v2.
+homeassistant:
+  packages: !include irrigation_garden_v2/installation/packages.yaml
+
+lovelace:
+  dashboards:
+    irrigation-garden:
+      mode: yaml
+      title: Irrigation Garden
+      icon: mdi:sprinkler-variant
+      show_in_sidebar: true
+      require_admin: true
+      filename: irrigation_garden_v2/dist/en/irrigation_dashboard.yaml
+
+# Polish: title: Podlewanie Ogrodu
+#         filename: irrigation_garden_v2/dist/pl/irrigation_dashboard.yaml
