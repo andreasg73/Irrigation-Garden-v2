@@ -1,0 +1,58 @@
+{
+  "tested_on": "Home Assistant 2026.10.2; frontend 20260930.4",
+  "dependencies": [
+    {
+      "name": "button-card",
+      "tested_version": "7.0.1",
+      "repository": "https://github.com/custom-cards/button-card",
+      "unpatched_vendor_sha256": "5d6e9c6afca01e8014653fa56bb5d6aa9248d832c34fb944a7f2c36329bc22d1"
+    },
+    {
+      "name": "card-mod",
+      "tested_version": "4.2.1",
+      "repository": "https://github.com/thomasloven/lovelace-card-mod",
+      "unpatched_vendor_sha256": "5e7e71ad61796f59070f8c4621e69fa8e71a9864d0be0922bc4dbc72f990cd35"
+    },
+    {
+      "name": "hui-element",
+      "tested_version": "1.1.2",
+      "repository": "https://github.com/thomasloven/lovelace-hui-element",
+      "unpatched_vendor_sha256": "4ef105098e533013aa6a2c740f9a0c2eb9ccf46c2c1c4ae0dc32b59402995c15"
+    },
+    {
+      "name": "config-template-card",
+      "tested_version": "1.3.6",
+      "repository": "https://github.com/iantrich/config-template-card",
+      "unpatched_vendor_sha256": "ecee3c7e0a10920e9a432de2e7f1f9506ae742425e95741d1835bbd4dea56c2e"
+    },
+    {
+      "name": "mini-graph-card",
+      "tested_version": "0.13.0",
+      "repository": "https://github.com/kalkih/mini-graph-card",
+      "unpatched_vendor_sha256": "4d8b986f3cd693c0f7771d2f5574008bc39c45ecb450aec067906150be2dfabd"
+    },
+    {
+      "name": "state-switch",
+      "tested_version": "1.9.6",
+      "repository": "https://github.com/thomasloven/lovelace-state-switch",
+      "unpatched_vendor_sha256": "8b8870b3096d69d90bc917034314757d94e48e641d6e63c77d8b2ded66fe9f1e"
+    },
+    {
+      "name": "browser_mod",
+      "tested_version": "3.4.0",
+      "repository": "https://github.com/thomasloven/hass-browser_mod",
+      "unpatched_vendor_sha256": "0b1a22c785b34256d5c8daf2eeee88a50e0fa7912ed1d045cedaafaf0f493213"
+    }
+  ],
+  "browser_mod_readiness": [
+    "Loaded integration entry",
+    "Registered module",
+    "browser_mod.popup service"
+  ],
+  "not_required_by_current_compiled_view": [
+    "lovelace_gen",
+    "layout-card",
+    "time-picker-card"
+  ],
+  "note": "Dependency versions record the tested baseline; install and register these separately. No third-party JavaScript is included in this archive."
+}

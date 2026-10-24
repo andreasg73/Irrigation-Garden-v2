@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.venv/
+tests/*results.json
+tests/javascript-results.json
+tests/*-config/
+tests/local-ha*/
+tests/temp*/
+*.log
+*.db
+*.db-shm
+*.db-wal
+secrets.yaml
+.storage/
+configuration.yaml
