@@ -55,6 +55,7 @@ entities:
       - !include
         - ../item_settings_check_box_with_entity_icon.yaml
         - entity: input_boolean.irrigation_ignore_schedule_if_raining
+          name: Ignore schedules if it is raining
           columns: 1
           on_icon: mdi:calendar-check-outline
           off_icon: mdi:calendar-remove-outline
