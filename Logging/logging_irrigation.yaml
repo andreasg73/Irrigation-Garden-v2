@@ -7,7 +7,7 @@ command_line:
   - sensor:
       name: Logging My Log Irrigation First Line
       unique_id: logging_my_log_irrigation_first_line
-      command: head -n 1 -c 27 /config/my_log_irrigation.log
+      command: "if [ -r /config/my_log_irrigation.log ]; then head -n 1 -c 27 /config/my_log_irrigation.log; fi"
       scan_interval: 86400
 
 

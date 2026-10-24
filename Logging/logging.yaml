@@ -47,11 +47,11 @@
 shell_command:
   #=== Delete all lines from a log file
   logging_log_file_delete_all_lines: >
-    truncate -s 0 /config/my_log_{{ log_name }}.log
+    truncate -s 0 /config/my_log_irrigation.log
 
   #=== Delete the first line of a log file
   logging_log_file_delete_first_line: >
-    sed -i '1d' /config/my_log_{{ log_name }}.log
+    sed -i '1d' /config/my_log_irrigation.log
 
 
 #================
@@ -67,10 +67,11 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - input_select.logging_access_monitoring_level
-          - input_select.logging_alarm_level
-          - input_select.logging_announcements_level
-          - input_select.logging_heating_level
+          - input_boolean.logging_irrigation
+
+    condition:
+      - condition: template
+        value_template: "{{ trigger.from_state is not none and trigger.to_state is not none and trigger.to_state.state in ['on','off'] and 'notify.log_irrigation' in (states.notify | map(attribute='entity_id') | list) }}"
 
     action:
       #=== Write To The Log
@@ -99,17 +100,7 @@ automation:
     variables:
       #=== List of log names
       log_names: >
-        {{
-          expand(integration_entities('filesize')) 
-              | rejectattr('entity_id', 'contains', 'home_assistant')
-              | rejectattr('entity_id', 'contains', 'last_updated')
-              | rejectattr('entity_id', 'contains', 'size_bytes')
-              | map(attribute = 'object_id')
-              | map('regex_replace', 'my_log_', '')
-              | map('regex_replace', '_log_size', '')
-              | list
-              | sort
-        }}
+        {{ ['irrigation'] if 'notify.log_irrigation' in (states.notify | map(attribute='entity_id') | list) else [] }}
 
     action:
       - repeat:
@@ -128,7 +119,7 @@ automation:
                 #=== Check hoiday mode for Holiday Mode log 
                 - condition: template
                   value_template: >
-                    {% if repeat_item == 'holiday_mode' and
+                    {% if repeat.item == 'holiday_mode' and
                           states('binary_sensor.holiday_mode') == 'off' %}
                       false
                     {% else %}
@@ -156,16 +147,7 @@ automation:
     variables:
       #=== List of log names
       log_names: >
-        {{
-          expand(integration_entities('filesize')) 
-              | rejectattr('entity_id', 'contains', 'home_assistant')
-              | rejectattr('entity_id', 'contains', 'bytes')
-              | map(attribute = 'object_id')
-              | map('regex_replace', 'my_log_', '')
-              | map('regex_replace', '_log_size', '')
-              | list
-              | sort
-        }}
+        {{ ['irrigation'] if 'notify.log_irrigation' in (states.notify | map(attribute='entity_id') | list) else [] }}
 
     action:
       - repeat:
@@ -185,7 +167,7 @@ automation:
                 #=== Check hoiday mode for Holiday Mode log 
                 - condition: template
                   value_template: >
-                    {% if repeat_item == 'holiday_mode' and
+                    {% if repeat.item == 'holiday_mode' and
                           states('binary_sensor.holiday_mode') == 'off' %}
                       false
                     {% else %}
@@ -214,47 +196,51 @@ automation:
                       {{ repeat.item }}
 
       #=== Create Persistent notification for logs size
-      - service: script.notify
-        data:
-          show: True
-          notification_id: logging_on_warning
-          title: Logging On
-
-          #=== Note: File Size sensors are created by the File Size integration
-          message: >
-            |Log|Size|Retention|Level| |
-
-            |:---|:---|:---|:---|:---|
-            {%- for log in log_names %}
-              {%- set size = states('sensor.my_log_' ~ log ~ '_log_size') %}
-              {%- if size == 'unavailable' %}
-                {%- set size = 'Log file empty' %}
-              {%- elif size | float(0.0) > 1.99%}
-                {%- set size = '<font color=Red>' ~ size ~ ' MB</font> ⚠️' %}
-              {%- elif size | float(0.0) > 0.99 %}
-                {%- set size = '<font color=DarkOrange>' ~ size ~ ' MB</font> ⚠️' %}
-              {%- elif size | float(0.0) > 0.0 %}
-                {%- set size = '<font color=Green>' ~ size ~ ' MB</font>' %}
-              {%- else %}
-                {%- set size = size ~ ' MB' %}
-              {%- endif %}
-              {%- set keep_days = states('input_number.logging_' ~ log ~ '_days_to_keep') | int(-1) %}
-              {%- if keep_days == -1 %}
-                {%- set keep_days = '' %}
-              {%- elif keep_days == 0 %}
-                {%- set keep_days = 'All days' %}
-              {%- elif keep_days == 1 %}
-                {%- set keep_days = keep_days ~ ' day' %}
-              {%- else %}
-                {%- set keep_days = keep_days ~ ' days' %}
-              {%- endif %}
-              {%- set on_off = states('input_boolean.logging_' ~ log) | title %}
-              {%- if on_off == 'Off' %}
-                {%- set on_off = '<font color=SteelBlue>' ~ on_off ~ '</font>' %}
-              {%- endif %}
-              {%- set log_level = states('input_select.logging_' ~ log ~ '_level').replace('unknown', '') %}
-              | {{ log.replace('_', ' ') | title }} | {{ size }} | {{ keep_days }} | {{ log_level }} | {{ on_off }}
-            {%- endfor %}
+      - if:
+          - condition: template
+            value_template: "{{ has_value('script.notify') }}"
+        then:
+          - service: script.notify
+            data:
+              show: True
+              notification_id: logging_on_warning
+              title: Logging On
+    
+              #=== Note: File Size sensors are created by the File Size integration
+              message: >
+                |Log|Size|Retention|Level| |
+    
+                |:---|:---|:---|:---|:---|
+                {%- for log in log_names %}
+                  {%- set size = states('sensor.my_log_' ~ log ~ '_log_size') %}
+                  {%- if size == 'unavailable' %}
+                    {%- set size = 'Log file empty' %}
+                  {%- elif size | float(0.0) > 1.99%}
+                    {%- set size = '<font color=Red>' ~ size ~ ' MB</font> ⚠️' %}
+                  {%- elif size | float(0.0) > 0.99 %}
+                    {%- set size = '<font color=DarkOrange>' ~ size ~ ' MB</font> ⚠️' %}
+                  {%- elif size | float(0.0) > 0.0 %}
+                    {%- set size = '<font color=Green>' ~ size ~ ' MB</font>' %}
+                  {%- else %}
+                    {%- set size = size ~ ' MB' %}
+                  {%- endif %}
+                  {%- set keep_days = states('input_number.logging_' ~ log ~ '_days_to_keep') | int(-1) %}
+                  {%- if keep_days == -1 %}
+                    {%- set keep_days = '' %}
+                  {%- elif keep_days == 0 %}
+                    {%- set keep_days = 'All days' %}
+                  {%- elif keep_days == 1 %}
+                    {%- set keep_days = keep_days ~ ' day' %}
+                  {%- else %}
+                    {%- set keep_days = keep_days ~ ' days' %}
+                  {%- endif %}
+                  {%- set on_off = states('input_boolean.logging_' ~ log) | title %}
+                  {%- if on_off == 'Off' %}
+                    {%- set on_off = '<font color=SteelBlue>' ~ on_off ~ '</font>' %}
+                  {%- endif %}
+                  {%- set log_level = states('input_select.logging_' ~ log ~ '_level').replace('unknown', '') %}
+                  | {{ log.replace('_', ' ') | title }} | {{ size }} | {{ keep_days }} | {{ log_level }} | {{ on_off }}
+                {%- endfor %}
 
 
 #===================
@@ -267,9 +253,11 @@ script:
   #===================================
   logging_clear_log_of_old_data:
     alias: Logging Clear Log Of Old Data
-    mode: parallel
-    max: 30
+    mode: single
     sequence:
+      # This package owns only the irrigation log; never prune other HA logs.
+      - condition: template
+        value_template: "{{ log_name | default('') == 'irrigation' }}"
       #=== Check log is not empty
       - condition: template
         value_template: >
@@ -281,7 +269,7 @@ script:
       #=== Check not keeping all data
       - condition: template
         value_template: >
-          {{ states('input_number.logging_' ~ log_name ~ '_days_to_keep') | int > 0 }}
+          {{ states('input_number.logging_' ~ log_name ~ '_days_to_keep') | int(0) > 0 }}
 
       #=== Get the first line of the log
       - service: homeassistant.update_entity
@@ -292,14 +280,18 @@ script:
       - repeat:
           while:
             - condition: template
+              value_template: "{{ repeat.index <= 10000 }}"
+            - condition: template
+              value_template: "{{ has_value('sensor.logging_my_log_irrigation_first_line') }}"
+            - condition: template
               value_template: >
                 {% set days_to_keep = states('input_number.logging_' ~ log_name ~ '_days_to_keep') | int(0) %}
-                {% set last_day_to_keep = strptime(states('sensor.date'), "%Y-%m-%d") - timedelta(days=days_to_keep) %}  
+                {% set last_day_to_keep = today_at() - timedelta(days=days_to_keep) %}  
 
                 {% set first_line = states('sensor.logging_my_log_' ~ log_name ~ '_first_line') %}
                 {% set first_line_date = strptime(first_line, "===== %a %d %b %Y =====", false) %}
 
-                {{ not first_line_date or (as_timestamp(first_line_date) < as_timestamp(last_day_to_keep)) }}
+                {{ not first_line_date or (first_line_date.date() < last_day_to_keep.date()) }}
 
             #=== Failsafe to stop endless loop
             - condition: template
@@ -321,3 +313,4 @@ script:
               data:
                 entity_id: >
                   {{ 'sensor.logging_my_log_' ~ log_name ~ '_first_line' }}
+
