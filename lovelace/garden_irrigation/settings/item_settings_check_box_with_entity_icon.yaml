@@ -72,6 +72,8 @@ styles:
     - font-size: {{ card_font_size | default('14px') }}
     - border-radius: {{ card_border_radius | default('5px') }}
   name:
+    - white-space: normal
+    - text-align: left
     - justify-self: {{ name_justify_self | default('start') }}
   custom_fields:
     check_box:
