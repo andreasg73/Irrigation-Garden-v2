@@ -2,6 +2,7 @@
 
 Based on original Kloggy HA-Irrigation-Version2, master `532f01b5e`, incorporating a modernization reference from tinkerfish PR #103 and subsequent changes.
 
+- HACS custom-repository installation assistant 0.1.0b1 bundles the exact published original engine and EN/PL dashboard. Explicit package activation, migration instructions, versioned releases, update options and Repairs status; no automatic global YAML edits or actuator actions. See [HACS guide](docs/HACS_INSTALLATION.md).
 - HA 2026.10.2 syntax/schema compatibility; safe defaults for numeric filters and missing attributes.
 - STOP/CANCEL and Master OFF stop active execution before closing outputs; manual-zone settings are restored from persistent snapshots.
 - Output acknowledgment, bounded waits, active-output snapshots, watchdog and controlled shutdown/restart cleanup. Each service boundary rechecks output permissions.
@@ -14,4 +15,4 @@ Based on original Kloggy HA-Irrigation-Version2, master `532f01b5e`, incorporati
 
 The new public repository layout uses root-level original source directories, generic installation examples and portable build/test paths. It contains no exported state or valve mappings from the maintainer's HA instance.
 
-Known scope: no physical production migration is demonstrated by publication; isolated tests and a safe live installation check do not guarantee hardware behavior during power loss or communication failure. Native dropdown options and some backend/Jinja values can remain English. Language selection is at build time.
+Known scope: no physical production migration is demonstrated by publication; isolated tests and a safe live installation check do not guarantee hardware behavior during power loss or communication failure. Native dropdown options and some backend/Jinja values can remain English. Manual installation selects language at build time; the HACS assistant selects the bundled EN/PL dashboard in its wizard/options.

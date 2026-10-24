@@ -6,6 +6,10 @@ Modernization of the **original [Kloggy / HA-Irrigation-Version2](https://github
 
 **Development version.** Back up an existing installation and validate it on virtual valves before migrating physical outputs. Version 2026.10.2 is the verified HA baseline; this is not a claim of compatibility with every future release or every hardware configuration.
 
+## Installation through HACS
+
+Use this repository as a HACS custom **Integration** repository. The installer delivers the same original engine and EN/PL panel; activation requires one explicit YAML include. Follow the [HACS installation and migration guide](docs/HACS_INSTALLATION.md), including the existing-installation steps. It is not listed in HACS’s default catalog.
+
 ## Features
 
 - 1–16 configurable zones, two scheduled cycles and a manual cycle.

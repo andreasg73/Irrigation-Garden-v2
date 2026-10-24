@@ -1,12 +1,12 @@
 # Installation — Home Assistant 2026.10.2 baseline
 
-This is a YAML package plus a compiled version of the original Lovelace UI. It is not a HACS custom integration and is not installed by copying a Python component into `custom_components`.
+This guide covers manual installation of the original YAML packages and compiled Lovelace UI. For the HACS installation assistant, use the [HACS installation and migration guide](HACS_INSTALLATION.md). Both routes install the same engine; choose one package include route.
 
 ## Before installing
 
 Back up your current configuration. If another Kloggy version already defines `irrigation_*` entities, do not load both sets of packages: they use the same IDs. An existing irrigation controller must not be scheduled concurrently on the same valves during migration.
 
-The full registry includes all 27 engine files and both Logging files. It also includes the original optional MQTT remote example. Review it if your installation has no MQTT integration. Notifications (`script.notify`), announcements (`script.announcement`), holiday mode and `notify.log_irrigation` are installation-specific optional features. Their absent entities may still be reported by reference-checking tools even though runtime calls are guarded. No fake replacement entities are provided.
+The full registry includes all 27 engine files and both Logging files. It also includes the original optional MQTT remote example. Review it if your installation has no MQTT integration. Notifications, announcements, holiday mode and remote logging are optional and use configurable project-owned adapters. See [optional feature configuration](OPTIONAL_FEATURES.md). Unconfigured adapters are skipped; no fake measurements are provided.
 
 ## 1. Install frontend dependencies
 
