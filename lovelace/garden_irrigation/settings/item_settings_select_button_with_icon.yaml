@@ -7,8 +7,8 @@ type: custom:button-card
 entity: {{ entity }}
 show_state: false
 show_name: true
-name: {{ name }}
-icon: {{ icon }}
+name: {{ name | default('') }}
+icon: {{ icon | default('') }}
 show_icon: true
 size: {{ size | default('50%') }}
 lock:
@@ -16,9 +16,9 @@ lock:
 tap_action:
   action: {{ tap_action | default('toggle') }}
 double_tap_action:
-  action: {{ double_tap_action | default(none) }}
+  action: {{ double_tap_action | default('none') }}
 hold_action:
-  action: {{ hold_action | default(none) }}
+  action: {{ hold_action | default('none') }}
 styles:
   grid:
     - grid-template-areas: '"i n"'
@@ -50,22 +50,27 @@ styles:
     - font-size: {{ card_font_size | default('14px') }}
     - border-radius: {{ card_border_radius | default('5px') }}
   name:
+    - white-space: normal
+    - text-overflow: unset
+    - overflow-wrap: anywhere
+    - text-align: left
     - justify-self: {{ name_justify_self | default('start') }}
 state:
   - value: 'on'
-    name: {{ on_name }}
-    icon: {{ on_icon }}
+    name: {{ on_name | default('') }}
+    icon: {{ on_icon | default('') }}
     styles:
       card:
         - background-color: {{ card_background_on_color | default('var(--primary-background-color)') }}
         - border: 1px solid var(--accent-color)
   - value: 'off'
-    name: {{ off_name }}
-    icon: {{ off_icon }}
+    name: {{ off_name | default('') }}
+    icon: {{ off_icon | default('') }}
     styles:
       card:
         - color: {{ card_off_color | default('var(--secondary-text-color)') }}
         - box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19)
       icon:
         - color: {{ icon_off_color | default('var(--secondary-text-color)') }}
+
 

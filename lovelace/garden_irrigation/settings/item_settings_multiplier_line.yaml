@@ -15,16 +15,16 @@
 type: custom:button-card
 entity: {{ entity }}
 show_state: true
-name: {{ name }}
-icon: {{ icon }}
+name: {{ name | default('') }}
+icon: {{ icon | default('') }}
 show_label: true
-label: {{ label }}
+label: {{ label | default('') }}
 size: 30%
 styles:
   grid:
     - grid-template-areas: >
         [[[
-          if ('{{ label }}' == '')
+          if ('{{ label | default('') }}' == '')
             return '"i n s"  "i n s"';
           else
             return '"i n s"  "i l s"';
@@ -99,3 +99,4 @@ tap_action:
               font-family: {% raw %}{{ states('input_text.irrigation_ui_font_family') }}{% endraw %};
             }
     
+

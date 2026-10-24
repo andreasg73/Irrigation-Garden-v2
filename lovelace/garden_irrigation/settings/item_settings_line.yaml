@@ -15,11 +15,20 @@
 #====================================================
 type: custom:button-card
 entity: {{ entity }}
+triggers_update:
+  - binary_sensor.irrigation_temperature_data_ready
+  - binary_sensor.irrigation_rainfall_data_ready
 show_state: true
 state_display: >
   [[[
-    var unit = '{{ unit }}';
-    var round = '{{ round }}';
+    var temperature_history = /^input_number\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);
+    if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id] !== true)
+      return '—';
+    var rainfall_data = /^input_number\.irrigation_rainfall_[2-4]$|^sensor\.irrigation_sensor_rainfall_/.test(entity.entity_id);
+    if (rainfall_data && states['binary_sensor.irrigation_rainfall_data_ready']?.attributes.valid?.[entity.entity_id] !== true)
+      return '—';
+    var unit = '{{ unit | default('') }}';
+    var round = '{{ round | default('') }}';
     var unit_om = entity.attributes.unit_of_measurement ? entity.attributes.unit_of_measurement : '';
     var statestr = entity.state;
 
@@ -30,21 +39,21 @@ state_display: >
     else
       return parseFloat(statestr).toFixed(round) + ' ' + unit_om;
   ]]]
-name: {{ name }}
-icon: {{ icon }}
+name: {{ name | default('') }}
+icon: {{ icon | default('') }}
 show_label: true
-label: {{ label }}
+label: {{ label | default('') }}
 size: 30%
 styles:
   grid:
     - grid-template-areas: >
         [[[
-          if ('{{ label }}' == '')
+          if ('{{ label | default('') }}' == '')
             return '"i n s"  "i n s"';
           else
             return '"i n s"  "i l s"';
         ]]]
-    - grid-template-columns: 15% auto 15%
+    - grid-template-columns: 12% minmax(0, 1fr) 22%
     - grid-template-rows: min-content min-content
   card:
     - font-family: >
@@ -57,10 +66,21 @@ styles:
   icon:
     - color: var(--state-icon-color)
   name: 
+    - white-space: normal
+    - text-overflow: unset
+    - overflow-wrap: anywhere
+    - text-align: left
     - justify-self: start
   label:
+    - white-space: normal
+    - text-overflow: unset
+    - overflow-wrap: anywhere
+    - text-align: left
     - justify-self: start
     - color: var(--secondary-text-color)
+  state:
+    - white-space: normal
+    - overflow-wrap: anywhere
 state:
   - value: unavailable
     styles:
@@ -78,13 +98,13 @@ tap_action:
   browser_mod:
     service: browser_mod.popup
     data:
-      title: {{ name }}
+      title: {{ name | default('') }}
       content:
         type: entities
         entities:
           - entity: {{ entity }}
-            name: {{ name }}
-            icon: {{ icon }}
+            name: {{ name | default('') }}
+            icon: {{ icon | default('') }}
             card_mod:
               style: # Wrap text
                 hui-generic-entity-row:

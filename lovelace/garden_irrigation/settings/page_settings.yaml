@@ -20,13 +20,17 @@ entities:
         name: -- SETTINGS --
         styles:
           card:
-            - font-size: 16px
+            - font-size: 13px
             - font-family: >
                 [[[
                   return states['input_text.irrigation_ui_font_family'].state
                 ]]]
             - background: none
             - margin: 0.1em 0em 0em 0em
+          name:
+            - white-space: normal
+            - text-overflow: unset
+            - overflow-wrap: anywhere
         tap_action:
           action: none
 
