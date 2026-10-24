@@ -222,6 +222,15 @@ entities:
             name: "Current Multiplier ( ℹ️ )"
             label: Calculated based on rainfall and threshold
 
+      # Missing required readings retain the last valid correction.
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.irrigation_rainfall_data_ready
+            state: 'off'
+        card:
+          type: markdown
+          content: Rainfall data is incomplete for the selected days. The last valid correction is retained.
+
       #=== Rolling values
       - !include
           - ../rainfall/item_settings_rainfall_line.yaml
@@ -473,3 +482,4 @@ card_mod:
     ha-card {
       box-shadow: none;
     }
+
