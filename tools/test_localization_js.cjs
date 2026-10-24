@@ -56,5 +56,18 @@ check('numeric.invalid.handling.preserved',()=>{
  assert.equal(run(p.b,{state:'unknown',attributes:{}}),run(p.a,{state:'unknown',attributes:{}}));
 });
 check('technical.ids.not.translated',()=>{assert(!fs.readFileSync(root+'/dist/pl/irrigation_dashboard.json','utf8').includes('input_boolean.cykl'));});
+
+check('runtime.full.sentences.and.units',()=>{
+ const nodes=[];function collect(x){if(Array.isArray(x))x.forEach(collect);else if(x&&typeof x==='object'){if(x.type==='custom:button-card'&&x.entity==='input_text.irrigation_current_status'&&x.state_display)nodes.push(x);Object.values(x).forEach(collect);}}collect(after);
+ for(const [a,b] of [['NOTHING SCHEDULED','BRAK ZAPLANOWANEGO PODLEWANIA'],['Watering...','Podlewanie...'],['Changing Zone...','Zmiana strefy...'],['STOP: output not confirmed OFF','STOP: brak potwierdzenia zamknięcia zaworu']])assert.equal(run(nodes[0].state_display,{state:a}),b);
+ state('sensor.irrigation_next_run','NO SCHEDULE TODAY OR TOMORROW');assert.equal(run(header.b),'BRAK HARMONOGRAMU NA DZIŚ I JUTRO');
+});
+check('localized.selectors.keep.canonical.payloads',()=>{
+ const got=[];function collect(x){if(Array.isArray(x))x.forEach(collect);else if(x&&typeof x==='object'){if(x.tap_action?.service==='input_select.select_option'&&['input_select.irrigation_high_temp_options','input_select.irrigation_cycle1_start_time_type','input_select.irrigation_cycle2_start_time_type'].includes(x.entity))got.push(x);Object.values(x).forEach(collect);}}collect(after);
+ assert(got.some(x=>x.name==='Z prognozy'&&x.tap_action.service_data.option==='Use Forecast'));
+ assert(got.some(x=>x.name==='Przesunięcie względem wschodu słońca'&&x.tap_action.service_data.option==='Sunrise Offset'));
+});
+
 const report={syntax_cases:syntax,wrapped_presentation_expressions:pairs.length,rows};
 fs.writeFileSync(root+'/tests/javascript-results.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));
+
