@@ -70,13 +70,14 @@ entities:
     entity: input_text.irrigation_previous_total_watering_time
     name: >
       [[[
-        if (isNaN(entity.state))
-          var total_seconds = 0;
-        else  
-          var total_seconds = parseFloat(entity.state);
-        var date = new Date(null);
-        date.setSeconds(total_seconds);
-        return date.toISOString().substr(11, 8);
+        var raw = entity?.state;
+        var total_seconds = Number(raw);
+        if (raw == null || String(raw).trim() === '' || !Number.isFinite(total_seconds) || total_seconds < 0)
+          return '—';
+        var hours = Math.floor(total_seconds / 3600);
+        var minutes = Math.floor(total_seconds % 3600 / 60);
+        var seconds = Math.floor(total_seconds % 60);
+        return [hours, minutes, seconds].map(v => String(v).padStart(2, '0')).join(':');
       ]]]
     label: "Total watering time last run -&nbsp"
     show_label: true
@@ -200,4 +201,5 @@ entities:
           padding-top: 0em;
           padding-bottom: 0em;
         }
+
 
