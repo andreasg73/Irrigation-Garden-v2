@@ -1,5 +1,5 @@
 
-title: Garden Irrigation
+title: Irrigation Garden
 path: garden_irrigation
 icon: mdi:sprinkler-variant
 # type: custom:horizontal-layout
@@ -56,3 +56,4 @@ sections:
                 !include garden_irrigation/settings/rainfall/section_settings_rainfall.yaml
               Temperature:
                 !include garden_irrigation/settings/temperature/section_settings_temperature.yaml
+
