@@ -21,3 +21,15 @@ jobs:
       - run: python tools/test_localization.py
       - run: node tools/test_localization_js.cjs
       - run: python tools/check_publication.py
+      - run: python tools/build_hacs_bundle.py
+      - run: git diff --exit-code -- custom_components/irrigation_garden/bundle.zip
+  installer-ha-2026-10:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - uses: astral-sh/setup-uv@v6
+      - run: uv pip install --system homeassistant==2026.10.2 pytest pytest-asyncio
+      - run: python -m pytest tests/hacs -q
