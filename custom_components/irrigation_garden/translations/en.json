@@ -1,0 +1,66 @@
+{
+  "title": "Irrigation Garden",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Prepare Irrigation Garden",
+        "description": "Install the original published Kloggy-based engine and dashboard. HACS downloads the installer; YAML activation is a separate, explicit step. Choose your panel language and dashboard URL.",
+        "data": {
+          "language": "Panel language",
+          "dashboard_url": "Dashboard URL path"
+        }
+      },
+      "confirm": {
+        "title": "Review installation",
+        "description": "Existing irrigation helpers: {existing}. Missing frontend prerequisites: {dependencies}.\n\nConfirm to prepare files only. Then merge this single entry into your existing homeassistant.packages mapping:\n\n```yaml\nirrigation_garden: !include irrigation_garden/package.yaml\n```\n\nFor an existing installation, REPLACE the old irrigation package includes and its old dashboard registration; do not load both copies. Preserve unrelated packages, including your weather adapters. Check HA configuration before restarting. No valve is opened by this wizard. Install missing cards and configure Browser Mod before using the panel.",
+        "data": {
+          "acknowledge": "I understand the YAML activation and existing-installation migration steps"
+        }
+      }
+    },
+    "error": {
+      "invalid_choices": "Select EN or PL and a hyphenated lowercase dashboard URL.",
+      "acknowledge_required": "Confirm the activation/migration steps first.",
+      "watering_active": "Stop all irrigation cycles and close mapped valves before staging files.",
+      "prepare_failed": "Files could not be prepared. Check free space, permissions and edited managed files; existing configuration was not automatically overwritten."
+    },
+    "abort": {
+      "already_configured": "The installation assistant is already configured. Use its options for updates."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Prepare update or language change",
+        "description": "Missing prerequisites: {dependencies}. This prepares the original packages and panel, retains previous releases and changes no running helper values. Validate your YAML and restart HA to activate the prepared version. Do not apply while watering.",
+        "data": {
+          "language": "Panel language",
+          "acknowledge": "Prepare the update; I will validate and restart HA"
+        }
+      }
+    },
+    "error": {
+      "acknowledge_required": "Confirm preparation first.",
+      "watering_active": "Stop irrigation and close mapped valves first.",
+      "prepare_failed": "Cannot prepare files; check permissions, free space and modified managed files."
+    }
+  },
+  "selector": {
+    "language": {
+      "options": {
+        "en": "English",
+        "pl": "Polski"
+      }
+    }
+  },
+  "issues": {
+    "package_activation": {
+      "title": "Irrigation Garden files need YAML activation",
+      "description": "The prepared package release is not loaded. Merge `irrigation_garden: !include irrigation_garden/package.yaml` under your existing `homeassistant.packages`. On migration, remove the previous irrigation package includes and its old dashboard registration while preserving unrelated weather adapters. Validate HA configuration and restart. See the HACS installation guide. The installer does not activate physical outputs."
+    },
+    "installer_update": {
+      "title": "Prepare the new Irrigation Garden package version",
+      "description": "HACS updated the installer payload. Open this integration’s options to explicitly prepare the new original packages and dashboard, then validate configuration and restart HA. Active settings are not automatically changed."
+    }
+  }
+}

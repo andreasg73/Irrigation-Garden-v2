@@ -1,0 +1,66 @@
+{
+  "title": "Irrigation Garden",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Przygotuj Irrigation Garden",
+        "description": "Instalator dostarcza opublikowany silnik oparty na Kloggy i obecny panel. HACS pobiera pliki; aktywacja YAML jest osobnym krokiem. Wybierz język panelu i adres dashboardu.",
+        "data": {
+          "language": "Język panelu",
+          "dashboard_url": "Ścieżka URL panelu"
+        }
+      },
+      "confirm": {
+        "title": "Sprawdź instalację",
+        "description": "Istniejące pomocniki podlewania: {existing}. Brakujące zależności panelu: {dependencies}.\n\nPotwierdzenie przygotuje wyłącznie pliki. Następnie dodaj do swojej istniejącej mapy homeassistant.packages:\n\n```yaml\nirrigation_garden: !include irrigation_garden/package.yaml\n```\n\nPrzy migracji ZASTĄP stare wpisy pakietów podlewania i usuń poprzednią rejestrację jego dashboardu. Nie ładuj dwóch kopii. Zachowaj inne pakiety, zwłaszcza własne adaptery pogody. Sprawdź konfigurację HA przed restartem. Kreator nie otwiera zaworów. Zainstaluj brakujące karty i skonfiguruj Browser Mod przed użyciem panelu.",
+        "data": {
+          "acknowledge": "Rozumiem aktywację YAML i kroki migracji istniejącej instalacji"
+        }
+      }
+    },
+    "error": {
+      "invalid_choices": "Wybierz EN lub PL i adres panelu z małych liter oraz łącznika.",
+      "acknowledge_required": "Potwierdź zapoznanie się z aktywacją i migracją.",
+      "watering_active": "Zatrzymaj cykle i zamknij przypisane zawory przed przygotowaniem plików.",
+      "prepare_failed": "Nie można przygotować plików. Sprawdź miejsce, uprawnienia i zmiany w zarządzanych plikach."
+    },
+    "abort": {
+      "already_configured": "Instalator jest już skonfigurowany. Aktualizacje przygotujesz w jego opcjach."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Przygotuj aktualizację lub zmianę języka",
+        "description": "Brakujące zależności: {dependencies}. Przygotowanie zachowa poprzednie wydania i nie zmieni bieżących wartości pomocników. Sprawdź YAML i uruchom ponownie HA, aby aktywować przygotowane wydanie. Podlewanie musi być zatrzymane.",
+        "data": {
+          "language": "Język panelu",
+          "acknowledge": "Przygotuj pliki; sprawdzę konfigurację i zrestartuję HA"
+        }
+      }
+    },
+    "error": {
+      "acknowledge_required": "Potwierdź zapoznanie się z aktywacją i migracją.",
+      "watering_active": "Zatrzymaj cykle i zamknij przypisane zawory przed przygotowaniem plików.",
+      "prepare_failed": "Nie można przygotować plików. Sprawdź miejsce, uprawnienia i zmiany w zarządzanych plikach."
+    }
+  },
+  "selector": {
+    "language": {
+      "options": {
+        "en": "English",
+        "pl": "Polski"
+      }
+    }
+  },
+  "issues": {
+    "package_activation": {
+      "title": "Irrigation Garden wymaga aktywacji pakietu YAML",
+      "description": "Przygotowane wydanie pakietu nie jest załadowane. Dodaj `irrigation_garden: !include irrigation_garden/package.yaml` pod istniejącym `homeassistant.packages`. Przy migracji usuń poprzednie wpisy pakietów podlewania i rejestrację starego dashboardu, zachowując własne adaptery pogody. Sprawdź konfigurację i zrestartuj HA. Szczegóły w instrukcji instalacji HACS. Instalator nie otwiera zaworów."
+    },
+    "installer_update": {
+      "title": "Przygotuj nowe wydanie pakietów Irrigation Garden",
+      "description": "HACS zaktualizował pliki instalatora. W opcjach tej integracji przygotuj nowe pakiety i panel, sprawdź konfigurację i zrestartuj HA. Bieżące ustawienia nie są zmieniane automatycznie."
+    }
+  }
+}
