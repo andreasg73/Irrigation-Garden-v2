@@ -21,13 +21,18 @@ entities:
         name: -- CYCLES --
         styles:
           card:
-            - font-size: 16px
+            - font-size: 13px
             - font-family: >
                 [[[
                   return states['input_text.irrigation_ui_font_family'].state
                 ]]]
             - background: none
             - margin: 0.1em 0em 0em 0em
+
+          name:
+            - white-space: normal
+            - text-overflow: unset
+            - overflow-wrap: anywhere
 
         #=== SHOW WHOLE WATERING TIME OVERVIEW
         tap_action:
@@ -52,50 +57,47 @@ entities:
                                         duration_c1_sat = 0, duration_c2_sat = 0, duration_sat = 0,
                                         duration_c1_sun = 0, duration_c2_sun = 0, duration_sun = 0,) %}
 
-                  {% for cycles in states.input_text
-                      if cycles.object_id == 'irrigation_cycle1_name' or
-                        cycles.object_id == 'irrigation_cycle2_name' %}
-                    {% set cycle = 'cycle' ~ loop.index %}
-
-                    {% for zones in states.input_number
-                      if zones.object_id.startswith('irrigation_' ~ cycle ~ '_zone') and 
-                        zones.object_id.endswith('_duration') %}
-                      {% set zone = 'zone' ~ loop.index %}
+                  {% for cycle_index in range(1, 3) %}
+                    {% set cycle = 'cycle' ~ cycle_index %}
+                    {% set zone_count = [[states('input_number.irrigation_number_of_zones') | int(1), 1] | max, 16] | min %}
+                    {% for zone_index in range(1, zone_count + 1) %}
+                      {% set zone = 'zone' ~ zone_index %}
+                      {% set duration = states('input_number.irrigation_' ~ cycle ~ '_' ~ zone ~ '_duration') | float(0) %}
 
                       {% if is_state('input_boolean.irrigation_' ~ cycle ~ '_' ~ zone ~ '_every_day', 'on') %}
-                        {% set ns.duration_mon = ns.duration_mon + (zones.state | int) %}
-                        {% set ns.duration_tue = ns.duration_tue + (zones.state | int) %}
-                        {% set ns.duration_wed = ns.duration_wed + (zones.state | int) %}
-                        {% set ns.duration_thu = ns.duration_thu + (zones.state | int) %}
-                        {% set ns.duration_fri = ns.duration_fri + (zones.state | int) %}
-                        {% set ns.duration_sat = ns.duration_sat + (zones.state | int) %}
-                        {% set ns.duration_sun = ns.duration_sun + (zones.state | int) %}
+                        {% set ns.duration_mon = ns.duration_mon + duration %}
+                        {% set ns.duration_tue = ns.duration_tue + duration %}
+                        {% set ns.duration_wed = ns.duration_wed + duration %}
+                        {% set ns.duration_thu = ns.duration_thu + duration %}
+                        {% set ns.duration_fri = ns.duration_fri + duration %}
+                        {% set ns.duration_sat = ns.duration_sat + duration %}
+                        {% set ns.duration_sun = ns.duration_sun + duration %}
                       {% else %}
                         {% if is_state('input_boolean.irrigation_' ~ cycle ~ '_' ~ zone ~ '_mon', 'on' ) %}
-                          {% set ns.duration_mon = ns.duration_mon + (zones.state | int) %}
+                          {% set ns.duration_mon = ns.duration_mon + duration %}
                         {% endif %}
                         {% if is_state('input_boolean.irrigation_' ~ cycle ~ '_' ~ zone ~ '_tue', 'on' ) %}
-                          {% set ns.duration_tue = ns.duration_tue + (zones.state | int) %}
+                          {% set ns.duration_tue = ns.duration_tue + duration %}
                         {% endif %}
                         {% if is_state('input_boolean.irrigation_' ~ cycle ~ '_' ~ zone ~ '_wed', 'on' ) %}
-                          {% set ns.duration_wed = ns.duration_wed + (zones.state | int) %}
+                          {% set ns.duration_wed = ns.duration_wed + duration %}
                         {% endif %}
                         {% if is_state('input_boolean.irrigation_' ~ cycle ~ '_' ~ zone ~ '_thu', 'on' ) %}
-                          {% set ns.duration_thu = ns.duration_thu + (zones.state | int) %}
+                          {% set ns.duration_thu = ns.duration_thu + duration %}
                         {% endif %}
                         {% if is_state('input_boolean.irrigation_' ~ cycle ~ '_' ~ zone ~ '_fri', 'on' ) %}
-                          {% set ns.duration_fri = ns.duration_fri + (zones.state | int) %}
+                          {% set ns.duration_fri = ns.duration_fri + duration %}
                         {% endif %}
                         {% if is_state('input_boolean.irrigation_' ~ cycle ~ '_' ~ zone ~ '_sat', 'on' ) %}
-                          {% set ns.duration_sat = ns.duration_sat + (zones.state | int) %}
+                          {% set ns.duration_sat = ns.duration_sat + duration %}
                         {% endif %}
                         {% if is_state('input_boolean.irrigation_' ~ cycle ~ '_' ~ zone ~ '_sun', 'on' ) %}
-                          {% set ns.duration_sun = ns.duration_sun + (zones.state | int) %}
+                          {% set ns.duration_sun = ns.duration_sun + duration %}
                         {% endif %}
                       {% endif %}
                     {% endfor %}
 
-                    {% if loop.first %}
+                    {% if cycle_index == 1 %}
                       {% set ns.duration_c1_mon = ns.duration_mon %}
                       {% set ns.duration_c1_tue = ns.duration_tue %}
                       {% set ns.duration_c1_wed = ns.duration_wed %}
@@ -181,5 +183,6 @@ style: >
     background: none;
     margin-top: -0.5em;
   }
+
 
 

@@ -151,9 +151,5 @@ card_mod:
   style: >
     ha-card {
       margin-top: -0.75em;
-      margin-bottom: {% raw %}
-      {% set no_of_zones = states('input_number.irrigation_number_of_zones') | int %}
-      {% set bottom_margin = ((16 - no_of_zones) / 2) * -1 %}
-      {{ bottom_margin }}em;
-      {% endraw %}
+      margin-bottom: 0;
     }

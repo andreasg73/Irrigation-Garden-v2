@@ -22,11 +22,12 @@ entities:
       - type: custom:button-card
         name: >
           [[[
-            var total_seconds = parseInt(states['sensor.irrigation_cycle3_duration_in_seconds'].state);
-            var date = new Date(null);
-            date.setSeconds(total_seconds);
-            var hrs = date.toISOString().substr(11, 2);
-            var mins = date.toISOString().substr(14, 2);
+            var raw = states['sensor.irrigation_cycle3_duration_in_seconds']?.state;
+            var total_seconds = Number(raw);
+            if (raw == null || String(raw).trim() === '' || !Number.isFinite(total_seconds) || total_seconds < 0)
+              return 'Total Runtime: —';
+            var hrs = Math.floor(total_seconds / 3600);
+            var mins = String(Math.floor(total_seconds % 3600 / 60)).padStart(2, '0');
 
             if (hrs == 1)
               var hrs_s = ' Hour and ';
@@ -41,14 +42,10 @@ entities:
             if (states['input_boolean.irrigation_testing_mode'].state == 'on')
               return 'Total Runtime: ' + total_seconds + ' Seconds (testing mode)';
             else {
-              if (hrs == '00')
+              if (hrs == 0)
                 return 'Total Runtime: ' + (total_seconds / 60) + mins_s;
-              else if (hrs == '01')
-                return 'Total Runtime: ' + hrs.substr(1, 1) + hrs_s + mins + mins_s;
-              else if (hrs > '01')
-                return 'Total Runtime: ' + hrs.substr(1, 1) + hrs_s + mins + mins_s;
               else
-                return 'Total Runtime: ' + mins + mins_s;
+                return 'Total Runtime: ' + hrs + hrs_s + mins + mins_s;
             }
           ]]]
         tap_action:
@@ -171,9 +168,5 @@ card_mod:
   style: >
     ha-card {
       margin-top: -0.75em;
-      margin-bottom: {% raw %}
-      {% set no_of_zones = states('input_number.irrigation_number_of_zones') | int %}
-      {% set bottom_margin = ((16 - no_of_zones) / 2) * -1 %}
-      {{ bottom_margin }}em;
-      {% endraw %}
+      margin-bottom: 0;
     }

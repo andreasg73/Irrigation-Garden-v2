@@ -37,6 +37,10 @@ cards:
         - margin-top: -0.75em
         - margin-bottom: -0.75em
       name:
+        - white-space: normal
+        - text-overflow: unset
+        - text-align: left
+        - overflow-wrap: anywhere
         - font-size: 18px
         - color: var(--secondary-text-color)
         - justify-self: start
@@ -96,6 +100,7 @@ cards:
           icon:
             - animation: blink 2s ease infinite
 
+{% if cycle | int != 3 %}
   #=== CYCLE 1 AND 2 ENABLE SCHEDULE BUTTON
   - type: custom:button-card
     icon: mdi:toggle-switch
@@ -130,6 +135,7 @@ cards:
         color: var(--paper-item-icon-active-color)
         icon: mdi:toggle-switch
 
+{% endif %}
   #=== CYCLE 3 START/STOP BUTTON
   - type: custom:button-card
     entity: input_boolean.irrigation_cycle3_running
@@ -143,6 +149,9 @@ cards:
             return 'none';
           else if (states['input_boolean.irrigation_cycle3_running'].state == 'on')
             return 'call-service';
+          else if (states['input_boolean.irrigation_master_control_switch']?.state !== 'on' ||
+                   states['input_boolean.irrigation_stop_in_progress']?.state !== 'off')
+            return 'none';
           else return 'toggle';
         ]]]
       service: script.irrigation_cancel_irrigation
@@ -201,8 +210,15 @@ cards:
     state:
       - value: 'off'
         icon: mdi:play-circle-outline
-        color: green
+        color: >
+          [[[
+            return states['input_boolean.irrigation_master_control_switch']?.state === 'on' &&
+                   states['input_boolean.irrigation_stop_in_progress']?.state === 'off'
+              ? 'green' : 'var(--disabled-text-color)';
+          ]]]
       - value: 'on'
         icon: mdi:stop-circle-outline
         color: red
+
+
 
