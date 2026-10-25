@@ -3,7 +3,7 @@
   "display_name": "Irrigation Garden",
   "format_version": 1,
   "build_tools": {
-    "compile_lovelace.py": "4b8e9dc766519ae349c63ea8fcf00da5afc0986dce5b87a142cfb1101ab2146a",
+    "compile_lovelace.py": "4fb4764194da47e2b11c9596680194efdfe9d2ca31d0f530755b6cc71ed544de",
     "localize_lovelace.py": "d5ce36aae3a9b86072bbdd8bc30654b8a17bab05ca2f6adeeb86f5427c6f1d4c",
     "build_i18n_release.py": "199693f689cdf486bcdc553af7bd9a080c1279bf5d56a71645b773a17564b428",
     "enhance_lovelace.py": "3aed8bef15f0d720d1bb0bf918b5e35c984af85edb500844dbdd34d6078f6705"
@@ -16,247 +16,247 @@
   "source_files": [
     {
       "path": "lovelace/garden_irrigation/cycles/item_cycle_day_select_button.yaml",
-      "sha256": "86ad7688de84ef13dad95aeb030f62d310a4fc46fc05551166b4f7ce234d4742",
+      "sha256": "07a2fc3ffcb9956e810743f730b1db61ec8c69993d75b1f84eb088153147a1b4",
       "normalized_text_sha256": "a2eea605fc666a879ff33a2be0d7d173fa4f39601de097dabb4e71df54362907",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/cycles/item_cycle_header.yaml",
-      "sha256": "bafe36e22e39dc0c9cfb7774352a7942a763c35dfb963511656ceb48f5b4dcd0",
+      "sha256": "a40ff05b112a458da2bb3000875ddfa9192b4ddc12f9c4b2c5c8f430fb3a6613",
       "normalized_text_sha256": "c89d3ff381bca4db9eaae67538f3c65be7743dc3b6831d16641a1c2a12c97866",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/cycles/item_cycle_start_time.yaml",
-      "sha256": "f5a365e29d4e7ccc072ca096098e569efd5f4ae132c4e6078b72966d78b9c584",
+      "sha256": "e6c4f6d7095b8ad23fbd2cfc5ac86df4b55e6a838dc9cd5e35bff40020474830",
       "normalized_text_sha256": "6961fbe7b4d3de3819451bc57d8706e9cb1589f93fc9c56a811c33a3fbceb2da",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/cycles/item_cycle_weather_check_box.yaml",
-      "sha256": "1bf1200824d6163d2b30976ca7bdcf2e402c8d0e65667dc6a1e82665008af1d2",
+      "sha256": "a2021caa5499eeeb4c298f799d9cacf2d86341b77ee998d22f66f34f19561a89",
       "normalized_text_sha256": "0998c51a5373f79430e4f2dd59c74ff5d2c793017e814b9fdce0df99c3b9b582",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/cycles/item_cycle_zone_duration_line.yaml",
-      "sha256": "10e46075e37056a8c4456b06432dce6d10916daf3843fa4932bec9e2afad4376",
+      "sha256": "59855da0ce0ad81259781b47821ca9ad6452d33277f438e6fb09093d9562f873",
       "normalized_text_sha256": "36f5a0a74c69d2f71abafc36905784ce4adbb2dc6d060785f35449556ba7fcf6",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/cycles/item_cycle_zone_every_day_check_box.yaml",
-      "sha256": "74050024f72b70c1b14e68a1f449dd23071b220da0b06fb63a3804246d8545c7",
+      "sha256": "398f25f278018eee06cf23233f8daf6c06dfdeb7922789c54f7facb58fe4a235",
       "normalized_text_sha256": "f315070fea61f087f363136fc3ac351aa9c459f5f20c846198f355fb16c667e4",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/cycles/page_cycles.yaml",
-      "sha256": "200e6d2f562db9298786e1612593647eef933f82bc0b376ca2e54431e89bf143",
+      "sha256": "a3b182bf36b28218eeed5dcc513236e7f2fe39631f697d9079007677c90d326f",
       "normalized_text_sha256": "bbad59c57915dc6c76e0f349a457a61ea30f0fa5e25758d876e49c92348ee815",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/cycles/section_cycle1_2_schedule.yaml",
-      "sha256": "485b0f92530ab80663e39436eea498c08006f64545543f2d11c422c83c857a30",
+      "sha256": "172e80e8fc186baaf083c0d82eda41d5121c66b0cc5a37ef18c07f9b26d8349a",
       "normalized_text_sha256": "371b5618a10d92a92eeb44a29b8f47c847b321ff001ff7574cf8590982641c98",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/cycles/section_cycle3_schedule.yaml",
-      "sha256": "79222908876fd5536fa1435f4ed40208662827055d7e165efb99e90652af2daa",
+      "sha256": "b69c6535ed74ecc2a9a45a0d21987339d92decd0202f5d21be6381b8cbd2d072",
       "normalized_text_sha256": "6c746bd3ecd84c43d4ae6dfc2b52fa8be693e2f2a55261ffc550e82427dd92ac",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/irrigation_section_select_button.yaml",
-      "sha256": "4dc2a09cc1edf3bdb936476a1fc765b16bd1d88090b5d9bfef5f3aecb6e44514",
+      "sha256": "2de88c8f0370bada51b76188aad07b8cb203b85df4ca7551d0466faa33f8728b",
       "normalized_text_sha256": "45d2de2e00b8442f199221f5686d02ee35c7d096203eda3cfb852e2955d17247",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/general/item_settings_controller_wifi_signal.yaml",
-      "sha256": "874f7072c35a3944117b70275a7a647a48edcf7d5bc7ad2209d17dbda0cf0186",
+      "sha256": "455a2aba37d5ae9e4221ce86e2fa88705bebc5f5994105da2a6095b531f81685",
       "normalized_text_sha256": "99f4019811403345f22611f40970bf15139779b3d1d08b1b20a9bb74259c05be",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/general/item_settings_edit_user_names.yaml",
-      "sha256": "bfca682754f050522261a7688b9de9ded2948c4ccf07355e3da08166e24de2c7",
+      "sha256": "13264435bbe0aee44e5f94adb6739f4314d33700f4259e181808235e9a75eb79",
       "normalized_text_sha256": "2b7a20e25554c6864d7c8f12a81aa88c7ab353786107c45c3e960e44957c029c",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/general/item_settings_notify_users.yaml",
-      "sha256": "bf1ded032293b0e807e0ef050b19d330260e106e40cbb1e22e3f0a67a6ac1ec7",
+      "sha256": "81e4ebf032195e47b8f20b6529a480d70f8cefce9156cbcc521ab92a91b32801",
       "normalized_text_sha256": "243a1e707177cf4207551acc205f8d96919fa1be5f91a9d652e15a34825d53d7",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/general/item_settings_ui_font.yaml",
-      "sha256": "fd06eed313bf6d04e3ca331ad2ae86f554258cc3951b75d26f30b9856ef07f38",
+      "sha256": "b59c2a9c642b94b51027bdfcdac0365991d29377c79be93152d7d7d3e7d97a12",
       "normalized_text_sha256": "d736a4a394116376b142cbe7675da95db891cbe349fc62bdaff1c97dc23618da",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/general/item_settings_warning.yaml",
-      "sha256": "a49a76e882d7bffdb03a9019126de5ee5a121fe15494dffc108ca8143776d2db",
+      "sha256": "0593c4f765dccf2084e2849631ff63233bf9c9b190a3d6bbe388802e43aade92",
       "normalized_text_sha256": "86f346453344d5ca1608f4b5c1dddfb7cd857e717e0cd76585b33c0aef3b3aad",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/general/item_settings_weather_sensors.yaml",
-      "sha256": "9bca6a15e65457d5f5c82310f319f1a84bd4771f2921e0c94a1c1a4ab5b15b97",
+      "sha256": "6fa53e6165aecc63c419e735460befa132394f645ddc32343ee51f87c02f8bc0",
       "normalized_text_sha256": "0135a15ca791aee0bdbdc49df9072cb49fec050955e26c4d1ede9c93a19a4a11",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/general/section_settings_general.yaml",
-      "sha256": "38ddfd5e4fba707c3b639363138c152f44c41b922dfffd274e7b2a349ebe0603",
+      "sha256": "85d423906d68b2ee916fc9791fec933db3ba7d288ebff803ed196dafe4f2bda8",
       "normalized_text_sha256": "582a71b29f5d0a585f58d22c9726a9e085f71b1240cf074b900e69528255be25",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/item_settings_check_box_with_entity_icon.yaml",
-      "sha256": "85c29d8617169d7b0e719ab9a2a539cd864e36ce1d9db66b1cb0059fa9374cc9",
+      "sha256": "d97da7033374e6160919ab5467981db6dcda05c6fc077a09dc7b2d3fbd194a6c",
       "normalized_text_sha256": "e961c61a89332640bd737dbc86549230632df3ba5c504fa4d62a2d1db84f8e3f",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/item_settings_info_button.yaml",
-      "sha256": "90fbe5323d19af19b96856539a8df56ff6cd0068529d665f38deaf15ad15079d",
+      "sha256": "ba10513afccb79707a12ae36d9f98b9251469d457a13be289b90bf394ac1f427",
       "normalized_text_sha256": "bfd7728612256efbf2386de5ba2b0527fcc6f0bef8e8bef683c0a9c6e9ab6039",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/item_settings_line.yaml",
-      "sha256": "3563e0558f4628b5dfd77ac834ec3076110a6709d1e287b4b1097f9d959a8a10",
+      "sha256": "6c95e62cac3b362c249c0ac26ee9a52e3469f490237ae6cdae59c72d60931a98",
       "normalized_text_sha256": "a8a695b25c77f7a7a398ef10aa8854f400b15ff0b3a9651756ef197a4db1e58d",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/item_settings_multiplier_line.yaml",
-      "sha256": "3869438d5fbfee56117d5addd6b12b9dea441a2f8d22945caf70d2ad78de2877",
+      "sha256": "b5bfdccfd0eb58f0b4c82c508cf37dbccfd00f89c7ac76a705fac9558896b1b3",
       "normalized_text_sha256": "12d15d257987795e949587109f28b87f5aa3e7956cce5a5f7f539e56b68dfed0",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/item_settings_select_button_with_icon.yaml",
-      "sha256": "a93da8c7044cc1c3645d5eb4949f3e6657536e790f89113e4a017c19bd0e2e86",
+      "sha256": "55de346ca4c6708b9915515f1ef5b93e1f3eee7004fcc50522942c521f50534c",
       "normalized_text_sha256": "85b0a45bcd4b539b81d06431d17050c5e696a8cd5e137ede5ae3d777c5779016",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/page_settings.yaml",
-      "sha256": "aa1719cddd71d99eb02afea900eae4ddf855d9a6aec1d7b37a9a1505a798b1d1",
+      "sha256": "88addb0f622121052a0b433a2a69e576fa1b61219a13f311388985462a1b4409",
       "normalized_text_sha256": "2f8e0b5fce466ff6535a6e4de479fed0ffe474816a286268c1ff77ca39add432",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/rainfall/item_settings_rainfall_graph.yaml",
-      "sha256": "209b7567209087dabdf3237422489490132e5e7fa7ad929b6268b066ad43eb4b",
+      "sha256": "e97872840c6a9d579478b2b62f82db977bc5b7c4d75be506c4c6b888ed03db47",
       "normalized_text_sha256": "256efbf8ae561094391ff2cd5f3bdfdbc197b3dd337ec99a805b6a03b98e45da",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/rainfall/item_settings_rainfall_line.yaml",
-      "sha256": "a1bd5ce25cc22d52d7014e19873cd9f6652e7ef3f3e5ab3856a086696628be82",
+      "sha256": "5a2651943e70b7541b4fb8379314aa66dcf9f8d4803eca494abb13cb6ccaffba",
       "normalized_text_sha256": "b66743a7f1de27cf86049d68f14f1a8c1d2da2fdbc82704b42868c2f4a01d65e",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/rainfall/item_settings_smartweather_check_box.yaml",
-      "sha256": "9cff6ce726c7a9c247087a0ef2a3d9a14c73c07ed204c844b8824338fce80527",
+      "sha256": "f18db741c972d16291b33e42020b76ee48080a80766f41884dcfa70624a9697f",
       "normalized_text_sha256": "fa458276d9bca1cbe164bc43f44728fadba1e89ae0c69a8008791e45c66542ca",
       "used_by_main": false
     },
     {
       "path": "lovelace/garden_irrigation/settings/rainfall/item_settings_smartweather_stations_used.yaml",
-      "sha256": "260794af4534d713e57c157911185e9206ca7bc8bf210fd937c327fa13aaac55",
+      "sha256": "d6bb0f4cb68b7a545f22f02f3886991674ab2072d1696b2cc6e906697782f692",
       "normalized_text_sha256": "6947bfe1e1c044d4db54a2ca24ef482cac9caa253da56d0784e0e4e122fdd44b",
       "used_by_main": false
     },
     {
       "path": "lovelace/garden_irrigation/settings/rainfall/section_settings_rainfall.yaml",
-      "sha256": "c49f4314bb064aa7084b48f0580fd8b80739db439237c1a38fbb0758661883c9",
+      "sha256": "8186f60e0510945b7ec81220df34ee09dae0c55730929cbedcc7b1f280919441",
       "normalized_text_sha256": "2eced8feea3fe35b4d699911bad678955e7ea07b2f9e193f1b43a7172731c433",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/temperature/item_settings_temperature_graph.yaml",
-      "sha256": "d7e7017f7e21b2641d07f06418dac95612c468db3f159037c320f6549adfab42",
+      "sha256": "bd78c73d402bb2e62e55acd27aa721d560fe062e438f8eb0fcf0769b2b0281d6",
       "normalized_text_sha256": "ca390788385afa74974615e179a4baf17604b12c99a75d2a23f1e8a994d0ad9d",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/temperature/item_settings_use_forecast_high_temp.yaml",
-      "sha256": "3087c5ab360c0563335e31837a81276932ae99cdb77321a1529913383e472b25",
+      "sha256": "c51847e8a0b2ab4d932764471e0c934b81b1bac1fcbd3d2fb0531fe5d6b98cdc",
       "normalized_text_sha256": "721573f343532d98404f796ab98a356a1f34278768c803abf9021f9021324e7a",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/settings/temperature/section_settings_temperature.yaml",
-      "sha256": "321d0cd1e419c6aab0a315f094c53983d8b315b24d8de5f5ee5eb1ea5b1343ed",
+      "sha256": "eccbbdf7990efc8fa96b07c19ec16c277e4e72b4a74a22940e679ecf4a1dda2f",
       "normalized_text_sha256": "f54455021d26642584ecc795d8748a9b9d7efde2eaffd4b93a8844f90e0f4814",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/status/current/item_status_current_activity_line.yaml",
-      "sha256": "1fa136ef79322eaafd2e6bccac7e09b27dc0f0464ec5263ce51e0442728f7ca5",
+      "sha256": "3a5cbf3dcfa6b8c40d1d50bc3f23825575a0a86bc2b45b2197cac30b374f503f",
       "normalized_text_sha256": "f90c3c81836df04c7015900d2660aa8b9e553c2c7b928b564bf112f91ed900b5",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/status/current/section_status_current_status.yaml",
-      "sha256": "a3642038abc2c08ff74419bb83c5ccbdb8f069de6468e9eb528514a448a02571",
+      "sha256": "f895d5bb111e3ead9138a1813a54aebdc615aed63b44c12dc9178eeed6aa65ee",
       "normalized_text_sha256": "1a11d3e2436cf54ae13570e52623801002a60a1f1c60e568886c793bcdd8d13d",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/status/history/item_status_history_line.yaml",
-      "sha256": "ec228abdff6574ad6a87e277861970f51cee3e5f609611632b503843ebddfde5",
+      "sha256": "45605bf799647b4145b44ff2dd88745727fcf972f03fe881a0122369da64e366",
       "normalized_text_sha256": "4b936f6c844ce188f611527046ac08827957f90b5f78f9ebbbbad776114fe472",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/status/history/section_status_history.yaml",
-      "sha256": "5e517f8c50562884e62c5cdfd16c42ce94ec25ba00fe71cd29daa668461f1fc0",
+      "sha256": "b2442682efba4f52b4093c4f704b92a09ae89a5613066e3b60f2e9615e61d939",
       "normalized_text_sha256": "6cb5d88d9582e9d0d2ef77ee80045d1f86b0fa64b487803daf2d588999a2b691",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/status/item_status_include_section_check_box.yaml",
-      "sha256": "7409dd0c3cf8fa9a601cae0ad77eff23dc3849eaabf5cd753097028732f650ed",
+      "sha256": "4df4ad7a3e67ac79d163fa539fe3fca95706ac590d311a0c5702bca17ca57536",
       "normalized_text_sha256": "c8272c880a024ba3d27df79b6718418d2d22dd3b323b5d9b2c5894f8677a1f7b",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/status/last_run/item_status_last_run_line.yaml",
-      "sha256": "d6bf1dd49edea91d20e22a10ec3c09702e9b995a67b53e710e0c689b4a89d721",
+      "sha256": "78f70095e85d25ec7dba3bf5e85230803425fd628c4fbd5d121b63b84c5f966b",
       "normalized_text_sha256": "5e9b64de9af416f0faf7f441383da1303b23ddf8de1b17af4bd3b142a15e0911",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/status/last_run/section_status_last_run.yaml",
-      "sha256": "cc0f2237c46602daf95071ab0fa2dac424d1f0e8d3e98dbca5015e2bc3a919a4",
+      "sha256": "3239d89486cbb5afc9e600b0c7b2e76e4071ef6b0e0ec85ae47ce68c6b6b36d5",
       "normalized_text_sha256": "12101db2cbdb595a170a4e4dba710e71e5351c6339d11d78827dad4acae9061c",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/status/page_status.yaml",
-      "sha256": "223d339feca230e45e37c3afa7cebef1503c092067e4704bc830d772ec340586",
+      "sha256": "b991127945da608eaeb4bf51a58d2fd55bcf879529a2fb348c268d3414480c89",
       "normalized_text_sha256": "bca04ab7ab3cac907e2eee702d8336434f76f8008b89c600293ee74f14d70c83",
       "used_by_main": true
     },
     {
       "path": "lovelace/garden_irrigation/status/section_status_header.yaml",
-      "sha256": "f301e434df6ae52e139bb49bb22b5c447c1e1c1de1ed12b11d55abc7a8e1034a",
+      "sha256": "c8bee95575b461cf916a16e6f85603ab1490450aea6159e8029e90f5bd4b179a",
       "normalized_text_sha256": "379cb224140ace7fb7662c7b0d969c2f27710d18855544cbe4f0f2f34e005478",
       "used_by_main": true
     },
     {
       "path": "lovelace/view_garden_irrigation.yaml",
-      "sha256": "aefecb47ebcd2819ca70322f8f719b61e633b3094d1d20a60b67f5fdc13659f0",
+      "sha256": "eec206b6d6c66c434be6fb9ae3e5fa1cc4399e9ded2d9b6b83f4d7f21a7c7509",
       "normalized_text_sha256": "ce3686424a3389ca8bd3a9855b88905f3941fec36fb1d0689ef51dccdc18ed10",
       "used_by_main": true
     }
