@@ -9,6 +9,7 @@ import yaml
 from compile_lovelace import Compiler,custom_types
 from localize_lovelace import localize,extract,write_catalog,key_for
 from enhance_lovelace import enhance,UI_LABELS
+from decision_labels import DECISION_LABELS
 ROOT=Path(__file__).resolve().parents[1]
 canonical=lambda x:json.dumps(x,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()
 sha=lambda x:hashlib.sha256(x).hexdigest()
@@ -34,7 +35,7 @@ def build(candidate,output,language,catalog_dir):
  (output/'irrigation_dashboard.json').write_text(json.dumps(data,ensure_ascii=False,separators=(',',':'))+'\n',encoding='utf-8',newline='\n')
  files=sorted(source.rglob('*.yaml'))
  manifest={'project':'Irrigation Garden','display_name':data['views'][0]['title'],'format_version':1,
-  'build_tools':{name:sha((ROOT/'tools'/name).read_bytes()) for name in ['compile_lovelace.py','localize_lovelace.py','build_i18n_release.py','enhance_lovelace.py']},
+  'build_tools':{name:sha((ROOT/'tools'/name).read_bytes()) for name in ['compile_lovelace.py','localize_lovelace.py','build_i18n_release.py','enhance_lovelace.py','decision_labels.py']},
   'target':'Original kloggy/HA-Irrigation-Version2; localized original Lovelace','language':language,'source_count':len(files),'reachable_source_count':len(used),'include_expansions':expansions,
   'source_files':[{'path':p.relative_to(candidate).as_posix(),'sha256':sha(p.read_bytes()),'normalized_text_sha256':sha(p.read_text().rstrip().encode()),'used_by_main':str(p.relative_to(source)) in used} for p in files],
   'catalogs':{name:sha((catalog_dir/name).read_bytes()) for name in sorted({'en.ini',language+'.ini'})},
@@ -52,7 +53,7 @@ def main():
  p.add_argument('--extract',action='store_true',help='Regenerate en.ini from source; reconcile other catalogs before building')
  a=p.parse_args()
  if a.extract:
-  c=Compiler(a.candidate/'lovelace');data={'views':[c.compile(a.candidate/'lovelace/view_garden_irrigation.yaml')]};messages=extract(data);messages.update({key_for(pair[0]):pair[0] for pair in UI_LABELS.values()});write_catalog(a.catalog_dir/'en.ini','en','English',messages);print(json.dumps({'extracted_messages':len(messages)}));return
+  c=Compiler(a.candidate/'lovelace');data={'views':[c.compile(a.candidate/'lovelace/view_garden_irrigation.yaml')]};messages=extract(data);messages.update({key_for(pair[0]):pair[0] for pair in list(UI_LABELS.values())+list(DECISION_LABELS.values())});write_catalog(a.catalog_dir/'en.ini','en','English',messages);print(json.dumps({'extracted_messages':len(messages)}));return
  language=a.language
  if not language:
   config=configparser.ConfigParser(interpolation=None);config.read(a.catalog_dir/'build.ini');language=config.get('build','language',fallback='en')

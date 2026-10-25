@@ -2,6 +2,7 @@
 import copy
 import re
 from localize_lovelace import key_for, read_catalog
+from decision_labels import DECISION_LABELS
 
 UI_LABELS = {
     'search': ('Search entities', 'Szukaj encji'),
@@ -86,6 +87,7 @@ def enhance(data, language, catalog_dir):
     _, catalog = read_catalog(catalog_dir / (language + '.ini'))
     _, english = read_catalog(catalog_dir / 'en.ini')
     labels = {name: catalog.get(key_for(pair[0]), english.get(key_for(pair[0]), pair[0])) for name, pair in UI_LABELS.items()}
+    decision_labels = {name: catalog.get(key_for(pair[0]), english.get(key_for(pair[0]), pair[0])) for name, pair in DECISION_LABELS.items()}
     counts = {'picker_rows': 0, 'popup_wrappers': 0, 'section_wrappers': 0}
 
     def wrapper(card):
@@ -119,14 +121,15 @@ def enhance(data, language, catalog_dir):
         for section in view.get('sections', []):
             section['cards'] = [wrapper(card) for card in section.get('cards', [])]
             counts['section_wrappers'] += len(section['cards'])
-        view['sections'][0]['cards'].insert(0, {'type': 'custom:irrigation-garden-appearance', 'ui_labels': labels})
+        view['sections'][0]['cards'].insert(0, {'type': 'custom:irrigation-garden-appearance', 'ui_labels': labels, 'show_decisions': False})
+        view['sections'][0]['cards'].insert(1, {'type': 'custom:irrigation-garden-decisions', 'ui_labels': decision_labels})
     return result, counts
 
 
 def original_structure(data):
     """Remove only the documented UI adapters, for independent legacy parity checks."""
     if isinstance(data, list):
-        return [original_structure(v) for v in data if not (isinstance(v, dict) and v.get('type') == 'custom:irrigation-garden-appearance')]
+        return [original_structure(v) for v in data if not (isinstance(v, dict) and v.get('type') in {'custom:irrigation-garden-appearance', 'custom:irrigation-garden-decisions'})]
     if not isinstance(data, dict):
         return data
     if data.get('type') == 'custom:irrigation-garden-themed-card':

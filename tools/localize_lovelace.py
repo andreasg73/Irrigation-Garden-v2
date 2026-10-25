@@ -129,6 +129,8 @@ def localize(data,language,catalog_dir):
  presentation_keys=set(expected)
  from enhance_lovelace import UI_LABELS
  expected.update({key_for(pair[0]):pair[0] for pair in UI_LABELS.values()})
+ from decision_labels import DECISION_LABELS
+ expected.update({key_for(pair[0]):pair[0] for pair in DECISION_LABELS.values()})
  if base!=expected:raise ValueError('Source catalog is stale; regenerate en.ini and reconcile translations')
  selected_meta,override=read_catalog(catalog_dir/(language+'.ini'))
  if selected_meta.get('language')!=language:raise ValueError('Catalog language metadata does not match filename')
