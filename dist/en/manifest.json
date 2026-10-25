@@ -4,9 +4,10 @@
   "format_version": 1,
   "build_tools": {
     "compile_lovelace.py": "4fb4764194da47e2b11c9596680194efdfe9d2ca31d0f530755b6cc71ed544de",
-    "localize_lovelace.py": "d5ce36aae3a9b86072bbdd8bc30654b8a17bab05ca2f6adeeb86f5427c6f1d4c",
-    "build_i18n_release.py": "199693f689cdf486bcdc553af7bd9a080c1279bf5d56a71645b773a17564b428",
-    "enhance_lovelace.py": "3aed8bef15f0d720d1bb0bf918b5e35c984af85edb500844dbdd34d6078f6705"
+    "localize_lovelace.py": "1bb5f970f89c373a2f9254d6bd9426d254400caea32abcc56e6e86c262ac66db",
+    "build_i18n_release.py": "0c7b9ffa64cd2692c50e61e5f33da32d8c293cfe99165da6189892d0fb7388ed",
+    "enhance_lovelace.py": "3be8d1acf9afeae28cc110247ce52d807e17a7d48a3990425601b11dd1c7fc7f",
+    "decision_labels.py": "22206bad29b23609d80f2d894cabc49549c8ab217af9166e5aaec9e6658e1848"
   },
   "target": "Original kloggy/HA-Irrigation-Version2; localized original Lovelace",
   "language": "en",
@@ -262,18 +263,18 @@
     }
   ],
   "catalogs": {
-    "en.ini": "18cdb4d4120baff369200cbd0df07e1710b0eeee3fd85cb74eaa0fe30bb15f24"
+    "en.ini": "b7a0e69bc5d8e5b385733df45b0398abe54ef72d74795c7a88f2695dfe1fa450"
   },
-  "semantic_sha256": "39c4bf5e9b56619a7efe5918285174d01228e4d181fe89f8a15f6b2eaf6f9692",
+  "semantic_sha256": "58f616f206b8efd9ab933fcbdc5975b9852356a7f1b2f65a4ef7161ee5a0bfa5",
   "english_semantic_sha256": "405730baf93b6ddd00dc288a502dee39762ae08dfb461bc34918513cad79a8cb",
   "generated": {
     "irrigation_dashboard.json": {
-      "bytes": 1154031,
-      "sha256": "38deec5276e03d9149c25cfd7dd58e525eb13c2eec5449e2cbd624ddeace897e"
+      "bytes": 1156592,
+      "sha256": "8dab0dc4aa6771ae1528cd58b88f88f39e6dac36b51ed627789d2135f5fc99b8"
     },
     "irrigation_dashboard.yaml": {
-      "bytes": 814155,
-      "sha256": "65e7188fc13d94a959eae4be6d0eb918ab49c0380ab6072ccbeff5937459c47c"
+      "bytes": 817000,
+      "sha256": "a8ad9947a51b307589b5fb8b927cd59dfee2e57b659cf47bbd7cfa8994b1d9a2"
     }
   },
   "checks": {
@@ -284,13 +285,14 @@
   },
   "ui_module": {
     "path": "custom_components/irrigation_garden/frontend/irrigation-garden-ui.js",
-    "sha256": "410fe0b6a2faf50b7bacba7d9b2cf8469a07755e2485907c95c73284ce6444fa"
+    "sha256": "4303e93e3579c64cf9412f290f4bd70de493e02bcbe68f2299b49293df6d7126"
   },
   "custom_cards": [
     "custom:button-card",
     "custom:config-template-card",
     "custom:hui-element",
     "custom:irrigation-garden-appearance",
+    "custom:irrigation-garden-decisions",
     "custom:irrigation-garden-entity-picker",
     "custom:irrigation-garden-themed-card",
     "custom:mini-graph-card",
@@ -304,7 +306,7 @@
   },
   "localization": {
     "language": "en",
-    "catalog_messages": 283,
+    "catalog_messages": 325,
     "fallback_keys": [],
     "changed_fields": 0
   },
