@@ -1,5 +1,9 @@
 # Irrigation Garden v2 — development, 2026-10-25
 
+## 0.3.0b1 — first published beta, 2026-10-25
+
+Published [GitHub Release 0.3.0b1](https://github.com/andreasg73/Irrigation-Garden-v2/releases/tag/0.3.0b1), pinned to tested commit `9ae31428dfc93e1291352356f991a53500bb165d`. The tag matches the integration manifest. In HACS, refresh repository data, enable beta releases if needed and select the numbered release; selecting `main` continues to track development commits. This publication supersedes earlier same-day notes that no release existed. No engine or Home Assistant settings changed.
+
 Documentation maintenance, 2026-10-25: align instructions and help links with the default branch `main` and development version 0.3.0b1. No GitHub Release is published yet. Clarify HACS download versus package activation, retain migration instructions, update manual module registration, weather picker units, catalog totals (283 per language) and test descriptions. Original Kloggy attribution remains preserved. No irrigation-engine or active HA changes.
 
 Weather diagnostics 0.3.0b1, 2026-10-25: weather entity pickers now show measurement/forecast/conditions, current value and unit, missing/unavailable/unknown sources, invalid types/units/values, and actual last report to HA separately from state/attribute updates. Report timestamps use a shared read-only template request with explicit refresh and a one-minute automatic throttle while mounted; errors and outdated snapshots do not produce a false report time. Existing searchable assignment, Save/Cancel and engine behavior are preserved. EN/PL catalogs and HACS payload updated; builds use portable UTF-8/LF output and ZIP paths. Git attributes enforce LF text checkouts and ZIP entries use canonical platform metadata, preserving exact published source bytes across Windows and Linux builds.
