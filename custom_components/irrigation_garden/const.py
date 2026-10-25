@@ -1,6 +1,6 @@
 """Constants for the installer of the original Irrigation Garden packages."""
 DOMAIN = "irrigation_garden"
-VERSION = "0.3.0b1"
+VERSION = "0.4.0b1"
 TITLE = "Irrigation Garden"
 INSTALL_DIR = "irrigation_garden"
 ISSUE_SETUP = "package_activation"
