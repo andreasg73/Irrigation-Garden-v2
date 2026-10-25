@@ -42,6 +42,8 @@ The supplied registry uses only the 29 intended package files. Never apply `!inc
 
 Use the `lovelace.dashboards.irrigation-garden` example. Storage-mode dashboards can remain as they are. English uses `dist/en/irrigation_dashboard.yaml` with title `Irrigation Garden`; Polish uses `dist/pl/irrigation_dashboard.yaml` with title `Podlewanie Ogrodu`.
 
+Register the project UI module as described in [Entity search and appearance](ENTITY_PICKER_AND_APPEARANCE.md#instalacja-modułu). Manual installs must copy the module and register its JavaScript Module resource as well as the YAML dashboard; copying the dashboard alone leaves the custom UI elements unavailable.
+
 The sidebar title belongs to the registration, while the view title comes from INI. Rebuilding the view does not automatically update sidebar metadata. Dashboard text replacements normally need only a frontend refresh; adding initial YAML registrations/packages requires validation and the appropriate HA restart.
 
 ## 5. Validate and start without outputs
@@ -62,7 +64,7 @@ Use General → Number Of Zones to select 1–16 zones. Click a zone name to set
 
 For initial verification use virtual switch entities and keep Disable Switches ON. Test Mode changes watering-duration units from minutes to seconds; it is separate from Disable Switches and must not be confused with permission to operate hardware.
 
-Use General → Weather Sensors to configure your own sources. Required numeric units are °C and mm (legacy custom sensors without a unit are also accepted by the original compatibility path). A `weather.*` entity is not a substitute for every required temperature/rain sensor. Missing required data retains the last valid correction rather than fabricating rainfall or temperature.
+Use General → Weather Sensors to configure your own sources. The searchable picker requires explicit °C and mm units. Some original backend compatibility templates accept unitless sources, but those sources are not listed by the picker; provide correctly labeled sensors instead. A `weather.*` entity is not a substitute for every required temperature/rain sensor. Missing required data retains the last valid correction rather than fabricating rainfall or temperature.
 
 Use rainfall/temperature corrections only after checking the sources, units and history. Optional controller Wi-Fi fields accept your own sensor entities. Configure remote control, notifications and logging only if you use them.
 
