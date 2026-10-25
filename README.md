@@ -8,6 +8,8 @@ Modernization of the **original [Kloggy / HA-Irrigation-Version2](https://github
 
 Search HA entities by name/ID when assigning valves and sensors, and switch the original panel between light/dark appearance with its header button. [Entity selection and appearance](docs/ENTITY_PICKER_AND_APPEARANCE.md).
 
+[Weather sources and sensor setup](Weather%20Sensors.md#english) · [Optional historical SmartWeather example](SmartWeather%20reference.md)
+
 ## Installation through HACS
 
 Use this repository as a HACS custom **Integration** repository. The installer delivers the same original engine and EN/PL panel; activation requires one explicit YAML include. Follow the [HACS installation and migration guide](docs/HACS_INSTALLATION.md), including the existing-installation steps. It is not listed in HACS’s default catalog.

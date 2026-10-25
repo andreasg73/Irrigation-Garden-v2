@@ -1,5 +1,7 @@
 # Irrigation Garden v2 — development, 2026-10-24
 
+Documentation update, 2026-10-25: replaced the weather-source setup guide with EN/PL entity mappings, unit/period requirements, forecast-versus-measurement guidance and current outlook proxy behavior. Marked SmartWeather as an optional historical example while preserving its original body. No engine, dashboard or installation payload changes.
+
 Based on original Kloggy HA-Irrigation-Version2, master `532f01b5e`, incorporating a modernization reference from tinkerfish PR #103 and subsequent changes.
 
 - HACS custom-repository installation assistant 0.1.0b1 bundles the exact published original engine and EN/PL dashboard. Explicit package activation, migration instructions, versioned releases, update options and Repairs status; no automatic global YAML edits or actuator actions. See [HACS guide](docs/HACS_INSTALLATION.md).

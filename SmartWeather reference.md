@@ -1,3 +1,25 @@
+# SmartWeather — optional historical reference / opcjonalny przykład historyczny
+
+## English
+
+The original Kloggy example below is preserved unchanged for reference. **It is not a required component or a ready-to-install configuration for Irrigation Garden v2.** It uses the author's five-station setup, legacy template syntax, external helpers and illuminance/lighting logic. The illuminance logic is unrelated to irrigation.
+
+Use the current [weather-source guide](Weather%20Sensors.md#english) to assign your existing HA entities with the searchable picker. Other providers and local sensors can be used. This document does not guarantee current API access, keys, station availability or compatibility of the legacy YAML with current HA. Check the chosen service's current authentication and permissions separately; a station ID alone is not an access credential. Do not publish API credentials in this public repository.
+
+Any adapted rainfall sources must expose the required observed totals in mm for the correct period. Keep forecasts, rain rates and wet/dry detection separate. The example below is not loaded by the installation package registry or included in the HACS engine payload.
+
+## Polski
+
+Poniżej zachowano niezmieniony, oryginalny przykład Kloggy'ego. **To materiał historyczny i opcjonalny, a nie wymagany składnik ani gotowa konfiguracja Irrigation Garden v2.** Wykorzystuje pięć stacji autora, starszą składnię szablonów, zewnętrzne pomocniki i logikę oświetlenia/natężenia światła, która nie jest częścią podlewania.
+
+Korzystaj z aktualnej [instrukcji źródeł pogody](Weather%20Sensors.md#polski), aby przypisać istniejące encje przez wyszukiwaną listę. Można używać innych dostawców i własnych czujników. Ten dokument nie gwarantuje obecnego dostępu do API, kluczy, dostępności stacji ani zgodności starego YAML z aktualnym HA. Osobno sprawdź bieżące uwierzytelnianie i uprawnienia wybranej usługi; sam identyfikator stacji nie daje dostępu. Kluczy API nie publikuj w repozytorium.
+
+Po dostosowaniu źródła opadów mają podawać rzeczywiste sumy w mm dla właściwego okresu. Prognozy, natężenie deszczu i sygnał mokro/sucho mają odrębne znaczenia. Poniższy przykład nie jest ładowany przez rejestr pakietów instalacji ani dołączany do paczki silnika HACS.
+
+---
+
+## Original Kloggy example (historical, unchanged)
+
 ### __SmartWeather__ - This is an example for backwards compatibility and reference **ONLY**
 
 DO NOT SIMPLY COPY THIS FILE AND INCLUDE IN YOUR CONFIG WITHOUT UNDERSTANDING IT!
