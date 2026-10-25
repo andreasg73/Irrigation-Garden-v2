@@ -8,7 +8,7 @@
   "dependencies": [
     "lovelace"
   ],
-  "documentation": "https://github.com/andreasg73/Irrigation-Garden-v2/blob/modernization-ha-2026.10/docs/HACS_INSTALLATION.md",
+  "documentation": "https://github.com/andreasg73/Irrigation-Garden-v2/blob/main/docs/HACS_INSTALLATION.md",
   "integration_type": "helper",
   "iot_class": "local_push",
   "issue_tracker": "https://github.com/andreasg73/Irrigation-Garden-v2/issues",

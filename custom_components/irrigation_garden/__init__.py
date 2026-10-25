@@ -18,7 +18,7 @@ def refresh_issues(hass: HomeAssistant, entry: ConfigEntry) -> None:
     else:
         ir.async_create_issue(hass, DOMAIN, ISSUE_SETUP, is_fixable=False,
                              severity=ir.IssueSeverity.WARNING, translation_key=ISSUE_SETUP,
-                             learn_more_url="https://github.com/andreasg73/Irrigation-Garden-v2/blob/modernization-ha-2026.10/docs/HACS_INSTALLATION.md")
+                             learn_more_url="https://github.com/andreasg73/Irrigation-Garden-v2/blob/main/docs/HACS_INSTALLATION.md")
     if entry.data.get("prepared_version") != VERSION:
         ir.async_create_issue(hass, DOMAIN, ISSUE_UPDATE, is_fixable=False,
                              severity=ir.IssueSeverity.WARNING, translation_key=ISSUE_UPDATE)
