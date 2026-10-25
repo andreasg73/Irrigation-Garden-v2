@@ -56,7 +56,7 @@ views:
                 grid:
                 - grid-template-areas: '"l clash_icon warning" "n n n"'
                 - grid-template-columns: minmax(0, 1fr) 24px auto
-                - &id195
+                - &id196
                   grid-template-rows: min-content min-content
                 card:
                 - &id008
@@ -218,7 +218,7 @@ views:
             - value: Changing Zone...
               styles:
                 state: &id049
-                - &id206
+                - &id207
                   animation: blink 2s ease infinite
           - type: custom:hui-element
             card_type: conditional
@@ -252,14 +252,14 @@ views:
                 - &id018
                   font-size: 16px
                 - *id008
-                - &id187
+                - &id188
                   padding: 0.4em
                 - height: 2.4em
                 label:
                 - *id011
                 - *id002
                 - justify-text: start
-                icon: &id177
+                icon: &id178
                 - *id010
           - type: custom:hui-element
             card_type: conditional
@@ -614,9 +614,9 @@ views:
               - *id011
               - *id013
               - *id005
-              - &id185
+              - &id186
                 padding-top: 0em
-              - &id231
+              - &id232
                 padding-bottom: 0em
               - *id008
               - *id014
@@ -629,7 +629,7 @@ views:
             - value: 'on'
               icon: mdi:checkbox-marked-outline
               styles: &id060
-                icon: &id196
+                icon: &id197
                 - color: var(--state-icon-color)
             - value: 'off'
               icon: mdi:checkbox-blank-outline
@@ -1762,7 +1762,7 @@ views:
             cards:
             - type: custom:button-card
               name: -- CYCLES --
-              styles: &id176
+              styles: &id177
                 card:
                 - &id047
                   font-size: 13px
@@ -2131,7 +2131,7 @@ views:
                       - top: -0.75em
                       - *id002
                       - font-size: 11px
-                      - &id204
+                      - &id205
                         padding: 0em 0em 0em 0em
                       custom_fields:
                         icons:
@@ -2273,6 +2273,10 @@ views:
                                     entities:
                                     - entity: input_text.irrigation_cycle1_wait_for_entity_name
                                       name: Entity Name
+                                      type: custom:irrigation-garden-entity-picker
+                                      ui_labels: *id001
+                                      domains: &id099
+                                      - '*'
                                     - entity: input_text.irrigation_cycle1_wait_for_entity_state
                                       name: Entity State
                                     - entity: input_boolean.irrigation_cycle1_wait_for_entity_name_timeout_continue
@@ -2282,7 +2286,7 @@ views:
                                 - type: custom:hui-element
                                   card_type: conditional
                                   conditions: *id057
-                                  card: &id100
+                                  card: &id101
                                     type: markdown
                                     content: '<font color=var(--primary-text-color)> Entity state can be a comma
                                       seperated list of states and may be prefixed with ''not in''.
@@ -2315,14 +2319,14 @@ views:
                         card:
                         - height: 1.75em
                         - *id034
-                        - &id249
+                        - &id250
                           margin-top: 0.2em
                         - *id059
                         - *id047
                         - *id005
                         - *id008
-                        name: &id250
-                        - &id175
+                        name: &id251
+                        - &id176
                           justify-self: right
                         - align-self: centre
                       state: &id063
@@ -2339,7 +2343,7 @@ views:
                       styles: *id062
                       state: *id063
                 - type: conditional
-                  conditions: &id101
+                  conditions: &id102
                   - condition: numeric_state
                     entity: input_number.irrigation_number_of_zones
                     above: 0
@@ -2382,7 +2386,7 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - &id102
+                                        - &id103
                                           type: custom:hui-element
                                           card_type: horizontal-stack
                                           cards:
@@ -2409,7 +2413,7 @@ views:
                                             size: 90%
                                             styles:
                                               grid: &id072
-                                              - &id178
+                                              - &id179
                                                 grid-template-areas: '"i n"'
                                               - grid-template-columns: 20% 1fr
                                               - *id025
@@ -2498,7 +2502,7 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - &id103
+                                        - &id104
                                           type: conditional
                                           conditions: &id075
                                           - entity: input_boolean.irrigation_remote_control
@@ -2507,10 +2511,10 @@ views:
                                             entity: input_number.irrigation_remote_control_zone1_duration
                                             name: Remote Control Duration
                                             icon: mdi:alpha-r-box-outline
-                                        - &id104
+                                        - &id105
                                           entity: input_text.irrigation_zone1_name
                                           name: Zone Name
-                                        - &id105
+                                        - &id106
                                           entity: input_text.irrigation_zone1_switch_entity_id
                                           name: Switch Name
                                           type: custom:irrigation-garden-entity-picker
@@ -2587,7 +2591,7 @@ views:
                               state: &id070
                               - value: 'on'
                                 styles:
-                                  card: &id179
+                                  card: &id180
                                   - background-color: var(--primary-background-color)
                                   - *id066
                                   name: *id023
@@ -2634,7 +2638,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: &id106
+                  conditions: &id107
                   - condition: numeric_state
                     entity: input_number.irrigation_number_of_zones
                     above: 1
@@ -2674,7 +2678,7 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - &id107
+                                        - &id108
                                           type: custom:hui-element
                                           card_type: horizontal-stack
                                           cards:
@@ -2775,17 +2779,17 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - &id109
+                                        - &id110
                                           type: conditional
                                           conditions: *id075
                                           row:
                                             entity: input_number.irrigation_remote_control_zone2_duration
                                             name: Remote Control Duration
                                             icon: mdi:alpha-r-box-outline
-                                        - &id110
+                                        - &id111
                                           entity: input_text.irrigation_zone2_name
                                           name: Zone Name
-                                        - &id111
+                                        - &id112
                                           entity: input_text.irrigation_zone2_switch_entity_id
                                           name: Switch Name
                                           type: custom:irrigation-garden-entity-picker
@@ -2878,7 +2882,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: &id112
+                  conditions: &id113
                   - condition: numeric_state
                     entity: input_number.irrigation_number_of_zones
                     above: 2
@@ -2918,7 +2922,7 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - &id113
+                                        - &id114
                                           type: custom:hui-element
                                           card_type: horizontal-stack
                                           cards:
@@ -3019,17 +3023,17 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - &id114
+                                        - &id115
                                           type: conditional
                                           conditions: *id075
                                           row:
                                             entity: input_number.irrigation_remote_control_zone3_duration
                                             name: Remote Control Duration
                                             icon: mdi:alpha-r-box-outline
-                                        - &id115
+                                        - &id116
                                           entity: input_text.irrigation_zone3_name
                                           name: Zone Name
-                                        - &id116
+                                        - &id117
                                           entity: input_text.irrigation_zone3_switch_entity_id
                                           name: Switch Name
                                           type: custom:irrigation-garden-entity-picker
@@ -3122,7 +3126,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: &id117
+                  conditions: &id118
                   - condition: numeric_state
                     entity: input_number.irrigation_number_of_zones
                     above: 3
@@ -3162,7 +3166,7 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - &id118
+                                        - &id119
                                           type: custom:hui-element
                                           card_type: horizontal-stack
                                           cards:
@@ -3263,17 +3267,17 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - &id119
+                                        - &id120
                                           type: conditional
                                           conditions: *id075
                                           row:
                                             entity: input_number.irrigation_remote_control_zone4_duration
                                             name: Remote Control Duration
                                             icon: mdi:alpha-r-box-outline
-                                        - &id120
+                                        - &id121
                                           entity: input_text.irrigation_zone4_name
                                           name: Zone Name
-                                        - &id121
+                                        - &id122
                                           entity: input_text.irrigation_zone4_switch_entity_id
                                           name: Switch Name
                                           type: custom:irrigation-garden-entity-picker
@@ -3366,7 +3370,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: &id122
+                  conditions: &id123
                   - condition: numeric_state
                     entity: input_number.irrigation_number_of_zones
                     above: 4
@@ -3406,7 +3410,7 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - &id123
+                                        - &id124
                                           type: custom:hui-element
                                           card_type: horizontal-stack
                                           cards:
@@ -3507,17 +3511,17 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - &id124
+                                        - &id125
                                           type: conditional
                                           conditions: *id075
                                           row:
                                             entity: input_number.irrigation_remote_control_zone5_duration
                                             name: Remote Control Duration
                                             icon: mdi:alpha-r-box-outline
-                                        - &id125
+                                        - &id126
                                           entity: input_text.irrigation_zone5_name
                                           name: Zone Name
-                                        - &id126
+                                        - &id127
                                           entity: input_text.irrigation_zone5_switch_entity_id
                                           name: Switch Name
                                           type: custom:irrigation-garden-entity-picker
@@ -3610,7 +3614,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: &id127
+                  conditions: &id128
                   - condition: numeric_state
                     entity: input_number.irrigation_number_of_zones
                     above: 5
@@ -3650,7 +3654,7 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - &id128
+                                        - &id129
                                           type: custom:hui-element
                                           card_type: horizontal-stack
                                           cards:
@@ -3751,17 +3755,17 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - &id129
+                                        - &id130
                                           type: conditional
                                           conditions: *id075
                                           row:
                                             entity: input_number.irrigation_remote_control_zone6_duration
                                             name: Remote Control Duration
                                             icon: mdi:alpha-r-box-outline
-                                        - &id130
+                                        - &id131
                                           entity: input_text.irrigation_zone6_name
                                           name: Zone Name
-                                        - &id131
+                                        - &id132
                                           entity: input_text.irrigation_zone6_switch_entity_id
                                           name: Switch Name
                                           type: custom:irrigation-garden-entity-picker
@@ -3854,7 +3858,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: &id132
+                  conditions: &id133
                   - condition: numeric_state
                     entity: input_number.irrigation_number_of_zones
                     above: 6
@@ -3894,7 +3898,7 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - &id133
+                                        - &id134
                                           type: custom:hui-element
                                           card_type: horizontal-stack
                                           cards:
@@ -3995,17 +3999,17 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - &id134
+                                        - &id135
                                           type: conditional
                                           conditions: *id075
                                           row:
                                             entity: input_number.irrigation_remote_control_zone7_duration
                                             name: Remote Control Duration
                                             icon: mdi:alpha-r-box-outline
-                                        - &id135
+                                        - &id136
                                           entity: input_text.irrigation_zone7_name
                                           name: Zone Name
-                                        - &id136
+                                        - &id137
                                           entity: input_text.irrigation_zone7_switch_entity_id
                                           name: Switch Name
                                           type: custom:irrigation-garden-entity-picker
@@ -4098,7 +4102,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: &id137
+                  conditions: &id138
                   - condition: numeric_state
                     entity: input_number.irrigation_number_of_zones
                     above: 7
@@ -4138,7 +4142,7 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - &id138
+                                        - &id139
                                           type: custom:hui-element
                                           card_type: horizontal-stack
                                           cards:
@@ -4239,17 +4243,17 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - &id139
+                                        - &id140
                                           type: conditional
                                           conditions: *id075
                                           row:
                                             entity: input_number.irrigation_remote_control_zone8_duration
                                             name: Remote Control Duration
                                             icon: mdi:alpha-r-box-outline
-                                        - &id140
+                                        - &id141
                                           entity: input_text.irrigation_zone8_name
                                           name: Zone Name
-                                        - &id141
+                                        - &id142
                                           entity: input_text.irrigation_zone8_switch_entity_id
                                           name: Switch Name
                                           type: custom:irrigation-garden-entity-picker
@@ -4342,7 +4346,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: &id142
+                  conditions: &id143
                   - condition: numeric_state
                     entity: input_number.irrigation_number_of_zones
                     above: 8
@@ -4382,7 +4386,7 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - &id143
+                                        - &id144
                                           type: custom:hui-element
                                           card_type: horizontal-stack
                                           cards:
@@ -4483,10 +4487,10 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - &id144
+                                        - &id145
                                           entity: input_text.irrigation_zone9_name
                                           name: Zone Name
-                                        - &id145
+                                        - &id146
                                           entity: input_text.irrigation_zone9_switch_entity_id
                                           name: Switch Name
                                           type: custom:irrigation-garden-entity-picker
@@ -4579,7 +4583,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: &id146
+                  conditions: &id147
                   - condition: numeric_state
                     entity: input_number.irrigation_number_of_zones
                     above: 9
@@ -4619,7 +4623,7 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - &id147
+                                        - &id148
                                           type: custom:hui-element
                                           card_type: horizontal-stack
                                           cards:
@@ -4720,10 +4724,10 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - &id148
+                                        - &id149
                                           entity: input_text.irrigation_zone10_name
                                           name: Zone Name
-                                        - &id149
+                                        - &id150
                                           entity: input_text.irrigation_zone10_switch_entity_id
                                           name: Switch Name
                                           type: custom:irrigation-garden-entity-picker
@@ -4816,7 +4820,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: &id150
+                  conditions: &id151
                   - condition: numeric_state
                     entity: input_number.irrigation_number_of_zones
                     above: 10
@@ -4856,7 +4860,7 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - &id151
+                                        - &id152
                                           type: custom:hui-element
                                           card_type: horizontal-stack
                                           cards:
@@ -4957,10 +4961,10 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - &id152
+                                        - &id153
                                           entity: input_text.irrigation_zone11_name
                                           name: Zone Name
-                                        - &id153
+                                        - &id154
                                           entity: input_text.irrigation_zone11_switch_entity_id
                                           name: Switch Name
                                           type: custom:irrigation-garden-entity-picker
@@ -5053,7 +5057,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: &id154
+                  conditions: &id155
                   - condition: numeric_state
                     entity: input_number.irrigation_number_of_zones
                     above: 11
@@ -5093,7 +5097,7 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - &id155
+                                        - &id156
                                           type: custom:hui-element
                                           card_type: horizontal-stack
                                           cards:
@@ -5194,10 +5198,10 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - &id156
+                                        - &id157
                                           entity: input_text.irrigation_zone12_name
                                           name: Zone Name
-                                        - &id157
+                                        - &id158
                                           entity: input_text.irrigation_zone12_switch_entity_id
                                           name: Switch Name
                                           type: custom:irrigation-garden-entity-picker
@@ -5290,7 +5294,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: &id158
+                  conditions: &id159
                   - condition: numeric_state
                     entity: input_number.irrigation_number_of_zones
                     above: 12
@@ -5330,7 +5334,7 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - &id159
+                                        - &id160
                                           type: custom:hui-element
                                           card_type: horizontal-stack
                                           cards:
@@ -5431,10 +5435,10 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - &id160
+                                        - &id161
                                           entity: input_text.irrigation_zone13_name
                                           name: Zone Name
-                                        - &id161
+                                        - &id162
                                           entity: input_text.irrigation_zone13_switch_entity_id
                                           name: Switch Name
                                           type: custom:irrigation-garden-entity-picker
@@ -5527,7 +5531,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: &id162
+                  conditions: &id163
                   - condition: numeric_state
                     entity: input_number.irrigation_number_of_zones
                     above: 13
@@ -5567,7 +5571,7 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - &id163
+                                        - &id164
                                           type: custom:hui-element
                                           card_type: horizontal-stack
                                           cards:
@@ -5668,10 +5672,10 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - &id164
+                                        - &id165
                                           entity: input_text.irrigation_zone14_name
                                           name: Zone Name
-                                        - &id165
+                                        - &id166
                                           entity: input_text.irrigation_zone14_switch_entity_id
                                           name: Switch Name
                                           type: custom:irrigation-garden-entity-picker
@@ -5764,7 +5768,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: &id166
+                  conditions: &id167
                   - condition: numeric_state
                     entity: input_number.irrigation_number_of_zones
                     above: 14
@@ -5804,7 +5808,7 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - &id167
+                                        - &id168
                                           type: custom:hui-element
                                           card_type: horizontal-stack
                                           cards:
@@ -5905,10 +5909,10 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - &id168
+                                        - &id169
                                           entity: input_text.irrigation_zone15_name
                                           name: Zone Name
-                                        - &id169
+                                        - &id170
                                           entity: input_text.irrigation_zone15_switch_entity_id
                                           name: Switch Name
                                           type: custom:irrigation-garden-entity-picker
@@ -6001,7 +6005,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: &id170
+                  conditions: &id171
                   - condition: numeric_state
                     entity: input_number.irrigation_number_of_zones
                     above: 15
@@ -6041,7 +6045,7 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - &id171
+                                        - &id172
                                           type: custom:hui-element
                                           card_type: horizontal-stack
                                           cards:
@@ -6142,10 +6146,10 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - &id172
+                                        - &id173
                                           entity: input_text.irrigation_zone16_name
                                           name: Zone Name
-                                        - &id173
+                                        - &id174
                                           entity: input_text.irrigation_zone16_switch_entity_id
                                           name: Switch Name
                                           type: custom:irrigation-garden-entity-picker
@@ -6237,7 +6241,7 @@ views:
                               name: Sun
                               styles: *id069
                               state: *id070
-              card_mod: &id174
+              card_mod: &id175
                 style: "ha-card {\n  margin-top: -0.75em;\n  margin-bottom: 0;\n}\n"
             cycle2:
               type: entities
@@ -6446,7 +6450,7 @@ views:
                                   name: Wait For Entity
                                 - type: custom:hui-element
                                   card_type: conditional
-                                  conditions: &id099
+                                  conditions: &id100
                                   - entity: input_boolean.irrigation_cycle2_wait_for_entity
                                     state: 'on'
                                   card:
@@ -6454,6 +6458,9 @@ views:
                                     entities:
                                     - entity: input_text.irrigation_cycle2_wait_for_entity_name
                                       name: Entity Name
+                                      type: custom:irrigation-garden-entity-picker
+                                      ui_labels: *id001
+                                      domains: *id099
                                     - entity: input_text.irrigation_cycle2_wait_for_entity_state
                                       name: Entity State
                                     - entity: input_boolean.irrigation_cycle2_wait_for_entity_name_timeout_continue
@@ -6462,8 +6469,8 @@ views:
                                       name: Wait Timeout Duration
                                 - type: custom:hui-element
                                   card_type: conditional
-                                  conditions: *id099
-                                  card: *id100
+                                  conditions: *id100
+                                  card: *id101
                                 card_mod: *id048
                           style: *id042
                   - type: vertical-stack
@@ -6481,7 +6488,7 @@ views:
                       styles: *id062
                       state: *id063
                 - type: conditional
-                  conditions: *id101
+                  conditions: *id102
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -6518,11 +6525,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id102
+                                        - *id103
                                         - entity: input_number.irrigation_cycle2_zone1_duration_box
                                           name: Duration
                                         - type: conditional
-                                          conditions: &id108
+                                          conditions: &id109
                                           - condition: or
                                             conditions:
                                             - condition: state
@@ -6544,9 +6551,9 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - *id103
                                         - *id104
                                         - *id105
+                                        - *id106
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -6633,7 +6640,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: *id106
+                  conditions: *id107
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -6670,11 +6677,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id107
+                                        - *id108
                                         - entity: input_number.irrigation_cycle2_zone2_duration_box
                                           name: Duration
                                         - type: conditional
-                                          conditions: *id108
+                                          conditions: *id109
                                           row:
                                             type: custom:hui-element
                                             card_type: markdown
@@ -6688,9 +6695,9 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - *id109
                                         - *id110
                                         - *id111
+                                        - *id112
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -6777,7 +6784,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: *id112
+                  conditions: *id113
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -6814,11 +6821,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id113
+                                        - *id114
                                         - entity: input_number.irrigation_cycle2_zone3_duration_box
                                           name: Duration
                                         - type: conditional
-                                          conditions: *id108
+                                          conditions: *id109
                                           row:
                                             type: custom:hui-element
                                             card_type: markdown
@@ -6832,9 +6839,9 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - *id114
                                         - *id115
                                         - *id116
+                                        - *id117
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -6921,7 +6928,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: *id117
+                  conditions: *id118
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -6958,11 +6965,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id118
+                                        - *id119
                                         - entity: input_number.irrigation_cycle2_zone4_duration_box
                                           name: Duration
                                         - type: conditional
-                                          conditions: *id108
+                                          conditions: *id109
                                           row:
                                             type: custom:hui-element
                                             card_type: markdown
@@ -6976,9 +6983,9 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - *id119
                                         - *id120
                                         - *id121
+                                        - *id122
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -7065,7 +7072,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: *id122
+                  conditions: *id123
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -7102,11 +7109,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id123
+                                        - *id124
                                         - entity: input_number.irrigation_cycle2_zone5_duration_box
                                           name: Duration
                                         - type: conditional
-                                          conditions: *id108
+                                          conditions: *id109
                                           row:
                                             type: custom:hui-element
                                             card_type: markdown
@@ -7120,9 +7127,9 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - *id124
                                         - *id125
                                         - *id126
+                                        - *id127
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -7209,7 +7216,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: *id127
+                  conditions: *id128
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -7246,11 +7253,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id128
+                                        - *id129
                                         - entity: input_number.irrigation_cycle2_zone6_duration_box
                                           name: Duration
                                         - type: conditional
-                                          conditions: *id108
+                                          conditions: *id109
                                           row:
                                             type: custom:hui-element
                                             card_type: markdown
@@ -7264,9 +7271,9 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - *id129
                                         - *id130
                                         - *id131
+                                        - *id132
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -7353,7 +7360,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: *id132
+                  conditions: *id133
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -7390,11 +7397,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id133
+                                        - *id134
                                         - entity: input_number.irrigation_cycle2_zone7_duration_box
                                           name: Duration
                                         - type: conditional
-                                          conditions: *id108
+                                          conditions: *id109
                                           row:
                                             type: custom:hui-element
                                             card_type: markdown
@@ -7408,9 +7415,9 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - *id134
                                         - *id135
                                         - *id136
+                                        - *id137
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -7497,7 +7504,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: *id137
+                  conditions: *id138
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -7534,11 +7541,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id138
+                                        - *id139
                                         - entity: input_number.irrigation_cycle2_zone8_duration_box
                                           name: Duration
                                         - type: conditional
-                                          conditions: *id108
+                                          conditions: *id109
                                           row:
                                             type: custom:hui-element
                                             card_type: markdown
@@ -7552,9 +7559,9 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - *id139
                                         - *id140
                                         - *id141
+                                        - *id142
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -7641,7 +7648,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: *id142
+                  conditions: *id143
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -7678,11 +7685,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id143
+                                        - *id144
                                         - entity: input_number.irrigation_cycle2_zone9_duration_box
                                           name: Duration
                                         - type: conditional
-                                          conditions: *id108
+                                          conditions: *id109
                                           row:
                                             type: custom:hui-element
                                             card_type: markdown
@@ -7696,8 +7703,8 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - *id144
                                         - *id145
+                                        - *id146
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -7784,7 +7791,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: *id146
+                  conditions: *id147
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -7821,11 +7828,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id147
+                                        - *id148
                                         - entity: input_number.irrigation_cycle2_zone10_duration_box
                                           name: Duration
                                         - type: conditional
-                                          conditions: *id108
+                                          conditions: *id109
                                           row:
                                             type: custom:hui-element
                                             card_type: markdown
@@ -7839,8 +7846,8 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - *id148
                                         - *id149
+                                        - *id150
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -7927,7 +7934,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: *id150
+                  conditions: *id151
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -7964,11 +7971,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id151
+                                        - *id152
                                         - entity: input_number.irrigation_cycle2_zone11_duration_box
                                           name: Duration
                                         - type: conditional
-                                          conditions: *id108
+                                          conditions: *id109
                                           row:
                                             type: custom:hui-element
                                             card_type: markdown
@@ -7982,8 +7989,8 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - *id152
                                         - *id153
+                                        - *id154
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -8070,7 +8077,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: *id154
+                  conditions: *id155
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -8107,11 +8114,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id155
+                                        - *id156
                                         - entity: input_number.irrigation_cycle2_zone12_duration_box
                                           name: Duration
                                         - type: conditional
-                                          conditions: *id108
+                                          conditions: *id109
                                           row:
                                             type: custom:hui-element
                                             card_type: markdown
@@ -8125,8 +8132,8 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - *id156
                                         - *id157
+                                        - *id158
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -8213,7 +8220,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: *id158
+                  conditions: *id159
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -8250,11 +8257,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id159
+                                        - *id160
                                         - entity: input_number.irrigation_cycle2_zone13_duration_box
                                           name: Duration
                                         - type: conditional
-                                          conditions: *id108
+                                          conditions: *id109
                                           row:
                                             type: custom:hui-element
                                             card_type: markdown
@@ -8268,8 +8275,8 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - *id160
                                         - *id161
+                                        - *id162
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -8356,7 +8363,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: *id162
+                  conditions: *id163
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -8393,11 +8400,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id163
+                                        - *id164
                                         - entity: input_number.irrigation_cycle2_zone14_duration_box
                                           name: Duration
                                         - type: conditional
-                                          conditions: *id108
+                                          conditions: *id109
                                           row:
                                             type: custom:hui-element
                                             card_type: markdown
@@ -8411,8 +8418,8 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - *id164
                                         - *id165
+                                        - *id166
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -8499,7 +8506,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: *id166
+                  conditions: *id167
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -8536,11 +8543,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id167
+                                        - *id168
                                         - entity: input_number.irrigation_cycle2_zone15_duration_box
                                           name: Duration
                                         - type: conditional
-                                          conditions: *id108
+                                          conditions: *id109
                                           row:
                                             type: custom:hui-element
                                             card_type: markdown
@@ -8554,8 +8561,8 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - *id168
                                         - *id169
+                                        - *id170
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -8642,7 +8649,7 @@ views:
                               styles: *id069
                               state: *id070
                 - type: conditional
-                  conditions: *id170
+                  conditions: *id171
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -8679,11 +8686,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id171
+                                        - *id172
                                         - entity: input_number.irrigation_cycle2_zone16_duration_box
                                           name: Duration
                                         - type: conditional
-                                          conditions: *id108
+                                          conditions: *id109
                                           row:
                                             type: custom:hui-element
                                             card_type: markdown
@@ -8697,8 +8704,8 @@ views:
                                               \ / 60) - min) * 60) | int %}\n  <font color=var(--primary-text-color)><center>Duration\
                                               \ adjusted for rainfall and temperature: {{ min }} min  {{ sec }}\
                                               \ sec</center></font>\n{% endif %}\n"
-                                        - *id172
                                         - *id173
+                                        - *id174
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -8784,7 +8791,7 @@ views:
                               name: Sun
                               styles: *id069
                               state: *id070
-              card_mod: *id174
+              card_mod: *id175
             cycle3:
               type: entities
               entities:
@@ -8860,10 +8867,10 @@ views:
                     - *id005
                     name:
                     - *id026
-                    - *id175
+                    - *id176
                     - font-family: "[[[\n  return states['input_text.irrigation_ui_font_family'].state;\n]]]\n"
                 - type: conditional
-                  conditions: *id101
+                  conditions: *id102
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -8900,12 +8907,12 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id102
+                                        - *id103
                                         - entity: input_number.irrigation_cycle3_zone1_duration_box
                                           name: Duration
-                                        - *id103
                                         - *id104
                                         - *id105
+                                        - *id106
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -8923,7 +8930,7 @@ views:
                                 \ == 3 %}\n    --state-icon-color: var(--paper-item-icon-active-color);\n  {% endif\
                                 \ %}\n  \n}\n"
                 - type: conditional
-                  conditions: *id106
+                  conditions: *id107
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -8960,12 +8967,12 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id107
+                                        - *id108
                                         - entity: input_number.irrigation_cycle3_zone2_duration_box
                                           name: Duration
-                                        - *id109
                                         - *id110
                                         - *id111
+                                        - *id112
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -8983,7 +8990,7 @@ views:
                                 \ == 3 %}\n    --state-icon-color: var(--paper-item-icon-active-color);\n  {% endif\
                                 \ %}\n  \n}\n"
                 - type: conditional
-                  conditions: *id112
+                  conditions: *id113
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -9020,12 +9027,12 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id113
+                                        - *id114
                                         - entity: input_number.irrigation_cycle3_zone3_duration_box
                                           name: Duration
-                                        - *id114
                                         - *id115
                                         - *id116
+                                        - *id117
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -9043,7 +9050,7 @@ views:
                                 \ == 3 %}\n    --state-icon-color: var(--paper-item-icon-active-color);\n  {% endif\
                                 \ %}\n  \n}\n"
                 - type: conditional
-                  conditions: *id117
+                  conditions: *id118
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -9080,12 +9087,12 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id118
+                                        - *id119
                                         - entity: input_number.irrigation_cycle3_zone4_duration_box
                                           name: Duration
-                                        - *id119
                                         - *id120
                                         - *id121
+                                        - *id122
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -9103,7 +9110,7 @@ views:
                                 \ == 3 %}\n    --state-icon-color: var(--paper-item-icon-active-color);\n  {% endif\
                                 \ %}\n  \n}\n"
                 - type: conditional
-                  conditions: *id122
+                  conditions: *id123
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -9140,12 +9147,12 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id123
+                                        - *id124
                                         - entity: input_number.irrigation_cycle3_zone5_duration_box
                                           name: Duration
-                                        - *id124
                                         - *id125
                                         - *id126
+                                        - *id127
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -9163,7 +9170,7 @@ views:
                                 \ == 3 %}\n    --state-icon-color: var(--paper-item-icon-active-color);\n  {% endif\
                                 \ %}\n  \n}\n"
                 - type: conditional
-                  conditions: *id127
+                  conditions: *id128
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -9200,12 +9207,12 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id128
+                                        - *id129
                                         - entity: input_number.irrigation_cycle3_zone6_duration_box
                                           name: Duration
-                                        - *id129
                                         - *id130
                                         - *id131
+                                        - *id132
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -9223,7 +9230,7 @@ views:
                                 \ == 3 %}\n    --state-icon-color: var(--paper-item-icon-active-color);\n  {% endif\
                                 \ %}\n  \n}\n"
                 - type: conditional
-                  conditions: *id132
+                  conditions: *id133
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -9260,12 +9267,12 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id133
+                                        - *id134
                                         - entity: input_number.irrigation_cycle3_zone7_duration_box
                                           name: Duration
-                                        - *id134
                                         - *id135
                                         - *id136
+                                        - *id137
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -9283,7 +9290,7 @@ views:
                                 \ == 3 %}\n    --state-icon-color: var(--paper-item-icon-active-color);\n  {% endif\
                                 \ %}\n  \n}\n"
                 - type: conditional
-                  conditions: *id137
+                  conditions: *id138
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -9320,12 +9327,12 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id138
+                                        - *id139
                                         - entity: input_number.irrigation_cycle3_zone8_duration_box
                                           name: Duration
-                                        - *id139
                                         - *id140
                                         - *id141
+                                        - *id142
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -9343,7 +9350,7 @@ views:
                                 \ == 3 %}\n    --state-icon-color: var(--paper-item-icon-active-color);\n  {% endif\
                                 \ %}\n  \n}\n"
                 - type: conditional
-                  conditions: *id142
+                  conditions: *id143
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -9380,11 +9387,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id143
+                                        - *id144
                                         - entity: input_number.irrigation_cycle3_zone9_duration_box
                                           name: Duration
-                                        - *id144
                                         - *id145
+                                        - *id146
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -9402,7 +9409,7 @@ views:
                                 \ == 3 %}\n    --state-icon-color: var(--paper-item-icon-active-color);\n  {% endif\
                                 \ %}\n  \n}\n"
                 - type: conditional
-                  conditions: *id146
+                  conditions: *id147
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -9439,11 +9446,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id147
+                                        - *id148
                                         - entity: input_number.irrigation_cycle3_zone10_duration_box
                                           name: Duration
-                                        - *id148
                                         - *id149
+                                        - *id150
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -9461,7 +9468,7 @@ views:
                                 \ == 3 %}\n    --state-icon-color: var(--paper-item-icon-active-color);\n  {% endif\
                                 \ %}\n  \n}\n"
                 - type: conditional
-                  conditions: *id150
+                  conditions: *id151
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -9498,11 +9505,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id151
+                                        - *id152
                                         - entity: input_number.irrigation_cycle3_zone11_duration_box
                                           name: Duration
-                                        - *id152
                                         - *id153
+                                        - *id154
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -9520,7 +9527,7 @@ views:
                                 \ == 3 %}\n    --state-icon-color: var(--paper-item-icon-active-color);\n  {% endif\
                                 \ %}\n  \n}\n"
                 - type: conditional
-                  conditions: *id154
+                  conditions: *id155
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -9557,11 +9564,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id155
+                                        - *id156
                                         - entity: input_number.irrigation_cycle3_zone12_duration_box
                                           name: Duration
-                                        - *id156
                                         - *id157
+                                        - *id158
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -9579,7 +9586,7 @@ views:
                                 \ == 3 %}\n    --state-icon-color: var(--paper-item-icon-active-color);\n  {% endif\
                                 \ %}\n  \n}\n"
                 - type: conditional
-                  conditions: *id158
+                  conditions: *id159
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -9616,11 +9623,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id159
+                                        - *id160
                                         - entity: input_number.irrigation_cycle3_zone13_duration_box
                                           name: Duration
-                                        - *id160
                                         - *id161
+                                        - *id162
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -9638,7 +9645,7 @@ views:
                                 \ == 3 %}\n    --state-icon-color: var(--paper-item-icon-active-color);\n  {% endif\
                                 \ %}\n  \n}\n"
                 - type: conditional
-                  conditions: *id162
+                  conditions: *id163
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -9675,11 +9682,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id163
+                                        - *id164
                                         - entity: input_number.irrigation_cycle3_zone14_duration_box
                                           name: Duration
-                                        - *id164
                                         - *id165
+                                        - *id166
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -9697,7 +9704,7 @@ views:
                                 \ == 3 %}\n    --state-icon-color: var(--paper-item-icon-active-color);\n  {% endif\
                                 \ %}\n  \n}\n"
                 - type: conditional
-                  conditions: *id166
+                  conditions: *id167
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -9734,11 +9741,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id167
+                                        - *id168
                                         - entity: input_number.irrigation_cycle3_zone15_duration_box
                                           name: Duration
-                                        - *id168
                                         - *id169
+                                        - *id170
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -9756,7 +9763,7 @@ views:
                                 \ == 3 %}\n    --state-icon-color: var(--paper-item-icon-active-color);\n  {% endif\
                                 \ %}\n  \n}\n"
                 - type: conditional
-                  conditions: *id170
+                  conditions: *id171
                   card:
                     type: custom:mod-card
                     card_mod: *id071
@@ -9793,11 +9800,11 @@ views:
                                       card:
                                         type: entities
                                         entities:
-                                        - *id171
+                                        - *id172
                                         - entity: input_number.irrigation_cycle3_zone16_duration_box
                                           name: Duration
-                                        - *id172
                                         - *id173
+                                        - *id174
                                         card_mod: *id048
                                     style: *id042
                               card_mod:
@@ -9814,7 +9821,7 @@ views:
                                 \ is_state('timer.irrigation_zone' ~ zone ~ '_timer', 'active') and \n        cycle_ui\
                                 \ == 3 %}\n    --state-icon-color: var(--paper-item-icon-active-color);\n  {% endif\
                                 \ %}\n  \n}\n"
-              card_mod: *id174
+              card_mod: *id175
   - cards:
     - type: custom:irrigation-garden-themed-card
       ui_labels: *id001
@@ -9829,7 +9836,7 @@ views:
             cards:
             - type: custom:button-card
               name: -- SETTINGS --
-              styles: *id176
+              styles: *id177
               tap_action: *id009
             - type: custom:button-card
               entity: input_select.irrigation_settings
@@ -9887,7 +9894,7 @@ views:
                 card:
                 - *id005
                 - width: 1.9em
-                icon: *id177
+                icon: *id178
               tap_action:
                 action: fire-dom-event
                 browser_mod:
@@ -9949,28 +9956,28 @@ views:
                     icon: null
                     show_icon: true
                     size: 50%
-                    lock: &id180
+                    lock: &id181
                       enabled: false
                     tap_action: *id087
                     double_tap_action: *id009
                     hold_action: *id009
-                    styles: &id181
+                    styles: &id182
                       grid:
-                      - *id178
+                      - *id179
                       - grid-template-columns: "[[[\n  var columns = '2';\n  if (columns == '1')\n    {\n      var\
                           \ icon_size = '10%';\n    }\n  else\n    {  \n      var icon_size = '20%';\n    }\n  return\
                           \ icon_size + ' auto ';\n]]]\n"
                       - *id025
-                      img_cell: &id186
+                      img_cell: &id187
                       - *id034
                       card:
                       - *id008
                       - *id034
-                      - &id184
+                      - &id185
                         height: 2.5em
                       - *id026
                       - *id073
-                      name: &id205
+                      name: &id206
                       - *id039
                       - *id040
                       - *id041
@@ -9980,12 +9987,12 @@ views:
                     - value: 'on'
                       name: System is ON
                       icon: null
-                      styles: &id182
-                        card: *id179
+                      styles: &id183
+                        card: *id180
                     - value: 'off'
                       name: System is OFF
                       icon: null
-                      styles: &id183
+                      styles: &id184
                         card:
                         - *id011
                         - box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19)
@@ -9998,20 +10005,20 @@ views:
                     icon: null
                     show_icon: true
                     size: 50%
-                    lock: *id180
+                    lock: *id181
                     tap_action: *id087
                     double_tap_action: *id009
                     hold_action: *id009
-                    styles: *id181
+                    styles: *id182
                     state:
                     - value: 'on'
                       name: Remote Control is ON
                       icon: null
-                      styles: *id182
+                      styles: *id183
                     - value: 'off'
                       name: Remote Control is OFF
                       icon: mdi:remote-off
-                      styles: *id183
+                      styles: *id184
                 - type: horizontal-stack
                   cards:
                   - type: custom:button-card
@@ -10022,47 +10029,47 @@ views:
                     icon: null
                     show_icon: true
                     size: 50%
-                    lock: *id180
+                    lock: *id181
                     tap_action: *id087
                     double_tap_action: *id009
                     hold_action: *id009
-                    styles: *id181
+                    styles: *id182
                     state:
                     - value: 'on'
                       name: Test Mode is ON
                       icon: null
-                      styles: *id182
+                      styles: *id183
                     - value: 'off'
                       name: Test Mode is OFF
                       icon: null
-                      styles: *id183
+                      styles: *id184
                   - type: custom:button-card
                     entity: input_boolean.irrigation_testing_mode
                     name: "[[[\n  if (states['input_boolean.irrigation_testing_mode'].state == 'on')\n    return\
                       \ 'Warning! Testing mode converts run<br>times from minutes to seconds';\n]]]\n"
                     styles:
-                      grid: &id227
+                      grid: &id228
                       - grid-template-areas: '"n"'
                       - grid-template-columns: 1fr
                       - *id017
                       card:
                       - display: "[[[\n  if (states['input_boolean.irrigation_testing_mode'].state != 'on')\n  \
                           \  return 'none';\n  else return null;\n]]]\n"
-                      - *id184
+                      - *id185
                       - *id008
                       - *id081
                       - *id067
-                      - *id185
-                      - &id191
+                      - *id186
+                      - &id192
                         margin-top: 0em
-                      - &id228
+                      - &id229
                         margin-bottom: 0em
-                      name: &id229
+                      name: &id230
                       - *id010
-                      - *id175
+                      - *id176
                       - padding-right: 0.75em
                     tap_action: *id009
-                    state: &id230
+                    state: &id231
                     - value: 'on'
                       styles:
                         card:
@@ -10077,37 +10084,37 @@ views:
                     icon: null
                     show_icon: true
                     size: 50%
-                    lock: *id180
+                    lock: *id181
                     tap_action: *id087
                     double_tap_action: *id009
                     hold_action: *id009
-                    styles: &id188
+                    styles: &id189
                       grid:
-                      - &id232
+                      - &id233
                         grid-template-areas: '"i n check_box"'
                       - grid-template-columns: "[[[\n  var columns = '2';\n  if (columns == '1')\n    {\n      var\
                           \ icon_size = '10%';\n      var check_box_size = '8%';\n    }\n  else\n    {  \n     \
                           \ var icon_size = '20%';\n      var check_box_size = '16%';\n    }\n  return icon_size\
                           \ + ' auto ' + check_box_size;\n]]]\n"
                       - *id025
-                      img_cell: *id186
+                      img_cell: *id187
                       card:
                       - *id008
                       - *id034
                       - padding-right: "[[[\n  var columns = '2';\n  if (columns == '1')\n    return '1em';\n]]]\n"
                       - padding-left: "[[[\n  var columns = '2';\n  if (columns == '1')\n    return '1em';\n]]]\n"
-                      - *id184
+                      - *id185
                       - *id026
                       - *id073
-                      name: &id233
+                      name: &id234
                       - *id039
                       - *id043
                       - *id002
-                      custom_fields: &id234
+                      custom_fields: &id235
                         check_box:
-                        - *id187
+                        - *id188
                         - justify-self: null
-                    custom_fields: &id189
+                    custom_fields: &id190
                       check_box: "[[[\n  if (entity.state == 'on')\n      return '<ha-icon icon=\"mdi:checkbox-marked\"\
                         ></ha-icon>';\n  else\n      return '<ha-icon icon=\"mdi:checkbox-blank-outline\"></ha-icon>';\n\
                         ]]] \n"
@@ -10115,11 +10122,11 @@ views:
                     - value: 'on'
                       name: Logging
                       icon: mdi:notebook-check
-                      styles: *id182
+                      styles: *id183
                     - value: 'off'
                       name: Logging
                       icon: mdi:notebook-remove-outline
-                      styles: *id183
+                      styles: *id184
                   - type: entities
                     entities:
                     - entity: input_number.logging_irrigation_days_to_keep
@@ -10133,7 +10140,7 @@ views:
                     card_mod:
                       style: "ha-card .card-content {\n  padding: 0px;\n}\n"
                 - type: conditional
-                  conditions: &id190
+                  conditions: &id191
                   - condition: state
                     entity: script.irrigation_notify
                     state_not:
@@ -10158,21 +10165,21 @@ views:
                         icon: null
                         show_icon: true
                         size: 50%
-                        lock: *id180
+                        lock: *id181
                         tap_action: *id087
                         double_tap_action: *id009
                         hold_action: *id009
-                        styles: *id188
-                        custom_fields: *id189
+                        styles: *id189
+                        custom_fields: *id190
                         state:
                         - value: 'on'
                           name: ${'Notify ' +  USER1_NAME + ' of events'}
                           icon: null
-                          styles: *id182
+                          styles: *id183
                         - value: 'off'
                           name: ${'Notify ' +  USER1_NAME + ' of events'}
                           icon: null
-                          styles: *id183
+                          styles: *id184
                     - type: custom:config-template-card
                       variables:
                         USER2_NAME: states['input_text.irrigation_notification_user2_name']?.state ?? 'User 2'
@@ -10189,23 +10196,23 @@ views:
                         icon: null
                         show_icon: true
                         size: 50%
-                        lock: *id180
+                        lock: *id181
                         tap_action: *id087
                         double_tap_action: *id009
                         hold_action: *id009
-                        styles: *id188
-                        custom_fields: *id189
+                        styles: *id189
+                        custom_fields: *id190
                         state:
                         - value: 'on'
                           name: ${'Notify ' +  USER2_NAME + ' of events'}
                           icon: null
-                          styles: *id182
+                          styles: *id183
                         - value: 'off'
                           name: ${'Notify ' +  USER2_NAME + ' of events'}
                           icon: null
-                          styles: *id183
+                          styles: *id184
                 - type: conditional
-                  conditions: *id190
+                  conditions: *id191
                   card:
                     type: horizontal-stack
                     cards:
@@ -10218,17 +10225,17 @@ views:
                       styles:
                         grid:
                         - *id058
-                        - &id248
+                        - &id249
                           grid-template-columns: 1fr 20%
                         - *id017
                         card:
                         - *id008
                         - *id081
                         - padding: 0em 0.2em 0em
-                        - *id191
+                        - *id192
                         name:
                         - *id011
-                        - *id175
+                        - *id176
                       tap_action:
                         action: fire-dom-event
                         browser_mod:
@@ -10246,7 +10253,7 @@ views:
                                     events.
 
                                     '
-                                  card_mod: &id194
+                                  card_mod: &id195
                                     style: "ha-card {\n  font-family: {{ states('input_text.irrigation_ui_font_family')\
                                       \ }};\n  font-size: 16px;\n}\n"
                                 - type: entities
@@ -10259,7 +10266,7 @@ views:
                                     name: Notification script
                                     type: custom:irrigation-garden-entity-picker
                                     ui_labels: *id001
-                                    domains: &id192
+                                    domains: &id193
                                     - script
                                   - entity: input_text.irrigation_log_notify_entity
                                     name: File notification entity
@@ -10271,7 +10278,7 @@ views:
                                     name: Announcement script
                                     type: custom:irrigation-garden-entity-picker
                                     ui_labels: *id001
-                                    domains: *id192
+                                    domains: *id193
                                   - entity: input_text.irrigation_announcement_player
                                     name: Announcement media player
                                     type: custom:irrigation-garden-entity-picker
@@ -10282,14 +10289,14 @@ views:
                                     name: Optional startup-ready entity
                                     type: custom:irrigation-garden-entity-picker
                                     ui_labels: *id001
-                                    domains: &id193
+                                    domains: &id194
                                     - binary_sensor
                                     - input_boolean
                                   - entity: input_text.irrigation_ha_stopping_entity
                                     name: Optional shutdown entity
                                     type: custom:irrigation-garden-entity-picker
                                     ui_labels: *id001
-                                    domains: *id193
+                                    domains: *id194
                                   - entity: input_text.irrigation_external_sensor_weather_outlook
                                     name: Weather outlook entity
                                     type: custom:irrigation-garden-entity-picker
@@ -10302,7 +10309,7 @@ views:
                                   content: 'These names are held in:
 
                                     '
-                                  card_mod: *id194
+                                  card_mod: *id195
                                 - type: markdown
                                   content: 'input_text.irrigation_notification_user[1, 2]_name
 
@@ -10334,18 +10341,18 @@ views:
                   styles:
                     grid:
                     - grid-template-areas: '"i n s"  "i n s"'
-                    - &id240
+                    - &id241
                       grid-template-columns: 15% auto 15%
-                    - *id195
-                    card: &id241
+                    - *id196
+                    card: &id242
                     - *id008
-                    - &id197
+                    - &id198
                       font-size: 15px
                     - padding: 0em 0em 0.5em 0em
                     - *id005
-                    icon: *id196
+                    icon: *id197
                     name: *id022
-                    label: &id242
+                    label: &id243
                     - *id002
                     - *id011
                   tap_action:
@@ -10362,7 +10369,7 @@ views:
                             cards:
                             - type: markdown
                               content: Leave blank to use the font from the current theme.
-                              card_mod: &id251
+                              card_mod: &id252
                                 style: "ha-card {\n  font-family: {{ states('input_text.irrigation_ui_font_family')\
                                   \ }};\n  font-size: 16px;\n  text-align: center;\n}\n"
                             - type: entities
@@ -10377,17 +10384,17 @@ views:
                   show_state: true
                   state_display: <elt><ha-icon icon=mdi:square-edit-outline></ha-icon></elt>
                   styles:
-                    grid: &id216
+                    grid: &id217
                     - grid-template-areas: '"i n s"'
                     - grid-template-columns: 15% auto 5%
                     - *id025
                     card:
                     - height: 2em
                     - *id008
-                    - *id197
+                    - *id198
                     - padding: 0em 1.5em 0.5em 0.2em
                     - *id005
-                    icon: *id196
+                    icon: *id197
                     name: *id022
                   tap_action:
                     action: fire-dom-event
@@ -10423,80 +10430,80 @@ views:
                               entities:
                               - type: section
                                 label: Rainfall Sensors (leave blank to reset default)
-                                card_mod: &id198
+                                card_mod: &id199
                                   style:
                                     hui-generic-entity-row:
                                       $: ".info {\n  text-overflow: unset !important;\n  white-space: unset !important;\n\
                                         }\n"
-                              - &id236
+                              - &id237
                                 entity: input_boolean.irrigation_rainfall_use_rolling_values
                               - type: custom:hui-element
                                 card_type: conditional
-                                conditions: &id199
+                                conditions: &id200
                                 - entity: input_boolean.irrigation_rainfall_use_rolling_values
                                   state: 'on'
                                 card:
                                   type: entities
                                   entities:
                                   - entity: input_text.irrigation_external_sensor_rainfall_last_twenty_four_hours
-                                    card_mod: *id198
+                                    card_mod: *id199
                                     type: custom:irrigation-garden-entity-picker
                                     ui_labels: *id001
-                                    domains: &id200
+                                    domains: &id201
                                     - sensor
-                                    units: &id201
+                                    units: &id202
                                     - mm
                               - type: custom:hui-element
                                 card_type: conditional
-                                conditions: *id199
+                                conditions: *id200
                                 card:
                                   type: entities
                                   entities:
                                   - entity: input_text.irrigation_external_sensor_rainfall_between_24_and_48_hours_ago
-                                    card_mod: *id198
+                                    card_mod: *id199
                                     type: custom:irrigation-garden-entity-picker
                                     ui_labels: *id001
-                                    domains: *id200
-                                    units: *id201
+                                    domains: *id201
+                                    units: *id202
                               - type: custom:hui-element
                                 card_type: conditional
-                                conditions: *id199
+                                conditions: *id200
                                 card:
                                   type: entities
                                   entities:
                                   - entity: input_text.irrigation_external_sensor_rainfall_between_48_and_72_hours_ago
-                                    card_mod: *id198
+                                    card_mod: *id199
                                     type: custom:irrigation-garden-entity-picker
                                     ui_labels: *id001
-                                    domains: *id200
-                                    units: *id201
+                                    domains: *id201
+                                    units: *id202
                               - type: custom:hui-element
                                 card_type: conditional
-                                conditions: *id199
+                                conditions: *id200
                                 card:
                                   type: entities
                                   entities:
                                   - entity: input_text.irrigation_external_sensor_rainfall_between_72_and_96_hours_ago
-                                    card_mod: *id198
+                                    card_mod: *id199
                                     type: custom:irrigation-garden-entity-picker
                                     ui_labels: *id001
-                                    domains: *id200
-                                    units: *id201
+                                    domains: *id201
+                                    units: *id202
                               - type: custom:hui-element
                                 card_type: conditional
-                                conditions: *id199
+                                conditions: *id200
                                 card:
                                   type: entities
                                   entities:
                                   - entity: input_text.irrigation_external_sensor_rainfall_between_96_and_120_hours_ago
-                                    card_mod: *id198
+                                    card_mod: *id199
                                     type: custom:irrigation-garden-entity-picker
                                     ui_labels: *id001
-                                    domains: *id200
-                                    units: *id201
+                                    domains: *id201
+                                    units: *id202
                               - type: custom:hui-element
                                 card_type: conditional
-                                conditions: &id202
+                                conditions: &id203
                                 - entity: input_boolean.irrigation_rainfall_use_rolling_values
                                   state: 'off'
                                 card:
@@ -10504,63 +10511,63 @@ views:
                                   entities:
                                   - entity: input_text.irrigation_external_sensor_rainfall_today
                                     name: Rain Today
-                                    card_mod: *id198
+                                    card_mod: *id199
                                     type: custom:irrigation-garden-entity-picker
                                     ui_labels: *id001
-                                    domains: *id200
-                                    units: *id201
+                                    domains: *id201
+                                    units: *id202
                               - type: custom:hui-element
                                 card_type: conditional
-                                conditions: *id202
+                                conditions: *id203
                                 card:
                                   type: entities
                                   entities:
                                   - entity: input_text.irrigation_external_sensor_rainfall_yesterday
                                     name: Rain Yesterday
-                                    card_mod: *id198
+                                    card_mod: *id199
                                     type: custom:irrigation-garden-entity-picker
                                     ui_labels: *id001
-                                    domains: *id200
-                                    units: *id201
+                                    domains: *id201
+                                    units: *id202
                               - *id035
                               - entity: input_text.irrigation_external_sensor_raining_now
                                 name: Raining Now
-                                card_mod: *id198
+                                card_mod: *id199
                                 type: custom:irrigation-garden-entity-picker
                                 ui_labels: *id001
                                 domains:
                                 - binary_sensor
                               - entity: input_text.irrigation_external_sensor_forecast_rain
                                 name: Forecast Rain
-                                card_mod: *id198
+                                card_mod: *id199
                                 type: custom:irrigation-garden-entity-picker
                                 ui_labels: *id001
-                                domains: *id200
-                                units: *id201
+                                domains: *id201
+                                units: *id202
                               - type: section
                                 label: Temperature Sensors (leave blank to reset default)
                               - entity: input_text.irrigation_external_sensor_forecast_high_temp
                                 name: Forecast High Temperature
-                                card_mod: *id198
+                                card_mod: *id199
                                 type: custom:irrigation-garden-entity-picker
                                 ui_labels: *id001
-                                domains: *id200
-                                units: &id203
+                                domains: *id201
+                                units: &id204
                                 - °C
                               - entity: input_text.irrigation_external_sensor_current_temp
                                 name: Current Temperature
-                                card_mod: *id198
+                                card_mod: *id199
                                 type: custom:irrigation-garden-entity-picker
                                 ui_labels: *id001
-                                domains: *id200
-                                units: *id203
-                              card_mod: &id237
+                                domains: *id201
+                                units: *id204
+                              card_mod: &id238
                                 style: "ha-card {\n  font-family: {{ states('input_text.irrigation_ui_font_family')\
                                   \ }};\n  }\n"
                         style: *id042
                 - type: custom:button-card
                   entity: input_number.irrigation_number_of_zones
-                  triggers_update: &id208
+                  triggers_update: &id209
                   - binary_sensor.irrigation_temperature_data_ready
                   - binary_sensor.irrigation_rainfall_data_ready
                   show_state: true
@@ -10577,37 +10584,37 @@ views:
                   show_label: true
                   label: null
                   size: 30%
-                  styles: &id209
-                    grid: &id238
+                  styles: &id210
+                    grid: &id239
                     - grid-template-areas: "[[[\n  if ('' == '')\n    return '\"i n s\"  \"i n s\"';\n  else\n \
                         \   return '\"i n s\"  \"i l s\"';\n]]]\n"
-                    - &id211
+                    - &id212
                       grid-template-columns: 12% minmax(0, 1fr) 22%
-                    - *id195
-                    card: &id212
+                    - *id196
+                    card: &id213
                     - *id008
-                    - *id197
-                    - *id204
+                    - *id198
+                    - *id205
                     - *id005
-                    icon: *id196
-                    name: *id205
-                    label: &id213
+                    icon: *id197
+                    name: *id206
+                    label: &id214
                     - *id039
                     - *id040
                     - *id041
                     - *id043
                     - *id002
                     - *id011
-                    state: &id214
+                    state: &id215
                     - *id039
                     - *id041
-                  state: &id210
+                  state: &id211
                   - value: unavailable
                     styles:
-                      icon: &id207
+                      icon: &id208
                       - *id010
-                      - *id206
-                      state: *id207
+                      - *id207
+                      state: *id208
                   tap_action:
                     action: fire-dom-event
                     browser_mod:
@@ -10623,12 +10630,12 @@ views:
                             - entity: input_number.irrigation_number_of_zones
                               name: Number Of Zones
                               icon: null
-                              card_mod: *id198
+                              card_mod: *id199
                             card_mod: *id048
                         style: *id042
                 - type: custom:button-card
                   entity: input_number.irrigation_pause_between_zones_in_seconds
-                  triggers_update: *id208
+                  triggers_update: *id209
                   show_state: true
                   state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                     \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -10643,8 +10650,8 @@ views:
                   show_label: true
                   label: null
                   size: 30%
-                  styles: *id209
-                  state: *id210
+                  styles: *id210
+                  state: *id211
                   tap_action:
                     action: fire-dom-event
                     browser_mod:
@@ -10660,12 +10667,12 @@ views:
                             - entity: input_number.irrigation_pause_between_zones_in_seconds
                               name: Pause Between Zones
                               icon: null
-                              card_mod: *id198
+                              card_mod: *id199
                             card_mod: *id048
                         style: *id042
                 - type: custom:button-card
                   entity: input_number.irrigation_weather_adjusted_minimum_duration_in_seconds
-                  triggers_update: *id208
+                  triggers_update: *id209
                   show_state: true
                   state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                     \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -10680,18 +10687,18 @@ views:
                   show_label: true
                   label: When using weather adjustments
                   size: 30%
-                  styles: &id215
+                  styles: &id216
                     grid:
                     - grid-template-areas: "[[[\n  if ('When using weather adjustments' == '')\n    return '\"i\
                         \ n s\"  \"i n s\"';\n  else\n    return '\"i n s\"  \"i l s\"';\n]]]\n"
-                    - *id211
-                    - *id195
-                    card: *id212
-                    icon: *id196
-                    name: *id205
-                    label: *id213
-                    state: *id214
-                  state: *id210
+                    - *id212
+                    - *id196
+                    card: *id213
+                    icon: *id197
+                    name: *id206
+                    label: *id214
+                    state: *id215
+                  state: *id211
                   tap_action:
                     action: fire-dom-event
                     browser_mod:
@@ -10707,12 +10714,12 @@ views:
                             - entity: input_number.irrigation_weather_adjusted_minimum_duration_in_seconds
                               name: Minimum Time To Run A Zone
                               icon: null
-                              card_mod: *id198
+                              card_mod: *id199
                             card_mod: *id048
                         style: *id042
                 - type: custom:button-card
                   entity: input_number.irrigation_weather_adjusted_maximum_duration_in_minutes
-                  triggers_update: *id208
+                  triggers_update: *id209
                   show_state: true
                   state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                     \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -10727,8 +10734,8 @@ views:
                   show_label: true
                   label: When using weather adjustments
                   size: 30%
-                  styles: *id215
-                  state: *id210
+                  styles: *id216
+                  state: *id211
                   tap_action:
                     action: fire-dom-event
                     browser_mod:
@@ -10744,7 +10751,7 @@ views:
                             - entity: input_number.irrigation_weather_adjusted_maximum_duration_in_minutes
                               name: Maximum Time To Run A Zone
                               icon: null
-                              card_mod: *id198
+                              card_mod: *id199
                             card_mod: *id048
                         style: *id042
                 - *id093
@@ -10767,16 +10774,16 @@ views:
                     show_state: true
                     state_display: <elt><ha-icon icon=mdi:square-edit-outline></ha-icon></elt>
                     size: 30%
-                    styles: &id217
-                      grid: *id216
+                    styles: &id218
+                      grid: *id217
                       card:
                       - *id008
-                      - *id197
+                      - *id198
                       - padding: 0em 1.5em 0em 0em
                       - *id005
-                      icon: *id196
-                      name: *id205
-                    state: *id210
+                      icon: *id197
+                      name: *id206
+                    state: *id211
                     tap_action:
                       action: fire-dom-event
                       browser_mod:
@@ -10789,68 +10796,68 @@ views:
                             card:
                               type: vertical-stack
                               cards:
-                              - &id218
+                              - &id219
                                 type: markdown
                                 content: 'Enter the name of the sensor for your irrigation controller WiFi signal
                                   strength.
 
 
                                   Leave blank to reset to default.'
-                                card_mod: *id194
+                                card_mod: *id195
                               - type: entities
                                 entities:
                                 - entity: input_text.irrigation_external_sensor_controller_1_wifi
                                   name: Irrigation Controller 1
-                                  card_mod: *id198
+                                  card_mod: *id199
                                   type: custom:irrigation-garden-entity-picker
                                   ui_labels: *id001
-                                  domains: *id200
-                                  units: &id219
+                                  domains: *id201
+                                  units: &id220
                                   - dBm
                                   - '%'
-                                - &id220
+                                - &id221
                                   type: section
                                 card_mod: *id048
-                              - &id221
+                              - &id222
                                 type: markdown
                                 content: '### Settings for all controllers.
 
                                   You can decide how long to wait if a controller is offline.
 
                                   '
-                                card_mod: *id194
-                              - &id222
+                                card_mod: *id195
+                              - &id223
                                 type: entities
                                 entities:
                                 - entity: input_number.irrigation_controller_offline_wait
                                   name: Seconds To Wait If Offline
-                                  card_mod: *id198
+                                  card_mod: *id199
                                 - entity: input_number.irrigation_controller_log_unavailable_seconds_threshold
                                   name: Seconds To Wait Before Logging
-                                  card_mod: *id198
-                              - &id223
+                                  card_mod: *id199
+                              - &id224
                                 type: markdown
                                 content: You can disable the switches to prevent irrigation while testing.
-                                card_mod: *id194
-                              - &id224
+                                card_mod: *id195
+                              - &id225
                                 type: entities
                                 entities:
                                 - entity: input_boolean.irrigation_disable_switches
-                                  card_mod: *id198
+                                  card_mod: *id199
                                 card_mod: *id048
-                              - &id225
+                              - &id226
                                 type: markdown
                                 content: Choose notifications for Controller WiFi events.
-                                card_mod: *id194
-                              - &id226
+                                card_mod: *id195
+                              - &id227
                                 type: entities
                                 entities:
                                 - entity: input_boolean.irrigation_ha_notify_of_controller_wifi_events
                                   name: HA Persistent Notifications
-                                  card_mod: *id198
+                                  card_mod: *id199
                                 - entity: input_boolean.irrigation_user_notify_of_controller_wifi_events
                                   name: User Notifications
-                                  card_mod: *id198
+                                  card_mod: *id199
                                 card_mod: *id048
                           style: *id042
                 - type: custom:config-template-card
@@ -10872,8 +10879,8 @@ views:
                     show_state: true
                     state_display: <elt><ha-icon icon=mdi:square-edit-outline></ha-icon></elt>
                     size: 30%
-                    styles: *id217
-                    state: *id210
+                    styles: *id218
+                    state: *id211
                     tap_action:
                       action: fire-dom-event
                       browser_mod:
@@ -10886,44 +10893,44 @@ views:
                             card:
                               type: vertical-stack
                               cards:
-                              - *id218
+                              - *id219
                               - type: entities
                                 entities:
                                 - entity: input_text.irrigation_external_sensor_controller_2_wifi
                                   name: Irrigation Controller 2
-                                  card_mod: *id198
+                                  card_mod: *id199
                                   type: custom:irrigation-garden-entity-picker
                                   ui_labels: *id001
-                                  domains: *id200
-                                  units: *id219
-                                - *id220
+                                  domains: *id201
+                                  units: *id220
+                                - *id221
                                 card_mod: *id048
-                              - *id221
                               - *id222
                               - *id223
                               - *id224
                               - *id225
                               - *id226
+                              - *id227
                           style: *id042
                 - type: custom:button-card
                   entity: input_boolean.irrigation_testing_mode
                   name: "[[[\n  if (states['input_boolean.irrigation_disable_switches'].state == 'on')\n    return\
                     \ 'Warning! Switches disabled';\n]]]\n"
                   styles:
-                    grid: *id227
+                    grid: *id228
                     card:
                     - display: "[[[\n  if (states['input_boolean.irrigation_disable_switches'].state != 'on')\n\
                         \    return 'none';\n  else return null;\n]]]\n"
-                    - *id184
+                    - *id185
                     - *id008
                     - *id081
                     - *id067
-                    - *id185
-                    - *id191
-                    - *id228
-                    name: *id229
+                    - *id186
+                    - *id192
+                    - *id229
+                    name: *id230
                   tap_action: *id009
-                  state: *id230
+                  state: *id231
             Rainfall:
               type: entities
               entities:
@@ -10934,13 +10941,13 @@ views:
                   show_icon: false
                   name: GENERAL RAINFALL SETTINGS
                   tap_action: *id009
-                  styles: &id235
+                  styles: &id236
                     card:
                     - *id011
                     - *id013
                     - *id005
-                    - *id185
-                    - *id231
+                    - *id186
+                    - *id232
                     - *id016
                     - *id008
                     - *id014
@@ -10950,7 +10957,7 @@ views:
                     - *id016
                 - type: custom:button-card
                   entity: input_number.irrigation_days_of_rainfall_history_used
-                  triggers_update: *id208
+                  triggers_update: *id209
                   show_state: true
                   state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                     \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -10969,14 +10976,14 @@ views:
                     grid:
                     - grid-template-areas: "[[[\n  if ('(0 to 4) If zero only rainfall today is used' == '')\n \
                         \   return '\"i n s\"  \"i n s\"';\n  else\n    return '\"i n s\"  \"i l s\"';\n]]]\n"
-                    - *id211
-                    - *id195
-                    card: *id212
-                    icon: *id196
-                    name: *id205
-                    label: *id213
-                    state: *id214
-                  state: *id210
+                    - *id212
+                    - *id196
+                    card: *id213
+                    icon: *id197
+                    name: *id206
+                    label: *id214
+                    state: *id215
+                  state: *id211
                   tap_action:
                     action: fire-dom-event
                     browser_mod:
@@ -10992,12 +10999,12 @@ views:
                             - entity: input_number.irrigation_days_of_rainfall_history_used
                               name: Number of days history to use
                               icon: null
-                              card_mod: *id198
+                              card_mod: *id199
                             card_mod: *id048
                         style: *id042
                 - type: custom:button-card
                   entity: input_number.irrigation_rainfall_threshold
-                  triggers_update: *id208
+                  triggers_update: *id209
                   show_state: true
                   state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                     \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11017,14 +11024,14 @@ views:
                     - grid-template-areas: "[[[\n  if ('If this threshold is reached no watering takes place' ==\
                         \ '')\n    return '\"i n s\"  \"i n s\"';\n  else\n    return '\"i n s\"  \"i l s\"';\n\
                         ]]]\n"
-                    - *id211
-                    - *id195
-                    card: *id212
-                    icon: *id196
-                    name: *id205
-                    label: *id213
-                    state: *id214
-                  state: *id210
+                    - *id212
+                    - *id196
+                    card: *id213
+                    icon: *id197
+                    name: *id206
+                    label: *id214
+                    state: *id215
+                  state: *id211
                   tap_action:
                     action: fire-dom-event
                     browser_mod:
@@ -11040,7 +11047,7 @@ views:
                             - entity: input_number.irrigation_rainfall_threshold
                               name: Rainfall threshold
                               icon: null
-                              card_mod: *id198
+                              card_mod: *id199
                             card_mod: *id048
                         style: *id042
                 - type: custom:button-card
@@ -11051,39 +11058,39 @@ views:
                   icon: null
                   show_icon: true
                   size: 50%
-                  lock: *id180
+                  lock: *id181
                   tap_action: *id087
                   double_tap_action: *id009
                   hold_action: *id009
                   styles:
                     grid:
-                    - *id232
+                    - *id233
                     - grid-template-columns: "[[[\n  var columns = '1';\n  if (columns == '1')\n    {\n      var\
                         \ icon_size = '10%';\n      var check_box_size = '8%';\n    }\n  else\n    {  \n      var\
                         \ icon_size = '20%';\n      var check_box_size = '16%';\n    }\n  return icon_size + ' auto\
                         \ ' + check_box_size;\n]]]\n"
                     - *id025
-                    img_cell: *id186
+                    img_cell: *id187
                     card:
                     - *id008
                     - *id034
                     - padding-right: "[[[\n  var columns = '1';\n  if (columns == '1')\n    return '1em';\n]]]\n"
                     - padding-left: "[[[\n  var columns = '1';\n  if (columns == '1')\n    return '1em';\n]]]\n"
-                    - *id184
+                    - *id185
                     - *id026
                     - *id073
-                    name: *id233
-                    custom_fields: *id234
-                  custom_fields: *id189
+                    name: *id234
+                    custom_fields: *id235
+                  custom_fields: *id190
                   state:
                   - value: 'on'
                     name: Ignore schedules if it is raining
                     icon: mdi:calendar-check-outline
-                    styles: *id182
+                    styles: *id183
                   - value: 'off'
                     name: Ignore schedules if it is raining
                     icon: mdi:calendar-remove-outline
-                    styles: *id183
+                    styles: *id184
                 - *id093
                 - type: custom:hui-element
                   card_type: horizontal-stack
@@ -11092,7 +11099,7 @@ views:
                     show_icon: false
                     name: RAINFALL INCLUDED IN CALCULATIONS
                     tap_action: *id009
-                    styles: *id235
+                    styles: *id236
                   - type: custom:button-card
                     icon: mdi:square-edit-outline
                     styles:
@@ -11111,10 +11118,10 @@ views:
                             card:
                               type: entities
                               entities:
-                              - *id236
+                              - *id237
                               - type: custom:hui-element
                                 card_type: conditional
-                                conditions: *id199
+                                conditions: *id200
                                 card:
                                   type: entities
                                   entities:
@@ -11128,7 +11135,7 @@ views:
                                     name: 96 to 120 hours ago
                               - type: custom:hui-element
                                 card_type: conditional
-                                conditions: *id202
+                                conditions: *id203
                                 card:
                                   type: entities
                                   entities:
@@ -11140,15 +11147,15 @@ views:
                                     name: Three days ago
                                   - entity: input_number.irrigation_rainfall_percentage_4
                                     name: Four days ago
-                              card_mod: *id237
+                              card_mod: *id238
                           style: *id042
                 - type: custom:hui-element
                   card_type: conditional
-                  conditions: *id199
+                  conditions: *id200
                   card:
                     type: custom:button-card
                     entity: input_number.irrigation_rainfall_percentage_1
-                    triggers_update: *id208
+                    triggers_update: *id209
                     show_state: true
                     state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                       \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11164,18 +11171,18 @@ views:
                     show_label: true
                     label: null
                     size: 30%
-                    styles: &id239
-                      grid: *id238
+                    styles: &id240
+                      grid: *id239
                       card:
                       - *id008
-                      - *id197
+                      - *id198
                       - *id078
                       - *id005
-                      icon: *id196
-                      name: *id205
-                      label: *id213
-                      state: *id214
-                    state: *id210
+                      icon: *id197
+                      name: *id206
+                      label: *id214
+                      state: *id215
+                    state: *id211
                     tap_action:
                       action: none
                       browser_mod:
@@ -11191,16 +11198,16 @@ views:
                               - entity: input_number.irrigation_rainfall_percentage_1
                                 name: 24 to 48 hours ago
                                 icon: null
-                                card_mod: *id198
+                                card_mod: *id199
                               card_mod: *id048
                           style: *id042
                 - type: custom:hui-element
                   card_type: conditional
-                  conditions: *id199
+                  conditions: *id200
                   card:
                     type: custom:button-card
                     entity: input_number.irrigation_rainfall_percentage_2
-                    triggers_update: *id208
+                    triggers_update: *id209
                     show_state: true
                     state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                       \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11216,8 +11223,8 @@ views:
                     show_label: true
                     label: null
                     size: 30%
-                    styles: *id209
-                    state: *id210
+                    styles: *id210
+                    state: *id211
                     tap_action:
                       action: none
                       browser_mod:
@@ -11233,16 +11240,16 @@ views:
                               - entity: input_number.irrigation_rainfall_percentage_2
                                 name: 48 to 72 hours ago
                                 icon: null
-                                card_mod: *id198
+                                card_mod: *id199
                               card_mod: *id048
                           style: *id042
                 - type: custom:hui-element
                   card_type: conditional
-                  conditions: *id199
+                  conditions: *id200
                   card:
                     type: custom:button-card
                     entity: input_number.irrigation_rainfall_percentage_3
-                    triggers_update: *id208
+                    triggers_update: *id209
                     show_state: true
                     state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                       \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11258,8 +11265,8 @@ views:
                     show_label: true
                     label: null
                     size: 30%
-                    styles: *id209
-                    state: *id210
+                    styles: *id210
+                    state: *id211
                     tap_action:
                       action: none
                       browser_mod:
@@ -11275,16 +11282,16 @@ views:
                               - entity: input_number.irrigation_rainfall_percentage_3
                                 name: 72 to 96 hours ago
                                 icon: null
-                                card_mod: *id198
+                                card_mod: *id199
                               card_mod: *id048
                           style: *id042
                 - type: custom:hui-element
                   card_type: conditional
-                  conditions: *id199
+                  conditions: *id200
                   card:
                     type: custom:button-card
                     entity: input_number.irrigation_rainfall_percentage_4
-                    triggers_update: *id208
+                    triggers_update: *id209
                     show_state: true
                     state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                       \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11300,8 +11307,8 @@ views:
                     show_label: true
                     label: null
                     size: 30%
-                    styles: *id209
-                    state: *id210
+                    styles: *id210
+                    state: *id211
                     tap_action:
                       action: none
                       browser_mod:
@@ -11317,16 +11324,16 @@ views:
                               - entity: input_number.irrigation_rainfall_percentage_4
                                 name: 96 to 120 hours ago
                                 icon: null
-                                card_mod: *id198
+                                card_mod: *id199
                               card_mod: *id048
                           style: *id042
                 - type: custom:hui-element
                   card_type: conditional
-                  conditions: *id202
+                  conditions: *id203
                   card:
                     type: custom:button-card
                     entity: input_number.irrigation_rainfall_percentage_1
-                    triggers_update: *id208
+                    triggers_update: *id209
                     show_state: true
                     state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                       \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11342,8 +11349,8 @@ views:
                     show_label: true
                     label: null
                     size: 30%
-                    styles: *id239
-                    state: *id210
+                    styles: *id240
+                    state: *id211
                     tap_action:
                       action: none
                       browser_mod:
@@ -11359,16 +11366,16 @@ views:
                               - entity: input_number.irrigation_rainfall_percentage_1
                                 name: Yesterday
                                 icon: null
-                                card_mod: *id198
+                                card_mod: *id199
                               card_mod: *id048
                           style: *id042
                 - type: custom:hui-element
                   card_type: conditional
-                  conditions: *id202
+                  conditions: *id203
                   card:
                     type: custom:button-card
                     entity: input_number.irrigation_rainfall_percentage_2
-                    triggers_update: *id208
+                    triggers_update: *id209
                     show_state: true
                     state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                       \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11384,8 +11391,8 @@ views:
                     show_label: true
                     label: null
                     size: 30%
-                    styles: *id209
-                    state: *id210
+                    styles: *id210
+                    state: *id211
                     tap_action:
                       action: none
                       browser_mod:
@@ -11401,16 +11408,16 @@ views:
                               - entity: input_number.irrigation_rainfall_percentage_2
                                 name: Two days ago
                                 icon: null
-                                card_mod: *id198
+                                card_mod: *id199
                               card_mod: *id048
                           style: *id042
                 - type: custom:hui-element
                   card_type: conditional
-                  conditions: *id202
+                  conditions: *id203
                   card:
                     type: custom:button-card
                     entity: input_number.irrigation_rainfall_percentage_3
-                    triggers_update: *id208
+                    triggers_update: *id209
                     show_state: true
                     state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                       \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11426,8 +11433,8 @@ views:
                     show_label: true
                     label: null
                     size: 30%
-                    styles: *id209
-                    state: *id210
+                    styles: *id210
+                    state: *id211
                     tap_action:
                       action: none
                       browser_mod:
@@ -11443,16 +11450,16 @@ views:
                               - entity: input_number.irrigation_rainfall_percentage_3
                                 name: Three days ago
                                 icon: null
-                                card_mod: *id198
+                                card_mod: *id199
                               card_mod: *id048
                           style: *id042
                 - type: custom:hui-element
                   card_type: conditional
-                  conditions: *id202
+                  conditions: *id203
                   card:
                     type: custom:button-card
                     entity: input_number.irrigation_rainfall_percentage_4
-                    triggers_update: *id208
+                    triggers_update: *id209
                     show_state: true
                     state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                       \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11468,8 +11475,8 @@ views:
                     show_label: true
                     label: null
                     size: 30%
-                    styles: *id209
-                    state: *id210
+                    styles: *id210
+                    state: *id211
                     tap_action:
                       action: none
                       browser_mod:
@@ -11485,7 +11492,7 @@ views:
                               - entity: input_number.irrigation_rainfall_percentage_4
                                 name: Four days ago
                                 icon: null
-                                card_mod: *id198
+                                card_mod: *id199
                               card_mod: *id048
                           style: *id042
                 - *id093
@@ -11493,7 +11500,7 @@ views:
                   show_icon: false
                   name: RAINFALL DATA
                   tap_action: *id009
-                  styles: *id235
+                  styles: *id236
                 - type: custom:button-card
                   entity: input_number.irrigation_rainfall_multiplier
                   show_state: true
@@ -11506,13 +11513,13 @@ views:
                     grid:
                     - grid-template-areas: "[[[\n  if ('Calculated based on rainfall and threshold' == '')\n   \
                         \ return '\"i n s\"  \"i n s\"';\n  else\n    return '\"i n s\"  \"i l s\"';\n]]]\n"
-                    - *id240
-                    - *id195
-                    card: *id241
-                    icon: *id196
+                    - *id241
+                    - *id196
+                    card: *id242
+                    icon: *id197
                     name: *id022
-                    label: *id242
-                  tap_action: &id245
+                    label: *id243
+                  tap_action: &id246
                     action: fire-dom-event
                     browser_mod:
                       service: browser_mod.popup
@@ -11564,11 +11571,11 @@ views:
                     content: Rainfall data is incomplete for the selected days. The last valid correction is retained.
                 - type: custom:hui-element
                   card_type: conditional
-                  conditions: *id199
+                  conditions: *id200
                   card:
                     type: custom:button-card
                     entity: sensor.irrigation_sensor_rainfall_last_twenty_four_hours
-                    triggers_update: *id208
+                    triggers_update: *id209
                     show_state: true
                     state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                       \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11584,8 +11591,8 @@ views:
                     show_label: true
                     label: null
                     size: 30%
-                    styles: *id239
-                    state: *id210
+                    styles: *id240
+                    state: *id211
                     tap_action:
                       action: none
                       browser_mod:
@@ -11601,16 +11608,16 @@ views:
                               - entity: sensor.irrigation_sensor_rainfall_last_twenty_four_hours
                                 name: Last 24 hours
                                 icon: null
-                                card_mod: *id198
+                                card_mod: *id199
                               card_mod: *id048
                           style: *id042
                 - type: custom:hui-element
                   card_type: conditional
-                  conditions: *id199
+                  conditions: *id200
                   card:
                     type: custom:button-card
                     entity: sensor.irrigation_sensor_rainfall_between_24_and_48_hours_ago
-                    triggers_update: *id208
+                    triggers_update: *id209
                     show_state: true
                     state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                       \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11626,8 +11633,8 @@ views:
                     show_label: true
                     label: null
                     size: 30%
-                    styles: *id209
-                    state: *id210
+                    styles: *id210
+                    state: *id211
                     tap_action:
                       action: none
                       browser_mod:
@@ -11643,16 +11650,16 @@ views:
                               - entity: sensor.irrigation_sensor_rainfall_between_24_and_48_hours_ago
                                 name: 24 to 48 hours ago
                                 icon: null
-                                card_mod: *id198
+                                card_mod: *id199
                               card_mod: *id048
                           style: *id042
                 - type: custom:hui-element
                   card_type: conditional
-                  conditions: *id199
+                  conditions: *id200
                   card:
                     type: custom:button-card
                     entity: sensor.irrigation_sensor_rainfall_between_48_and_72_hours_ago
-                    triggers_update: *id208
+                    triggers_update: *id209
                     show_state: true
                     state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                       \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11668,8 +11675,8 @@ views:
                     show_label: true
                     label: null
                     size: 30%
-                    styles: *id209
-                    state: *id210
+                    styles: *id210
+                    state: *id211
                     tap_action:
                       action: none
                       browser_mod:
@@ -11685,16 +11692,16 @@ views:
                               - entity: sensor.irrigation_sensor_rainfall_between_48_and_72_hours_ago
                                 name: 48 to 72 hours ago
                                 icon: null
-                                card_mod: *id198
+                                card_mod: *id199
                               card_mod: *id048
                           style: *id042
                 - type: custom:hui-element
                   card_type: conditional
-                  conditions: *id199
+                  conditions: *id200
                   card:
                     type: custom:button-card
                     entity: sensor.irrigation_sensor_rainfall_between_72_and_96_hours_ago
-                    triggers_update: *id208
+                    triggers_update: *id209
                     show_state: true
                     state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                       \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11710,8 +11717,8 @@ views:
                     show_label: true
                     label: null
                     size: 30%
-                    styles: *id209
-                    state: *id210
+                    styles: *id210
+                    state: *id211
                     tap_action:
                       action: none
                       browser_mod:
@@ -11727,16 +11734,16 @@ views:
                               - entity: sensor.irrigation_sensor_rainfall_between_72_and_96_hours_ago
                                 name: 72 to 96 hours ago
                                 icon: null
-                                card_mod: *id198
+                                card_mod: *id199
                               card_mod: *id048
                           style: *id042
                 - type: custom:hui-element
                   card_type: conditional
-                  conditions: *id199
+                  conditions: *id200
                   card:
                     type: custom:button-card
                     entity: sensor.irrigation_sensor_rainfall_between_96_and_120_hours_ago
-                    triggers_update: *id208
+                    triggers_update: *id209
                     show_state: true
                     state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                       \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11752,18 +11759,18 @@ views:
                     show_label: true
                     label: null
                     size: 30%
-                    styles: &id243
-                      grid: *id238
-                      card: &id244
+                    styles: &id244
+                      grid: *id239
+                      card: &id245
                       - *id008
-                      - *id197
+                      - *id198
                       - padding: 0em 0em 0.3em 0em
                       - *id005
-                      icon: *id196
-                      name: *id205
-                      label: *id213
-                      state: *id214
-                    state: *id210
+                      icon: *id197
+                      name: *id206
+                      label: *id214
+                      state: *id215
+                    state: *id211
                     tap_action:
                       action: none
                       browser_mod:
@@ -11779,16 +11786,16 @@ views:
                               - entity: sensor.irrigation_sensor_rainfall_between_96_and_120_hours_ago
                                 name: 96 to 120 hours ago
                                 icon: null
-                                card_mod: *id198
+                                card_mod: *id199
                               card_mod: *id048
                           style: *id042
                 - type: custom:hui-element
                   card_type: conditional
-                  conditions: *id202
+                  conditions: *id203
                   card:
                     type: custom:button-card
                     entity: sensor.irrigation_sensor_rainfall_today
-                    triggers_update: *id208
+                    triggers_update: *id209
                     show_state: true
                     state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                       \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11804,8 +11811,8 @@ views:
                     show_label: true
                     label: null
                     size: 30%
-                    styles: *id239
-                    state: *id210
+                    styles: *id240
+                    state: *id211
                     tap_action:
                       action: none
                       browser_mod:
@@ -11821,16 +11828,16 @@ views:
                               - entity: sensor.irrigation_sensor_rainfall_today
                                 name: Rainfall today
                                 icon: null
-                                card_mod: *id198
+                                card_mod: *id199
                               card_mod: *id048
                           style: *id042
                 - type: custom:hui-element
                   card_type: conditional
-                  conditions: *id202
+                  conditions: *id203
                   card:
                     type: custom:button-card
                     entity: sensor.irrigation_sensor_rainfall_yesterday
-                    triggers_update: *id208
+                    triggers_update: *id209
                     show_state: true
                     state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                       \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11846,8 +11853,8 @@ views:
                     show_label: true
                     label: null
                     size: 30%
-                    styles: *id209
-                    state: *id210
+                    styles: *id210
+                    state: *id211
                     tap_action:
                       action: none
                       browser_mod:
@@ -11863,16 +11870,16 @@ views:
                               - entity: sensor.irrigation_sensor_rainfall_yesterday
                                 name: Yesterday
                                 icon: null
-                                card_mod: *id198
+                                card_mod: *id199
                               card_mod: *id048
                           style: *id042
                 - type: custom:hui-element
                   card_type: conditional
-                  conditions: *id202
+                  conditions: *id203
                   card:
                     type: custom:button-card
                     entity: input_number.irrigation_rainfall_2
-                    triggers_update: *id208
+                    triggers_update: *id209
                     show_state: true
                     state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                       \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11888,8 +11895,8 @@ views:
                     show_label: true
                     label: null
                     size: 30%
-                    styles: *id209
-                    state: *id210
+                    styles: *id210
+                    state: *id211
                     tap_action:
                       action: none
                       browser_mod:
@@ -11905,16 +11912,16 @@ views:
                               - entity: input_number.irrigation_rainfall_2
                                 name: Two days ago
                                 icon: null
-                                card_mod: *id198
+                                card_mod: *id199
                               card_mod: *id048
                           style: *id042
                 - type: custom:hui-element
                   card_type: conditional
-                  conditions: *id202
+                  conditions: *id203
                   card:
                     type: custom:button-card
                     entity: input_number.irrigation_rainfall_3
-                    triggers_update: *id208
+                    triggers_update: *id209
                     show_state: true
                     state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                       \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11930,8 +11937,8 @@ views:
                     show_label: true
                     label: null
                     size: 30%
-                    styles: *id209
-                    state: *id210
+                    styles: *id210
+                    state: *id211
                     tap_action:
                       action: none
                       browser_mod:
@@ -11947,16 +11954,16 @@ views:
                               - entity: input_number.irrigation_rainfall_3
                                 name: Three days ago
                                 icon: null
-                                card_mod: *id198
+                                card_mod: *id199
                               card_mod: *id048
                           style: *id042
                 - type: custom:hui-element
                   card_type: conditional
-                  conditions: *id202
+                  conditions: *id203
                   card:
                     type: custom:button-card
                     entity: input_number.irrigation_rainfall_4
-                    triggers_update: *id208
+                    triggers_update: *id209
                     show_state: true
                     state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                       \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -11972,8 +11979,8 @@ views:
                     show_label: true
                     label: null
                     size: 30%
-                    styles: *id243
-                    state: *id210
+                    styles: *id244
+                    state: *id211
                     tap_action:
                       action: none
                       browser_mod:
@@ -11989,7 +11996,7 @@ views:
                               - entity: input_number.irrigation_rainfall_4
                                 name: Four days ago
                                 icon: null
-                                card_mod: *id198
+                                card_mod: *id199
                               card_mod: *id048
                           style: *id042
                 - *id093
@@ -11997,7 +12004,7 @@ views:
                   show_icon: false
                   name: RAINFALL - <font color=IndianRed>Forecast</font> vs. <font color=SteelBlue>Actual</font>
                   tap_action: *id009
-                  styles: *id235
+                  styles: *id236
                 - type: custom:config-template-card
                   entities:
                   - sensor.irrigation_sensor_forecast_rain
@@ -12016,7 +12023,7 @@ views:
                     hours_to_show: 48
                     points_per_hour: 4
                     aggregate_func: min
-                    show: &id246
+                    show: &id247
                       fill: fade
                       name: false
                       state: false
@@ -12025,7 +12032,7 @@ views:
                       labels_secondary: false
                       icon: false
                     tap_action: *id009
-                    card_mod: &id247
+                    card_mod: &id248
                       style: "ha-card {\n  background: none;\n  border-radius: 0px;\n} .flex {\n  padding: 0em\n\
                         }\n"
               card_mod:
@@ -12040,10 +12047,10 @@ views:
                   show_icon: false
                   name: TEMPERATURE SETTINGS
                   tap_action: *id009
-                  styles: *id235
+                  styles: *id236
                 - type: custom:button-card
                   entity: input_number.irrigation_days_of_temp_history_used
-                  triggers_update: *id208
+                  triggers_update: *id209
                   show_state: true
                   state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                     \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -12063,14 +12070,14 @@ views:
                     - grid-template-areas: "[[[\n  if ('(0 to 4) If zero only the temperature today is used' ==\
                         \ '')\n    return '\"i n s\"  \"i n s\"';\n  else\n    return '\"i n s\"  \"i l s\"';\n\
                         ]]]\n"
-                    - *id211
-                    - *id195
-                    card: *id212
-                    icon: *id196
-                    name: *id205
-                    label: *id213
-                    state: *id214
-                  state: *id210
+                    - *id212
+                    - *id196
+                    card: *id213
+                    icon: *id197
+                    name: *id206
+                    label: *id214
+                    state: *id215
+                  state: *id211
                   tap_action:
                     action: fire-dom-event
                     browser_mod:
@@ -12086,12 +12093,12 @@ views:
                             - entity: input_number.irrigation_days_of_temp_history_used
                               name: Number of days history to use
                               icon: null
-                              card_mod: *id198
+                              card_mod: *id199
                             card_mod: *id048
                         style: *id042
                 - type: custom:button-card
                   entity: input_number.irrigation_temperature_baseline
-                  triggers_update: *id208
+                  triggers_update: *id209
                   show_state: true
                   state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                     \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -12111,14 +12118,14 @@ views:
                     - grid-template-areas: "[[[\n  if ('Exceeding this temperature increases the watering time'\
                         \ == '')\n    return '\"i n s\"  \"i n s\"';\n  else\n    return '\"i n s\"  \"i l s\"';\n\
                         ]]]\n"
-                    - *id211
-                    - *id195
-                    card: *id244
-                    icon: *id196
-                    name: *id205
-                    label: *id213
-                    state: *id214
-                  state: *id210
+                    - *id212
+                    - *id196
+                    card: *id245
+                    icon: *id197
+                    name: *id206
+                    label: *id214
+                    state: *id215
+                  state: *id211
                   tap_action:
                     action: fire-dom-event
                     browser_mod:
@@ -12134,7 +12141,7 @@ views:
                             - entity: input_number.irrigation_temperature_baseline
                               name: Baseline temperature
                               icon: null
-                              card_mod: *id198
+                              card_mod: *id199
                             card_mod: *id048
                         style: *id042
                 - *id093
@@ -12142,7 +12149,7 @@ views:
                   show_icon: false
                   name: TEMPERATURE DATA
                   tap_action: *id009
-                  styles: *id235
+                  styles: *id236
                 - type: custom:button-card
                   entity: input_number.irrigation_temp_multiplier
                   show_state: true
@@ -12155,13 +12162,13 @@ views:
                     grid:
                     - grid-template-areas: "[[[\n  if ('Calculated based on temperature and baseline' == '')\n \
                         \   return '\"i n s\"  \"i n s\"';\n  else\n    return '\"i n s\"  \"i l s\"';\n]]]\n"
-                    - *id240
-                    - *id195
-                    card: *id241
-                    icon: *id196
+                    - *id241
+                    - *id196
+                    card: *id242
+                    icon: *id197
                     name: *id022
-                    label: *id242
-                  tap_action: *id245
+                    label: *id243
+                  tap_action: *id246
                 - type: conditional
                   conditions:
                   - entity: binary_sensor.irrigation_temperature_data_ready
@@ -12172,7 +12179,7 @@ views:
                       retained.
                 - type: custom:button-card
                   entity: input_number.irrigation_temperature_highest_forecast_high_temp_today
-                  triggers_update: *id208
+                  triggers_update: *id209
                   show_state: true
                   state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                     \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -12187,8 +12194,8 @@ views:
                   show_label: true
                   label: null
                   size: 30%
-                  styles: *id209
-                  state: *id210
+                  styles: *id210
+                  state: *id211
                   tap_action:
                     action: none
                     browser_mod:
@@ -12204,12 +12211,12 @@ views:
                             - entity: input_number.irrigation_temperature_highest_forecast_high_temp_today
                               name: Highest forecasted temperature today
                               icon: null
-                              card_mod: *id198
+                              card_mod: *id199
                             card_mod: *id048
                         style: *id042
                 - type: custom:button-card
                   entity: input_number.irrigation_temperature_highest_actual_temp_today
-                  triggers_update: *id208
+                  triggers_update: *id209
                   show_state: true
                   state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                     \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -12224,8 +12231,8 @@ views:
                   show_label: true
                   label: null
                   size: 30%
-                  styles: *id243
-                  state: *id210
+                  styles: *id244
+                  state: *id211
                   tap_action:
                     action: none
                     browser_mod:
@@ -12241,7 +12248,7 @@ views:
                             - entity: input_number.irrigation_temperature_highest_actual_temp_today
                               name: Highest actual temperature recorded today
                               icon: null
-                              card_mod: *id198
+                              card_mod: *id199
                             card_mod: *id048
                         style: *id042
                 - *id093
@@ -12249,7 +12256,7 @@ views:
                   show_icon: false
                   name: HIGH TEMPERATURE - <font color=IndianRed>Forecast</font> vs. <font color=SteelBlue>Actual</font>
                   tap_action: *id009
-                  styles: *id235
+                  styles: *id236
                 - type: custom:config-template-card
                   entities:
                   - sensor.irrigation_sensor_forecast_high_temp
@@ -12268,9 +12275,9 @@ views:
                     hours_to_show: 48
                     points_per_hour: 4
                     aggregate_func: min
-                    show: *id246
+                    show: *id247
                     tap_action: *id009
-                    card_mod: *id247
+                    card_mod: *id248
                 - type: horizontal-stack
                   cards:
                   - *id064
@@ -12287,15 +12294,15 @@ views:
                       styles:
                         grid:
                         - grid-template-areas: '"s i"'
-                        - *id248
+                        - *id249
                         - *id025
                         card:
                         - padding: 0em 0em
-                        - *id249
+                        - *id250
                         - *id008
                         - *id026
                         - *id005
-                        state: *id250
+                        state: *id251
                       tap_action:
                         action: fire-dom-event
                         browser_mod:
@@ -12310,7 +12317,7 @@ views:
                                 cards:
                                 - type: markdown
                                   content: Choose which high temperature measurement is used.
-                                  card_mod: *id251
+                                  card_mod: *id252
                                 - type: entities
                                   entities:
                                   - type: custom:hui-element
@@ -12365,10 +12372,10 @@ views:
                   show_icon: false
                   name: HIGH TEMPERATURE HISTORY
                   tap_action: *id009
-                  styles: *id235
+                  styles: *id236
                 - type: custom:button-card
                   entity: input_number.irrigation_high_temp_1
-                  triggers_update: *id208
+                  triggers_update: *id209
                   show_state: true
                   state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                     \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -12383,8 +12390,8 @@ views:
                   show_label: true
                   label: null
                   size: 30%
-                  styles: *id209
-                  state: *id210
+                  styles: *id210
+                  state: *id211
                   tap_action:
                     action: none
                     browser_mod:
@@ -12400,12 +12407,12 @@ views:
                             - entity: input_number.irrigation_high_temp_1
                               name: Yesterday
                               icon: null
-                              card_mod: *id198
+                              card_mod: *id199
                             card_mod: *id048
                         style: *id042
                 - type: custom:button-card
                   entity: input_number.irrigation_high_temp_2
-                  triggers_update: *id208
+                  triggers_update: *id209
                   show_state: true
                   state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                     \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -12420,8 +12427,8 @@ views:
                   show_label: true
                   label: null
                   size: 30%
-                  styles: *id209
-                  state: *id210
+                  styles: *id210
+                  state: *id211
                   tap_action:
                     action: none
                     browser_mod:
@@ -12437,12 +12444,12 @@ views:
                             - entity: input_number.irrigation_high_temp_2
                               name: Two days ago
                               icon: null
-                              card_mod: *id198
+                              card_mod: *id199
                             card_mod: *id048
                         style: *id042
                 - type: custom:button-card
                   entity: input_number.irrigation_high_temp_3
-                  triggers_update: *id208
+                  triggers_update: *id209
                   show_state: true
                   state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                     \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -12457,8 +12464,8 @@ views:
                   show_label: true
                   label: null
                   size: 30%
-                  styles: *id209
-                  state: *id210
+                  styles: *id210
+                  state: *id211
                   tap_action:
                     action: none
                     browser_mod:
@@ -12474,12 +12481,12 @@ views:
                             - entity: input_number.irrigation_high_temp_3
                               name: Three days ago
                               icon: null
-                              card_mod: *id198
+                              card_mod: *id199
                             card_mod: *id048
                         style: *id042
                 - type: custom:button-card
                   entity: input_number.irrigation_high_temp_4
-                  triggers_update: *id208
+                  triggers_update: *id209
                   show_state: true
                   state_display: "[[[\n  var temperature_history = /^input_number\\.irrigation_(high_temp_[1-4]|temperature_highest_(actual_temp|forecast_high_temp)_today)$/.test(entity.entity_id);\n\
                     \  if (temperature_history && states['binary_sensor.irrigation_temperature_data_ready']?.attributes.valid?.[entity.entity_id]\
@@ -12494,8 +12501,8 @@ views:
                   show_label: true
                   label: null
                   size: 30%
-                  styles: *id209
-                  state: *id210
+                  styles: *id210
+                  state: *id211
                   tap_action:
                     action: none
                     browser_mod:
@@ -12511,6 +12518,6 @@ views:
                             - entity: input_number.irrigation_high_temp_4
                               name: Four days ago
                               icon: null
-                              card_mod: *id198
+                              card_mod: *id199
                             card_mod: *id048
                         style: *id042

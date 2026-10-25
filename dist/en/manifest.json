@@ -6,7 +6,7 @@
     "compile_lovelace.py": "4fb4764194da47e2b11c9596680194efdfe9d2ca31d0f530755b6cc71ed544de",
     "localize_lovelace.py": "cd372f6949552f68a77578234ed744db49f20e1329b24eb83e1a86d7921f7cd5",
     "build_i18n_release.py": "c3b64c3b0efa4a1dec3708d5813bc4945789954cd51289cb9f4ffab373dc7ddb",
-    "enhance_lovelace.py": "73cfab03618f651e354410bcdd62d8f63d4b0d533367a4bc8269e33e84ea4c3b"
+    "enhance_lovelace.py": "4d9cf5b76a873f2d1a06f200069fddc3202c5efff4ca704f70640362761d99ab"
   },
   "target": "Original kloggy/HA-Irrigation-Version2; localized original Lovelace",
   "language": "en",
@@ -264,16 +264,16 @@
   "catalogs": {
     "en.ini": "3251bffcb54f661728d4db578205859a41f0e2bb36ce727fbe3dba11645c931a"
   },
-  "semantic_sha256": "cf4fe388d88805f19e3e4c5fe614a3dc4175a18ddd32caec4eb6e32689d6503b",
+  "semantic_sha256": "e7cef8437087ba9d9dbf0c3d503cb8329ad289a2f99ee9d43a48dd05395e4928",
   "english_semantic_sha256": "405730baf93b6ddd00dc288a502dee39762ae08dfb461bc34918513cad79a8cb",
   "generated": {
     "irrigation_dashboard.yaml": {
-      "bytes": 812040,
-      "sha256": "b2aea6c1309d34a5c4fcdc382a72d97a1467d1626ebcbfbd71b16580884ce8ee"
+      "bytes": 812470,
+      "sha256": "641e54bc29a9d1d0ccf795d1f8796403145efd7d5d86c086df52d722a6c93f05"
     },
     "irrigation_dashboard.json": {
-      "bytes": 1011215,
-      "sha256": "6f078b7658b4312406b37ff04086575b8bde41b528961eeeb0f4fddb3a379871"
+      "bytes": 1012751,
+      "sha256": "2e775558a368d2ea219438801b4f5068c4c743251e4c796a08ec458399f68ba2"
     }
   },
   "checks": {
@@ -284,7 +284,7 @@
   },
   "ui_module": {
     "path": "custom_components/irrigation_garden/frontend/irrigation-garden-ui.js",
-    "sha256": "efff098deed0261fb891acde2769dcdae398157d90f401f13813a1f1439f08a2"
+    "sha256": "efca4927bb9dac00618107257feee0b37b3222e56e4fc4d5bfec91483ae8cf56"
   },
   "custom_cards": [
     "custom:button-card",
@@ -298,7 +298,7 @@
     "custom:state-switch"
   ],
   "ui_enhancements": {
-    "picker_rows": 68,
+    "picker_rows": 70,
     "popup_wrappers": 97,
     "section_wrappers": 3
   },
