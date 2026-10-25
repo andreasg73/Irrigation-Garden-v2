@@ -4,6 +4,8 @@ Modernizacja **oryginalnego [Kloggy / HA-Irrigation-Version2](https://github.com
 
 Nazwa projektu na GitHubie: **Irrigation Garden v2**. Po instalacji panel nazywa się **Irrigation Garden** po angielsku albo **Podlewanie Ogrodu** po polsku — bez dopisku v2.
 
+Przypisywanie zaworów i czujników obsługuje wyszukiwanie encji HA po nazwie/ID. Przycisk w panelu przełącza jasny i ciemny wygląd. [Wybór encji i wygląd](docs/ENTITY_PICKER_AND_APPEARANCE.md).
+
 ## Instalacja przez HACS
 
 Repozytorium można dodać w HACS jako **niestandardową integrację**. Instalator dostarcza ten sam silnik i panel EN/PL; aktywacja wymaga jednego wpisu YAML. [Instrukcja HACS i migracji istniejącej instalacji](docs/HACS_INSTALLATION.md#polski). Projekt nie jest w domyślnym katalogu HACS.
@@ -15,7 +17,7 @@ Repozytorium można dodać w HACS jako **niestandardową integrację**. Instalat
 - Poprawki zgodności z HA, szablonów, STOP/Master OFF, timerów, potwierdzania wyjść i sprzątania przy restarcie/zatrzymaniu HA.
 - Poprawki historii, opadów i temperatury oraz brakujących danych.
 - Oryginalny panel budowany bez `lovelace_gen`.
-- Wymienne słowniki INI EN/PL po 248 wiadomości, gotowe panele oraz narzędzia i testy.
+- Wymienne słowniki INI EN/PL po 264 wiadomości, gotowe panele oraz narzędzia i testy.
 - Własne, konfigurowalne adaptery powiadomień i logowania oraz lokalny pośrednik opisu pogody, zastępujące odwołania do prywatnych encji autora. [Co dodano i jak to skonfigurować](docs/OPTIONAL_FEATURES.md#polski).
 
 Jest to **wersja rozwojowa**. Zgodność sprawdzono z HA 2026.10.2; nie deklarujemy sprawdzenia każdej przyszłej wersji ani niezawodności każdego sterownika fizycznego. Przed migracją wykonaj kopię i sprawdź działanie na wirtualnych zaworach. Wymagania i pełna instalacja: [docs/INSTALLATION.md](docs/INSTALLATION.md).
