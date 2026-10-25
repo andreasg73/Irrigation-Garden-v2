@@ -126,13 +126,16 @@ def localize(data,language,catalog_dir):
  catalog_dir=Path(catalog_dir)
  if not re.fullmatch(r'[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*',language):raise ValueError('Invalid language code')
  meta,base=read_catalog(catalog_dir/'en.ini');expected=extract(data)
+ presentation_keys=set(expected)
+ from enhance_lovelace import UI_LABELS
+ expected.update({key_for(pair[0]):pair[0] for pair in UI_LABELS.values()})
  if base!=expected:raise ValueError('Source catalog is stale; regenerate en.ini and reconcile translations')
  selected_meta,override=read_catalog(catalog_dir/(language+'.ini'))
  if selected_meta.get('language')!=language:raise ValueError('Catalog language metadata does not match filename')
  validate(base,override)
  missing=sorted(set(base)-set(override));merged={**base,**override}
  if language=='en':return copy.deepcopy(data),{'language':'en','catalog_messages':len(base),'fallback_keys':[],'changed_fields':0}
- pairs=[(src,merged[k]) for k,src in base.items() if merged[k]!=src]
+ pairs=[(src,merged[k]) for k,src in base.items() if k in presentation_keys and merged[k]!=src]
  # Uppercase names are rendered by the original cards, not stored in helpers.
  allpairs=dict(pairs)
  for a,b in pairs:

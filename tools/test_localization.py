@@ -1,6 +1,7 @@
 """Meaningful contracts: English identity, protected logic, fallback and hostile input."""
 import copy,json,tempfile,unittest
 from pathlib import Path
+from enhance_lovelace import original_structure
 from localize_lovelace import localize,read_catalog,write_catalog,validate,DISPLAY,JINJA,key_for
 ROOT=Path(__file__).resolve().parents[1]
 BASE=json.loads((ROOT/'dist/en/irrigation_dashboard.json').read_text())
@@ -18,7 +19,7 @@ class Contracts(unittest.TestCase):
    if isinstance(x,dict):return {k:without_style(v) for k,v in x.items() if k not in {'styles','style','card_mod'} | DISPLAY}
    if isinstance(x,list):return [without_style(v) for v in x]
    return x
-  self.assertEqual(without_style(original),without_style(BASE))
+  self.assertEqual(without_style(original),without_style(original_structure(BASE)))
  def test_rain_schedule_label_both_states_and_action(self):
   translated,_=localize(BASE,'pl',ROOT/'i18n');found=[]
   def walk(x):
