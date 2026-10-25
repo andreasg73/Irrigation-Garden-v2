@@ -6,7 +6,7 @@ from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 component = ROOT / "custom_components/irrigation_garden"
-files = {str(p.relative_to(ROOT)): p.read_bytes() for folder in ("Garden Irrigation", "Logging") for p in sorted((ROOT/folder).glob("*.yaml"))}
+files = {p.relative_to(ROOT).as_posix(): p.read_bytes() for folder in ("Garden Irrigation", "Logging") for p in sorted((ROOT/folder).glob("*.yaml"))}
 assert len(files) == 29
 for language in ("en", "pl"):
     files["dashboard/" + language + ".yaml"] = (ROOT/"dist"/language/"irrigation_dashboard.yaml").read_bytes()

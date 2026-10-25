@@ -30,20 +30,20 @@ def build(candidate,output,language,catalog_dir):
  body='# GENERATED from original lovelace + i18n/'+language+'.ini; do not edit generated labels.\n'+yaml.safe_dump(share(data),allow_unicode=True,sort_keys=False,width=110)
  assert yaml.safe_load(body)==data
  assert '!include' not in body and '!file' not in body
- (output/'irrigation_dashboard.yaml').write_text(body)
- (output/'irrigation_dashboard.json').write_text(json.dumps(data,ensure_ascii=False,separators=(',',':'))+'\n')
+ (output/'irrigation_dashboard.yaml').write_text(body,encoding='utf-8',newline='\n')
+ (output/'irrigation_dashboard.json').write_text(json.dumps(data,ensure_ascii=False,separators=(',',':'))+'\n',encoding='utf-8',newline='\n')
  files=sorted(source.rglob('*.yaml'))
  manifest={'project':'Irrigation Garden','display_name':data['views'][0]['title'],'format_version':1,
   'build_tools':{name:sha((ROOT/'tools'/name).read_bytes()) for name in ['compile_lovelace.py','localize_lovelace.py','build_i18n_release.py','enhance_lovelace.py']},
   'target':'Original kloggy/HA-Irrigation-Version2; localized original Lovelace','language':language,'source_count':len(files),'reachable_source_count':len(used),'include_expansions':expansions,
-  'source_files':[{'path':str(p.relative_to(candidate)),'sha256':sha(p.read_bytes()),'normalized_text_sha256':sha(p.read_text().rstrip().encode()),'used_by_main':str(p.relative_to(source)) in used} for p in files],
+  'source_files':[{'path':p.relative_to(candidate).as_posix(),'sha256':sha(p.read_bytes()),'normalized_text_sha256':sha(p.read_text().rstrip().encode()),'used_by_main':str(p.relative_to(source)) in used} for p in files],
   'catalogs':{name:sha((catalog_dir/name).read_bytes()) for name in sorted({'en.ini',language+'.ini'})},
   'semantic_sha256':sha(canonical(data)),'english_semantic_sha256':sha(canonical(base)),
   'generated':{p.name:{'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())} for p in output.glob('irrigation_dashboard.*')},
   'checks':{'all_41_compiled':True,'pyyaml_roundtrip':True,'no_build_tags':True,'live_native_loader_equality':False},
   'ui_module':{'path':'custom_components/irrigation_garden/frontend/irrigation-garden-ui.js','sha256':sha((ROOT/'custom_components/irrigation_garden/frontend/irrigation-garden-ui.js').read_bytes())},
   'custom_cards':custom_types(data),'ui_enhancements':ui_report,'localization':report,'limitations':['Build-time language selection; rebuild after editing INI','Native HA dialog chrome follows HA profile language','User-defined names and all internal entity IDs, options, values, conditions and action payloads are preserved','No switch commands or engine YAML changes']}
- (output/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+ (output/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
  return manifest
 
 def main():

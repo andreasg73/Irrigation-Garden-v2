@@ -15,7 +15,7 @@ assert len(list((ROOT/'lovelace').rglob('*.yaml')))==41
 registry=(ROOT/'installation/packages.yaml').read_text()
 targets=re.findall(r'!include "([^"]+)"',registry)
 assert len(targets)==29
-expected={str(p.relative_to(ROOT)) for p in packages}
+expected={p.relative_to(ROOT).as_posix() for p in packages}
 assert {p.removeprefix('/config/irrigation_garden_v2/') for p in targets}==expected
 for lang in ('en','pl'):
  out=ROOT/'dist'/lang
