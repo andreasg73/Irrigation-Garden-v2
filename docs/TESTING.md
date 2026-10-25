@@ -48,3 +48,7 @@ Other fixtures cover weather calendars, units, missing data, synchronization, hi
 ## HACS installation assistant
 
 In an isolated Python 3.14 environment with `homeassistant==2026.10.2 pytest pytest-asyncio`, run `python -m pytest tests/hacs -q`. The suite validates original-source identity, native package configuration in EN/PL, real config/options flows with frontend setup stubbed, existing state preservation, explicit acknowledgment, active-watering checks, lazy resource loading, interrupted staging/retry and managed-file protection. It does not operate physical valves or claim a completed user migration. CI also rebuilds the deterministic HACS bundle and rejects drift from the committed payload.
+
+## Entity picker and appearance
+
+`node tools/test_ui_dom.cjs` requires `happy-dom@21.0.4` and Python requirements. It runs programmatic DOM events against the actual UI module, with transport blocks and an explicit mock helper-write boundary. It checks filters, draft/cancel/save, input focus during updates and candidate rename, failed/delayed/duplicate saves, concurrent edits, watering guards, keyboard selection, local theme persistence/scope, view cleanup, translations and absent actuator requests. Card-helper creation is stubbed; no browser geometry/touch/IME is claimed. The initial file-based browser fixture was blocked by browser URL policy. Live HA screenshots are a separate rendering layer.

@@ -61,6 +61,10 @@
     "installer_update": {
       "title": "Prepare the new Irrigation Garden package version",
       "description": "HACS updated the installer payload. Open this integration’s options to explicitly prepare the new original packages and dashboard, then validate configuration and restart HA. Active settings are not automatically changed."
+    },
+    "frontend_resource": {
+      "title": "Register the Irrigation Garden frontend module",
+      "description": "Add a module resource: `{url}`. YAML resources or ambiguous existing entries require manual configuration. Preserve all other resources."
     }
   }
 }

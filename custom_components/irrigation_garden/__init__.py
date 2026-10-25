@@ -28,6 +28,8 @@ def refresh_issues(hass: HomeAssistant, entry: ConfigEntry) -> None:
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Observe installation only. Staging requires a deliberate config/options flow."""
+    from .frontend import async_setup_frontend
+    await async_setup_frontend(hass)
     refresh_issues(hass, entry)
 
     @callback
@@ -42,4 +44,5 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Do not delete packages or user settings when unloading the installer."""
     ir.async_delete_issue(hass, DOMAIN, ISSUE_SETUP)
     ir.async_delete_issue(hass, DOMAIN, ISSUE_UPDATE)
+    ir.async_delete_issue(hass, DOMAIN, "frontend_resource")
     return True

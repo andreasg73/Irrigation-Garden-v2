@@ -6,6 +6,8 @@ Modernization of the **original [Kloggy / HA-Irrigation-Version2](https://github
 
 **Development version.** Back up an existing installation and validate it on virtual valves before migrating physical outputs. Version 2026.10.2 is the verified HA baseline; this is not a claim of compatibility with every future release or every hardware configuration.
 
+Search HA entities by name/ID when assigning valves and sensors, and switch the original panel between light/dark appearance with its header button. [Entity selection and appearance](docs/ENTITY_PICKER_AND_APPEARANCE.md).
+
 ## Installation through HACS
 
 Use this repository as a HACS custom **Integration** repository. The installer delivers the same original engine and EN/PL panel; activation requires one explicit YAML include. Follow the [HACS installation and migration guide](docs/HACS_INSTALLATION.md), including the existing-installation steps. It is not listed in HACS’s default catalog.
@@ -17,7 +19,7 @@ Use this repository as a HACS custom **Integration** repository. The installer d
 - Updated HA templates and service handling, bounded waits, STOP/Master OFF cleanup, output acknowledgments, watchdog and restart/shutdown cleanup.
 - Dynamic zone activity/history, dated rainfall and temperature history, unavailable-source handling and guarded optional dependencies.
 - Original Lovelace compiled offline without `lovelace_gen`.
-- Replaceable UTF-8 INI catalogs: English and Polish, 248 messages each. Missing translations fall back to English. Languages are selected when building.
+- Replaceable UTF-8 INI catalogs: English and Polish, 264 messages each. Missing translations fall back to English. Languages are selected when building.
 - Configurable project-owned notification/logging adapters and a local weather-description proxy replace author-specific external entities. See [optional features and configuration](docs/OPTIONAL_FEATURES.md#english).
 
 ## Names

@@ -6,9 +6,9 @@
 
 ### Co instaluje HACS
 
-To **ten sam opublikowany silnik i oryginalny panel** Irrigation Garden v2: 29 pakietów YAML, gotowy panel EN/PL i te same identyfikatory `irrigation_*`. Integracja `irrigation_garden` jest pomocnikiem instalacji. Nie zastępuje silnika innym sterownikiem. Wersja pomocnika: **0.1.0b1**, Home Assistant **2026.10.2 lub nowszy**; testy wykonano na 2026.10.2.
+To **ten sam opublikowany silnik i oryginalny panel** Irrigation Garden v2: 29 pakietów YAML, gotowy panel EN/PL i te same identyfikatory `irrigation_*`. Integracja `irrigation_garden` jest pomocnikiem instalacji. Nie zastępuje silnika innym sterownikiem. Wersja pomocnika: **0.2.0b1**, Home Assistant **2026.10.2 lub nowszy**; testy wykonano na 2026.10.2.
 
-Repozytorium dodaje się jako **niestandardowe repozytorium HACS**, typ **Integration**. Nie jest to deklaracja przyjęcia projektu do domyślnego katalogu HACS. HACS pobiera integrację wraz z kompletnym pakietem silnika i panelu. Jednorazowe włączenie pakietów YAML wymaga wpisu w konfiguracji HA. Nie edytujemy automatycznie `configuration.yaml` ani `.storage`.
+Repozytorium dodaje się jako **niestandardowe repozytorium HACS**, typ **Integration**. Nie jest to deklaracja przyjęcia projektu do domyślnego katalogu HACS. HACS pobiera integrację wraz z kompletnym pakietem silnika i panelu. Od0.2.0b1 pomocnik udostępnia też moduł wyszukiwania encji i jasnego/ciemnego wyglądu oraz rejestruje tylko własny zasób Lovelace (listy YAML pozostają ręczne). Zobacz [nowe kontrolki](ENTITY_PICKER_AND_APPEARANCE.md). Jednorazowe włączenie pakietów YAML wymaga wpisu w konfiguracji HA. Nie edytujemy automatycznie `configuration.yaml` ani `.storage`.
 
 ### Pierwsza instalacja
 
@@ -54,7 +54,7 @@ Usunięcie integracji albo pobrania HACS **nie usuwa aktywnych pakietów, ustawi
 
 ### What HACS installs
 
-The installer delivers **the same published original engine and dashboard**: 29 YAML packages, compiled EN/PL dashboards and unchanged `irrigation_*` IDs. It is an installation assistant, not a replacement controller. Assistant version **0.1.0b1**, minimum Home Assistant **2026.10.2**; tested on 2026.10.2.
+The installer delivers **the same published original engine and dashboard**: 29 YAML packages, compiled EN/PL dashboards and unchanged `irrigation_*` IDs. It is an installation assistant, not a replacement controller. Assistant version **0.2.0b1**, minimum Home Assistant **2026.10.2**; tested on 2026.10.2.
 
 Use this repository as a HACS **custom repository**, category **Integration**. This does not imply acceptance into HACS's default catalog. One explicit YAML package include is required; global configuration and `.storage` are never automatically edited.
 

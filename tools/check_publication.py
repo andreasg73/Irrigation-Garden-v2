@@ -24,6 +24,8 @@ for lang in ('en','pl'):
  manifest=json.loads((out/'manifest.json').read_text())
  assert manifest['semantic_sha256']==hashlib.sha256(canonical(data)).hexdigest()
  assert manifest['source_count']==41 and manifest['language']==lang
+ assert sha(ROOT/manifest['ui_module']['path'])==manifest['ui_module']['sha256']
+ assert manifest['ui_enhancements']['section_wrappers']==3 and manifest['ui_enhancements']['picker_rows']>0
  for row in manifest['source_files']:
   assert sha(ROOT/row['path'])==row['sha256'],row['path']
  for name,digest in manifest['catalogs'].items():assert sha(ROOT/'i18n'/name)==digest
@@ -38,7 +40,7 @@ for p in ROOT.rglob('*'):
  if p.name=='check_publication.py':continue
  if rel.parts[0]=='tests' and len(rel.parts)>1 and rel.parts[1]!='fixtures':continue
  assert p.name not in ('secrets.yaml','home-assistant.log'),rel
- if p.suffix in ('.yaml','.ini','.json','.py','.cjs','.md','.txt'):
+ if p.suffix in ('.yaml','.ini','.json','.py','.js','.cjs','.md','.txt'):
   assert not private.search(p.read_text()),rel
   checked+=1
 print(json.dumps({'package_yaml':29,'authoring_yaml':41,'languages':['en','pl'],'hashes_and_roundtrips':'passed','files_privacy_scanned':checked}))
