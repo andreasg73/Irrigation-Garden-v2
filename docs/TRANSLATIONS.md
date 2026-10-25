@@ -2,7 +2,7 @@
 
 Project name: **Irrigation Garden v2**. Installed English name: **Irrigation Garden**. Installed Polish name: **Podlewanie Ogrodu**. The display names are catalog entries; no `v2` is appended in HA.
 
-EN and PL have 210 messages each. The language is selected at build time, not automatically per HA user. Native HA dialog controls use the HA profile language; canonical helper options such as `Use Forecast`, backend messages and dynamic Jinja values may remain English.
+EN and PL have 283 messages each. For manual installation the language is selected at build time; the HACS assistant selects the bundled EN/PL dashboard in its setup/options flow. It does not switch automatically per HA user. Native HA dialog controls use the HA profile language; canonical helper options such as `Use Forecast`, backend messages and dynamic Jinja values may remain English.
 
 ## Build / Budowanie
 
