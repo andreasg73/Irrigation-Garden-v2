@@ -6,7 +6,7 @@
     "compile_lovelace.py": "4fb4764194da47e2b11c9596680194efdfe9d2ca31d0f530755b6cc71ed544de",
     "localize_lovelace.py": "cd372f6949552f68a77578234ed744db49f20e1329b24eb83e1a86d7921f7cd5",
     "build_i18n_release.py": "c3b64c3b0efa4a1dec3708d5813bc4945789954cd51289cb9f4ffab373dc7ddb",
-    "enhance_lovelace.py": "73cfab03618f651e354410bcdd62d8f63d4b0d533367a4bc8269e33e84ea4c3b"
+    "enhance_lovelace.py": "4d9cf5b76a873f2d1a06f200069fddc3202c5efff4ca704f70640362761d99ab"
   },
   "target": "Original kloggy/HA-Irrigation-Version2; localized original Lovelace",
   "language": "pl",
@@ -265,16 +265,16 @@
     "en.ini": "3251bffcb54f661728d4db578205859a41f0e2bb36ce727fbe3dba11645c931a",
     "pl.ini": "724a412dc72165c4e2a995e6e4f034c3ad8db1dc8a7544b2841ccd86f33a424a"
   },
-  "semantic_sha256": "d6dd2ca6698724cd38b563a3a01969b38087bbfc2fe081896268fc6fd3db1950",
+  "semantic_sha256": "8138afdccc019e097a4e856fdf56e813dff6c768ffcfbbfc7f9f722b506a4133",
   "english_semantic_sha256": "405730baf93b6ddd00dc288a502dee39762ae08dfb461bc34918513cad79a8cb",
   "generated": {
     "irrigation_dashboard.yaml": {
-      "bytes": 2587768,
-      "sha256": "3d905e216aae68166e0c506665ec45f419f1a32e5e8f928182158abbd0ced000"
+      "bytes": 2588198,
+      "sha256": "9ea0a50be12efbf332abb82781c77683b932a0e8c361125eedc094f5055cfd78"
     },
     "irrigation_dashboard.json": {
-      "bytes": 2597339,
-      "sha256": "5733c07d6ac60c59987a2a4d7f271c04808f71677fd8aba9fcb42cc95035a583"
+      "bytes": 2599061,
+      "sha256": "331999b144d25046ec3bd2156dca75886c2c20f22458c546e3de807806d38d5f"
     }
   },
   "checks": {
@@ -285,7 +285,7 @@
   },
   "ui_module": {
     "path": "custom_components/irrigation_garden/frontend/irrigation-garden-ui.js",
-    "sha256": "efff098deed0261fb891acde2769dcdae398157d90f401f13813a1f1439f08a2"
+    "sha256": "efca4927bb9dac00618107257feee0b37b3222e56e4fc4d5bfec91483ae8cf56"
   },
   "custom_cards": [
     "custom:button-card",
@@ -299,7 +299,7 @@
     "custom:state-switch"
   ],
   "ui_enhancements": {
-    "picker_rows": 68,
+    "picker_rows": 70,
     "popup_wrappers": 97,
     "section_wrappers": 3
   },
