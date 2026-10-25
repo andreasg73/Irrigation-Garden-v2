@@ -61,6 +61,10 @@
     "installer_update": {
       "title": "Przygotuj nowe wydanie pakietów Irrigation Garden",
       "description": "HACS zaktualizował pliki instalatora. W opcjach tej integracji przygotuj nowe pakiety i panel, sprawdź konfigurację i zrestartuj HA. Bieżące ustawienia nie są zmieniane automatycznie."
+    },
+    "frontend_resource": {
+      "title": "Zarejestruj moduł panelu Irrigation Garden",
+      "description": "Dodaj zasób typu module: `{url}`. Lista zasobów YAML lub niejednoznaczne wcześniejsze wpisy wymagają ręcznej konfiguracji. Nie usuwaj innych zasobów."
     }
   }
 }
