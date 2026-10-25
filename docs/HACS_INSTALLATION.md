@@ -10,7 +10,7 @@ To **ten sam opublikowany silnik i oryginalny panel** Irrigation Garden v2: 29 p
 
 Repozytorium dodaje się jako **niestandardowe repozytorium HACS**, typ **Integration**. Nie jest to deklaracja przyjęcia projektu do domyślnego katalogu HACS. HACS pobiera integrację wraz z kompletnym pakietem silnika i panelu. Od 0.2.0b1 pomocnik udostępnia też moduł wyszukiwania encji i jasnego/ciemnego wyglądu oraz rejestruje tylko własny zasób Lovelace (listy YAML pozostają ręczne). Zobacz [nowe kontrolki](ENTITY_PICKER_AND_APPEARANCE.md). Jednorazowe włączenie pakietów YAML wymaga wpisu w konfiguracji HA. Nie edytujemy automatycznie `configuration.yaml` ani `.storage`.
 
-Gałąź domyślna to **`main`**. Wersja rozwojowa **`0.3.0b1` (beta)** zawiera wszystkie scalone poprawki, wyszukiwanie encji, jasny/ciemny wygląd oraz diagnostykę pogody. Diagnostyka pokazuje wartości i jednostki, brakujące lub niedostępne źródła i czas ostatniego raportu do HA, osobno od zmiany wartości. Zobacz [źródła i diagnostykę pogody](../Weather%20Sensors.md#polski). Nie opublikowano jeszcze wydania GitHub Release. Pobieraj bieżącą gałąź domyślną `main` i sprawdź, czy HACS pokazuje wersję integracji `0.3.0b1`; nie szukaj nieistniejącego wydania na liście wersji beta.
+Gałąź domyślna to **`main`**. Wersja rozwojowa **`0.3.0b1` (beta)** zawiera wszystkie scalone poprawki, wyszukiwanie encji, jasny/ciemny wygląd oraz diagnostykę pogody. Diagnostyka pokazuje wartości i jednostki, brakujące lub niedostępne źródła i czas ostatniego raportu do HA, osobno od zmiany wartości. Zobacz [źródła i diagnostykę pogody](../Weather%20Sensors.md#polski). Opublikowano pierwsze [wydanie GitHub Release `0.3.0b1`](https://github.com/andreasg73/Irrigation-Garden-v2/releases/tag/0.3.0b1), oznaczone jako beta. Odśwież repozytorium w HACS, w razie potrzeby włącz pokazywanie wersji beta i wybierz `0.3.0b1`. Wybór gałęzi `main` nadal oznacza bieżący commit rozwojowy.
 
 ### Pierwsza instalacja
 
@@ -60,7 +60,7 @@ The installer delivers **the same published original engine and dashboard**: 29 
 
 Use this repository as a HACS **custom repository**, category **Integration**. This does not imply acceptance into HACS's default catalog. One explicit YAML package include is required; global configuration and `.storage` are never automatically edited.
 
-The default branch is **`main`**. Development version **`0.3.0b1` (beta)** contains all merged fixes, searchable entity assignment, light/dark appearance and weather-source diagnostics. Diagnostics show values/units, missing or unavailable sources, and actual last reports to HA separately from state updates. See [weather sources and diagnostics](../Weather%20Sensors.md#english). No GitHub Release is published yet. Download the default branch `main` and verify integration version `0.3.0b1` in HACS; there is no published beta release to select.
+The default branch is **`main`**. Development version **`0.3.0b1` (beta)** contains all merged fixes, searchable entity assignment, light/dark appearance and weather-source diagnostics. Diagnostics show values/units, missing or unavailable sources, and actual last reports to HA separately from state updates. See [weather sources and diagnostics](../Weather%20Sensors.md#english). The first [GitHub Release `0.3.0b1`](https://github.com/andreasg73/Irrigation-Garden-v2/releases/tag/0.3.0b1) is published as a pre-release. Refresh the repository in HACS, enable beta releases if needed and select `0.3.0b1`. Selecting `main` still downloads current development commits.
 
 ### Installation
 
