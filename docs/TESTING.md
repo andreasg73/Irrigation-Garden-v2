@@ -15,7 +15,7 @@ node tools/test_localization_js.cjs
 python tools/check_publication.py
 ```
 
-The localization contracts cover English identity, preserved controls outside presentation styles, INI fallback, invalid keys/markup/templates, Unicode, JavaScript syntax and representative labels/statuses/custom names. Current count: 9 Python contracts, 1327 JavaScript fragments checked for syntax, 11 behavior cases.
+The localization contracts cover English identity, preserved controls outside presentation styles, INI fallback, invalid keys/markup/templates, Unicode, JavaScript syntax and representative labels/statuses/custom names. The 0.3.0b1 baseline has 11 Python localization contracts, 1330 JavaScript syntax cases and 13 behavior cases. Counts describe this revision rather than every future version.
 
 The publication check parses all 29 engine/logging packages, verifies package-registry targets, checks generated YAML/JSON equality and recorded hashes, and rejects common private-state/credential artifacts. It is not a substitute for the native HA schema validator or a physical device test.
 
@@ -52,3 +52,9 @@ In an isolated Python 3.14 environment with `homeassistant==2026.10.2 pytest pyt
 ## Entity picker and appearance
 
 `node tools/test_ui_dom.cjs` requires `happy-dom@21.0.4` and Python requirements. It runs programmatic DOM events against the actual UI module, with transport blocks and an explicit mock helper-write boundary. It checks filters, draft/cancel/save, input focus during updates and candidate rename, failed/delayed/duplicate saves, concurrent edits, watering guards, keyboard selection, local theme persistence/scope, view cleanup, translations and absent actuator requests. Card-helper creation is stubbed; no browser geometry/touch/IME is claimed. The initial file-based browser fixture was blocked by browser URL policy. Live HA screenshots are a separate rendering layer.
+
+## Weather-source diagnostics
+
+`node tools/test_weather_diagnostics.cjs` uses the same `happy-dom@21.0.4` dependency. Its 35 programmatic contracts cover source purpose, missing assignments/entities, invalid domains/units/values, rain-contact states, shared read requests, refresh throttling, delayed responses, failed/malformed reads, recovery, and preserving an open editor. Requests are mocked at the read-only API boundary; no real HA report request or physical sensor is exercised by this suite. Actual report-time rendering was checked separately in a live HA installation.
+
+CI runs the portable checks, native installer/frontend suite and both DOM suites. Check the [Actions page](https://github.com/andreasg73/Irrigation-Garden-v2/actions) for the exact commit you intend to install. Passing tests on a previous PR does not establish the result for a newer commit.

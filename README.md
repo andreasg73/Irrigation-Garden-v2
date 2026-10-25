@@ -12,6 +12,8 @@ Search HA entities by name/ID when assigning valves and sensors, and switch the 
 
 ## Installation through HACS
 
+The default branch is **`main`**. It currently contains development version **`0.3.0b1` (beta)**, including weather-source diagnostics. No GitHub Release is published yet: use the default branch when downloading through HACS and check that the integration version is `0.3.0b1`. Future release selection will be documented when releases are published.
+
 Use this repository as a HACS custom **Integration** repository. The installer delivers the same original engine and EN/PL panel; activation requires one explicit YAML include. Follow the [HACS installation and migration guide](docs/HACS_INSTALLATION.md), including the existing-installation steps. It is not listed in HACS’s default catalog.
 
 ## Features
@@ -21,7 +23,7 @@ Use this repository as a HACS custom **Integration** repository. The installer d
 - Updated HA templates and service handling, bounded waits, STOP/Master OFF cleanup, output acknowledgments, watchdog and restart/shutdown cleanup.
 - Dynamic zone activity/history, dated rainfall and temperature history, unavailable-source handling and guarded optional dependencies.
 - Original Lovelace compiled offline without `lovelace_gen`.
-- Replaceable UTF-8 INI catalogs: English and Polish, 264 messages each. Missing translations fall back to English. Languages are selected when building.
+- Replaceable UTF-8 INI catalogs: English and Polish, 283 messages each. Missing translations fall back to English. Languages are selected when building.
 - Configurable project-owned notification/logging adapters and a local weather-description proxy replace author-specific external entities. See [optional features and configuration](docs/OPTIONAL_FEATURES.md#english).
 
 ## Names

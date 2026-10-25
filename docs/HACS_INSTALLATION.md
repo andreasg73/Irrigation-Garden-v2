@@ -6,9 +6,11 @@
 
 ### Co instaluje HACS
 
-To **ten sam opublikowany silnik i oryginalny panel** Irrigation Garden v2: 29 pakietów YAML, gotowy panel EN/PL i te same identyfikatory `irrigation_*`. Integracja `irrigation_garden` jest pomocnikiem instalacji. Nie zastępuje silnika innym sterownikiem. Wersja pomocnika: **0.2.0b1**, Home Assistant **2026.10.2 lub nowszy**; testy wykonano na 2026.10.2.
+To **ten sam opublikowany silnik i oryginalny panel** Irrigation Garden v2: 29 pakietów YAML, gotowy panel EN/PL i te same identyfikatory `irrigation_*`. Integracja `irrigation_garden` jest pomocnikiem instalacji. Nie zastępuje silnika innym sterownikiem. Wersja pomocnika: **0.3.0b1 (beta)**, Home Assistant **2026.10.2 lub nowszy**; testy wykonano na 2026.10.2.
 
-Repozytorium dodaje się jako **niestandardowe repozytorium HACS**, typ **Integration**. Nie jest to deklaracja przyjęcia projektu do domyślnego katalogu HACS. HACS pobiera integrację wraz z kompletnym pakietem silnika i panelu. Od0.2.0b1 pomocnik udostępnia też moduł wyszukiwania encji i jasnego/ciemnego wyglądu oraz rejestruje tylko własny zasób Lovelace (listy YAML pozostają ręczne). Zobacz [nowe kontrolki](ENTITY_PICKER_AND_APPEARANCE.md). Jednorazowe włączenie pakietów YAML wymaga wpisu w konfiguracji HA. Nie edytujemy automatycznie `configuration.yaml` ani `.storage`.
+Repozytorium dodaje się jako **niestandardowe repozytorium HACS**, typ **Integration**. Nie jest to deklaracja przyjęcia projektu do domyślnego katalogu HACS. HACS pobiera integrację wraz z kompletnym pakietem silnika i panelu. Od 0.2.0b1 pomocnik udostępnia też moduł wyszukiwania encji i jasnego/ciemnego wyglądu oraz rejestruje tylko własny zasób Lovelace (listy YAML pozostają ręczne). Zobacz [nowe kontrolki](ENTITY_PICKER_AND_APPEARANCE.md). Jednorazowe włączenie pakietów YAML wymaga wpisu w konfiguracji HA. Nie edytujemy automatycznie `configuration.yaml` ani `.storage`.
+
+Gałąź domyślna to **`main`**. Wersja rozwojowa **`0.3.0b1` (beta)** zawiera wszystkie scalone poprawki, wyszukiwanie encji, jasny/ciemny wygląd oraz diagnostykę pogody. Diagnostyka pokazuje wartości i jednostki, brakujące lub niedostępne źródła i czas ostatniego raportu do HA, osobno od zmiany wartości. Zobacz [źródła i diagnostykę pogody](../Weather%20Sensors.md#polski). Nie opublikowano jeszcze wydania GitHub Release. Pobieraj bieżącą gałąź domyślną `main` i sprawdź, czy HACS pokazuje wersję integracji `0.3.0b1`; nie szukaj nieistniejącego wydania na liście wersji beta.
 
 ### Pierwsza instalacja
 
@@ -54,9 +56,11 @@ Usunięcie integracji albo pobrania HACS **nie usuwa aktywnych pakietów, ustawi
 
 ### What HACS installs
 
-The installer delivers **the same published original engine and dashboard**: 29 YAML packages, compiled EN/PL dashboards and unchanged `irrigation_*` IDs. It is an installation assistant, not a replacement controller. Assistant version **0.2.0b1**, minimum Home Assistant **2026.10.2**; tested on 2026.10.2.
+The installer delivers **the same published original engine and dashboard**: 29 YAML packages, compiled EN/PL dashboards and unchanged `irrigation_*` IDs. It is an installation assistant, not a replacement controller. Assistant version **0.3.0b1 (beta)**, minimum Home Assistant **2026.10.2**; tested on 2026.10.2.
 
 Use this repository as a HACS **custom repository**, category **Integration**. This does not imply acceptance into HACS's default catalog. One explicit YAML package include is required; global configuration and `.storage` are never automatically edited.
+
+The default branch is **`main`**. Development version **`0.3.0b1` (beta)** contains all merged fixes, searchable entity assignment, light/dark appearance and weather-source diagnostics. Diagnostics show values/units, missing or unavailable sources, and actual last reports to HA separately from state updates. See [weather sources and diagnostics](../Weather%20Sensors.md#english). No GitHub Release is published yet. Download the default branch `main` and verify integration version `0.3.0b1` in HACS; there is no published beta release to select.
 
 ### Installation
 

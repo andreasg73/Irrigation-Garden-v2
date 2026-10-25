@@ -10,6 +10,8 @@ Przypisywanie zaworów i czujników obsługuje wyszukiwanie encji HA po nazwie/I
 
 ## Instalacja przez HACS
 
+Gałąź domyślna to **`main`**. Zawiera wersję rozwojową **`0.3.0b1` (beta)** z diagnostyką źródeł pogody. Nie opublikowano jeszcze wydania GitHub Release: przy pobieraniu przez HACS korzystaj z gałęzi domyślnej i sprawdź wersję integracji `0.3.0b1`. Wybór wydań opiszemy po ich opublikowaniu.
+
 Repozytorium można dodać w HACS jako **niestandardową integrację**. Instalator dostarcza ten sam silnik i panel EN/PL; aktywacja wymaga jednego wpisu YAML. [Instrukcja HACS i migracji istniejącej instalacji](docs/HACS_INSTALLATION.md#polski). Projekt nie jest w domyślnym katalogu HACS.
 
 ## Co zawiera ta wersja
@@ -19,17 +21,17 @@ Repozytorium można dodać w HACS jako **niestandardową integrację**. Instalat
 - Poprawki zgodności z HA, szablonów, STOP/Master OFF, timerów, potwierdzania wyjść i sprzątania przy restarcie/zatrzymaniu HA.
 - Poprawki historii, opadów i temperatury oraz brakujących danych.
 - Oryginalny panel budowany bez `lovelace_gen`.
-- Wymienne słowniki INI EN/PL po 264 wiadomości, gotowe panele oraz narzędzia i testy.
+- Wymienne słowniki INI EN/PL po 283 wiadomości, gotowe panele oraz narzędzia i testy.
 - Własne, konfigurowalne adaptery powiadomień i logowania oraz lokalny pośrednik opisu pogody, zastępujące odwołania do prywatnych encji autora. [Co dodano i jak to skonfigurować](docs/OPTIONAL_FEATURES.md#polski).
 
 Jest to **wersja rozwojowa**. Zgodność sprawdzono z HA 2026.10.2; nie deklarujemy sprawdzenia każdej przyszłej wersji ani niezawodności każdego sterownika fizycznego. Przed migracją wykonaj kopię i sprawdź działanie na wirtualnych zaworach. Wymagania i pełna instalacja: [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
-## Szybka orientacja
+## Instalacja ręczna — szybka orientacja
 
 1. Zainstaluj wymagane karty oraz skonfiguruj wpis integracji Browser Mod.
 2. Skopiuj repozytorium do `/config/irrigation_garden_v2/`.
 3. Dodaj wyłącznie jawny rejestr `installation/packages.yaml` do istniejącej konfiguracji packages, scalając go z własnymi wpisami.
-4. Zarejestruj dodatkowy dashboard YAML, korzystając z przykładu w `installation/configuration.example.yaml`.
+4. Zarejestruj dodatkowy dashboard YAML, korzystając z przykładu w `installation/configuration.example.yaml`, oraz moduł interfejsu według [instrukcji modułu](docs/ENTITY_PICKER_AND_APPEARANCE.md#instalacja-modułu).
 5. Sprawdź całą konfigurację HA przed restartem. Pierwszy start: Master OFF, wyjścia zablokowane, mapowania nieustawione.
 6. W panelu ustaw własną liczbę stref, nazwy, czasy, dni oraz źródła pogody. Najpierw użyj wirtualnych zaworów. Nie uruchamiaj dwóch systemów na tych samych zaworach.
 
