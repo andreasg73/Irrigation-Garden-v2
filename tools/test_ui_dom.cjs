@@ -51,7 +51,8 @@ const sha=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex'
   click(1,'.open');
   check('FORM.celsius-only',()=>{const ids=[...q(1,'.list').children].map(b=>b.dataset.entity);assert.ok(ids.includes('sensor.virtual_celsius'));assert.ok(!ids.includes('sensor.virtual_fahrenheit'));assert.ok(!ids.includes('sensor.virtual_humidity'));});
   check('FORM.hostile-name-is-text',()=>{assert.equal(q(1,'.list').querySelector('img'),null);assert.ok(q(1,'.list').textContent.includes('<img src=x onerror=alert(1)>'));});
-  click(1,'.cancel');click(2,'.open');
+  click(1,'.cancel');
+  check('FORM.uninitialized-mapping-editable',()=>assert.equal(q(2,'.open').disabled,false));click(2,'.open');
   check('FORM.contact-sensor-allowed',()=>assert.equal(q(2,'.list').children[0].dataset.entity,'binary_sensor.virtual_contact'));click(2,'.cancel');
   await fresh();$('fault').value='reject';click(0,'.open');choose(0,'switch.virtual_zone_1');click(0,'.save');await tick();
   check('FAULT.rejected-save-retains-draft',()=>{assert.equal(status().mapping,'switch.virtual_zone_2');assert.equal(q(0,'.edit').hidden,false);assert.ok(q(0,'.error').textContent.includes('Zapis'));assert.equal(q(0,'.selected').textContent,'switch.virtual_zone_1');assert.equal(q(0,'.save').disabled,false);});

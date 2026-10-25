@@ -27,6 +27,8 @@ def policy(entity):
     """Filter real sources by the original engine's supported domains and units."""
     if re.fullmatch(r'input_text\.irrigation_zone(?:[1-9]|1[0-6])_switch_entity_id', entity):
         return {'domains': ['switch'], 'guard_watering': True}
+    if re.fullmatch(r'input_text\.irrigation_cycle[12]_wait_for_entity_name', entity):
+        return {'domains': ['*']}
     suffix = entity.removeprefix('input_text.irrigation_')
     if suffix in {'external_sensor_forecast_high_temp', 'external_sensor_current_temp'}:
         return {'domains': ['sensor'], 'units': ['°C']}

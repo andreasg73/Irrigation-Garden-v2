@@ -25,7 +25,7 @@ const entity=(entity_id,state,name,attributes={})=>({entity_id,state,attributes:
 let states={
  'input_text.irrigation_zone1_switch_entity_id':entity('input_text.irrigation_zone1_switch_entity_id','switch.virtual_zone_1','Valve mapping'),
  'input_text.irrigation_external_sensor_current_temp':entity('input_text.irrigation_external_sensor_current_temp','sensor.virtual_outdoor','Temperature mapping'),
- 'input_text.irrigation_external_sensor_raining_now':entity('input_text.irrigation_external_sensor_raining_now','','Rain mapping'),
+ 'input_text.irrigation_external_sensor_raining_now':entity('input_text.irrigation_external_sensor_raining_now','unknown','Rain mapping'),
  'script.irrigation_run_a_cycle':entity('script.irrigation_run_a_cycle','off','Virtual worker'),
  'switch.virtual_zone_1':entity('switch.virtual_zone_1','off','Garden front'),
  'switch.virtual_zone_2':entity('switch.virtual_zone_2','off','Garden rear'),
