@@ -18,12 +18,14 @@ Use this repository as a HACS custom **Integration** repository. The installer d
 
 ## Features
 
+- [Watering decision history](docs/WATERING_DECISIONS.md#english): skip reasons, captured duration adjustments and the latest 64 entries.
+
 - 1–16 configurable zones, two scheduled cycles and a manual cycle.
 - Original UI configuration for valve mappings, zone/cycle names, weekdays, start times, rainfall and temperature sources.
 - Updated HA templates and service handling, bounded waits, STOP/Master OFF cleanup, output acknowledgments, watchdog and restart/shutdown cleanup.
 - Dynamic zone activity/history, dated rainfall and temperature history, unavailable-source handling and guarded optional dependencies.
 - Original Lovelace compiled offline without `lovelace_gen`.
-- Replaceable UTF-8 INI catalogs: English and Polish, 283 messages each. Missing translations fall back to English. Languages are selected when building.
+- Replaceable UTF-8 INI catalogs: English and Polish, 325 messages each. Missing translations fall back to English. Languages are selected when building.
 - Configurable project-owned notification/logging adapters and a local weather-description proxy replace author-specific external entities. See [optional features and configuration](docs/OPTIONAL_FEATURES.md#english).
 
 ## Names
