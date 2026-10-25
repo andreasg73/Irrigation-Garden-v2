@@ -12,14 +12,16 @@ Zmiana zaworów jest blokowana podczas podlewania lub przy aktywnym przypisanym 
 
 **Wygląd:** przycisk przełącza jasny/ciemny wygląd panelu, wykresów i jego okien ustawień. Wybór jest pamiętany lokalnie w danej przeglądarce dla użytkownika HA. Nie zmienia profilu, motywu innych dashboardów ani ustawień podlewania. Bez zapisanego wyboru panel korzysta z aktualnego trybu HA; gdy przeglądarka blokuje pamięć lokalną, wybór działa do zamknięcia sesji strony.
 
+Od wersji **0.3.0b1** przy przypisanych źródłach pogody widać także diagnostykę wartości, jednostek, dostępności oraz czasu raportu do HA. Niezmienna wartość nie oznacza awarii. [Opis diagnostyki](../Weather%20Sensors.md#polski).
+
 ### Instalacja modułu
 
-Przez HACS: po aktualizacji pomocnika do **0.2.0b1** i wymaganym restarcie integracja udostępnia swój moduł i dodaje/aktualizuje tylko własny zasób dashboardu. Następnie przygotuj nowy panel przez opcje integracji zgodnie z [instrukcją HACS](HACS_INSTALLATION.md). Przy zasobach YAML integracja zgłosi w Naprawach dokładny adres modułu do dodania.
+Przez HACS: po aktualizacji pomocnika do **0.3.0b1** i wymaganym restarcie integracja udostępnia swój moduł i dodaje/aktualizuje tylko własny zasób dashboardu. Następnie przygotuj nowy panel przez opcje integracji zgodnie z [instrukcją HACS](HACS_INSTALLATION.md). Przy zasobach YAML integracja zgłosi w Naprawach dokładny adres modułu do dodania.
 
 Ręcznie: skopiuj `custom_components/irrigation_garden/frontend/irrigation-garden-ui.js` z repozytorium do `/config/www/irrigation-garden/irrigation-garden-ui.js`. Dodaj zasób typu **JavaScript Module**:
 
 ```text
-/local/irrigation-garden/irrigation-garden-ui.js?v=0.2.0b1
+/local/irrigation-garden/irrigation-garden-ui.js?v=0.3.0b1
 ```
 
 Wgraj przebudowany panel EN albo PL i odśwież przeglądarkę/aplikację. Przy kolejnej zmianie pliku zmień także wersję w URL zasobu, żeby ominąć cache. Wbudowane komponenty oryginalnego panelu pozostają wymagane.
@@ -36,6 +38,8 @@ Filters match the original engine: switch outputs; binary sensors for current ra
 
 The ☀/☾ button changes the irrigation dashboard, charts and its popup content. Its preference is stored in this browser for the HA user and does not change HA's profile/global theme, other dashboards or watering settings. Without a preference it follows HA's current mode. If local storage is blocked, the selection lasts for the current page session.
 
-HACS assistant **0.2.0b1** serves the module and registers/updates only its owned resource on setup. Prepare the updated dashboard through its options. YAML resource lists require the URL shown in Repairs. For manual installation, copy `custom_components/irrigation_garden/frontend/irrigation-garden-ui.js` into `/config/www/irrigation-garden/`, register `/local/irrigation-garden/irrigation-garden-ui.js?v=0.2.0b1` as a **JavaScript Module**, install the rebuilt EN/PL panel and refresh clients. Bump the resource URL version after future edits.
+Version **0.3.0b1** also displays weather-source diagnostics for value/unit validity, availability and actual last reports to HA. Unchanged values do not imply failure. [Diagnostics guide](../Weather%20Sensors.md#english).
+
+HACS assistant **0.3.0b1** serves the module and registers/updates only its owned resource on setup. Prepare the updated dashboard through its options. YAML resource lists require the URL shown in Repairs. For manual installation, copy `custom_components/irrigation_garden/frontend/irrigation-garden-ui.js` into `/config/www/irrigation-garden/`, register `/local/irrigation-garden/irrigation-garden-ui.js?v=0.3.0b1` as a **JavaScript Module**, install the rebuilt EN/PL panel and refresh clients. Bump the resource URL version after future edits.
 
 To roll back, restore the previous generated panel and then remove the newly added resource/file. Mapping helper values remain unchanged. UI validation includes programmatic DOM simulations and native HA schemas/collections; this is not real-phone touch, IME or physical-device certification.

@@ -6,9 +6,11 @@
 
 ### Co instaluje HACS
 
-To **ten sam opublikowany silnik i oryginalny panel** Irrigation Garden v2: 29 pakietów YAML, gotowy panel EN/PL i te same identyfikatory `irrigation_*`. Integracja `irrigation_garden` jest pomocnikiem instalacji. Nie zastępuje silnika innym sterownikiem. Wersja pomocnika: **0.2.0b1**, Home Assistant **2026.10.2 lub nowszy**; testy wykonano na 2026.10.2.
+To **ten sam opublikowany silnik i oryginalny panel** Irrigation Garden v2: 29 pakietów YAML, gotowy panel EN/PL i te same identyfikatory `irrigation_*`. Integracja `irrigation_garden` jest pomocnikiem instalacji. Nie zastępuje silnika innym sterownikiem. Wersja pomocnika: **0.3.0b1 (beta)**, Home Assistant **2026.10.2 lub nowszy**; testy wykonano na 2026.10.2.
 
 Repozytorium dodaje się jako **niestandardowe repozytorium HACS**, typ **Integration**. Nie jest to deklaracja przyjęcia projektu do domyślnego katalogu HACS. HACS pobiera integrację wraz z kompletnym pakietem silnika i panelu. Od0.2.0b1 pomocnik udostępnia też moduł wyszukiwania encji i jasnego/ciemnego wyglądu oraz rejestruje tylko własny zasób Lovelace (listy YAML pozostają ręczne). Zobacz [nowe kontrolki](ENTITY_PICKER_AND_APPEARANCE.md). Jednorazowe włączenie pakietów YAML wymaga wpisu w konfiguracji HA. Nie edytujemy automatycznie `configuration.yaml` ani `.storage`.
+
+Gałąź domyślna to **`main`**. Wydanie **`0.3.0b1` jest wersją beta**, zawierającą wszystkie scalone poprawki, wyszukiwanie encji, jasny/ciemny wygląd oraz diagnostykę pogody. Diagnostyka pokazuje wartości i jednostki, brakujące lub niedostępne źródła i czas ostatniego raportu do HA, osobno od zmiany wartości. Zobacz [źródła i diagnostykę pogody](../Weather%20Sensors.md#polski). W HACS wybierz to wydanie; do jego wyświetlenia może być potrzebna obsługa wersji beta. Pobranie gałęzi `main` oznacza bieżący stan rozwoju, a tag wydania wskazuje konkretną wersję.
 
 ### Pierwsza instalacja
 
@@ -54,9 +56,11 @@ Usunięcie integracji albo pobrania HACS **nie usuwa aktywnych pakietów, ustawi
 
 ### What HACS installs
 
-The installer delivers **the same published original engine and dashboard**: 29 YAML packages, compiled EN/PL dashboards and unchanged `irrigation_*` IDs. It is an installation assistant, not a replacement controller. Assistant version **0.2.0b1**, minimum Home Assistant **2026.10.2**; tested on 2026.10.2.
+The installer delivers **the same published original engine and dashboard**: 29 YAML packages, compiled EN/PL dashboards and unchanged `irrigation_*` IDs. It is an installation assistant, not a replacement controller. Assistant version **0.3.0b1 (beta)**, minimum Home Assistant **2026.10.2**; tested on 2026.10.2.
 
 Use this repository as a HACS **custom repository**, category **Integration**. This does not imply acceptance into HACS's default catalog. One explicit YAML package include is required; global configuration and `.storage` are never automatically edited.
+
+The default branch is **`main`**. **`0.3.0b1` is a beta release**, containing all merged fixes, searchable entity assignment, light/dark appearance and weather-source diagnostics. Diagnostics show values/units, missing or unavailable sources, and actual last reports to HA separately from state updates. See [weather sources and diagnostics](../Weather%20Sensors.md#english). Select this release in HACS; showing beta releases may need to be enabled. Downloading `main` selects current development, while a release tag selects a specific version.
 
 ### Installation
 
