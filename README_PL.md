@@ -10,6 +10,8 @@ Przypisywanie zaworów i czujników obsługuje wyszukiwanie encji HA po nazwie/I
 
 ## Instalacja przez HACS
 
+Gałąź domyślna to **`main`**. Aktualne wydanie **`0.3.0b1` (beta)** obejmuje także diagnostykę źródeł pogody. W HACS wybierz to wydanie; może być potrzebne wyświetlanie wersji beta. Tagi wydań zachowują wcześniejsze wersje, a `main` zawiera bieżący rozwój.
+
 Repozytorium można dodać w HACS jako **niestandardową integrację**. Instalator dostarcza ten sam silnik i panel EN/PL; aktywacja wymaga jednego wpisu YAML. [Instrukcja HACS i migracji istniejącej instalacji](docs/HACS_INSTALLATION.md#polski). Projekt nie jest w domyślnym katalogu HACS.
 
 ## Co zawiera ta wersja
@@ -19,7 +21,7 @@ Repozytorium można dodać w HACS jako **niestandardową integrację**. Instalat
 - Poprawki zgodności z HA, szablonów, STOP/Master OFF, timerów, potwierdzania wyjść i sprzątania przy restarcie/zatrzymaniu HA.
 - Poprawki historii, opadów i temperatury oraz brakujących danych.
 - Oryginalny panel budowany bez `lovelace_gen`.
-- Wymienne słowniki INI EN/PL po 264 wiadomości, gotowe panele oraz narzędzia i testy.
+- Wymienne słowniki INI EN/PL po 283 wiadomości, gotowe panele oraz narzędzia i testy.
 - Własne, konfigurowalne adaptery powiadomień i logowania oraz lokalny pośrednik opisu pogody, zastępujące odwołania do prywatnych encji autora. [Co dodano i jak to skonfigurować](docs/OPTIONAL_FEATURES.md#polski).
 
 Jest to **wersja rozwojowa**. Zgodność sprawdzono z HA 2026.10.2; nie deklarujemy sprawdzenia każdej przyszłej wersji ani niezawodności każdego sterownika fizycznego. Przed migracją wykonaj kopię i sprawdź działanie na wirtualnych zaworach. Wymagania i pełna instalacja: [docs/INSTALLATION.md](docs/INSTALLATION.md).
