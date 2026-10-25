@@ -4,8 +4,9 @@
   "format_version": 1,
   "build_tools": {
     "compile_lovelace.py": "4fb4764194da47e2b11c9596680194efdfe9d2ca31d0f530755b6cc71ed544de",
-    "localize_lovelace.py": "b485998102e5fe59577f54ceb063546fe5d95cab63519c4dd79f076fa0003f95",
-    "build_i18n_release.py": "d553cefaffe7a08e41860696f8eb3a935cb5bd7ef064cee5f780c1b9179217ca"
+    "localize_lovelace.py": "cd372f6949552f68a77578234ed744db49f20e1329b24eb83e1a86d7921f7cd5",
+    "build_i18n_release.py": "c3b64c3b0efa4a1dec3708d5813bc4945789954cd51289cb9f4ffab373dc7ddb",
+    "enhance_lovelace.py": "73cfab03618f651e354410bcdd62d8f63d4b0d533367a4bc8269e33e84ea4c3b"
   },
   "target": "Original kloggy/HA-Irrigation-Version2; localized original Lovelace",
   "language": "en",
@@ -261,18 +262,18 @@
     }
   ],
   "catalogs": {
-    "en.ini": "6c4897195c97efda223b111587cc0b403579c56c56b0c709f089f1b66601158f"
+    "en.ini": "3251bffcb54f661728d4db578205859a41f0e2bb36ce727fbe3dba11645c931a"
   },
-  "semantic_sha256": "405730baf93b6ddd00dc288a502dee39762ae08dfb461bc34918513cad79a8cb",
+  "semantic_sha256": "cf4fe388d88805f19e3e4c5fe614a3dc4175a18ddd32caec4eb6e32689d6503b",
   "english_semantic_sha256": "405730baf93b6ddd00dc288a502dee39762ae08dfb461bc34918513cad79a8cb",
   "generated": {
-    "irrigation_dashboard.json": {
-      "bytes": 880683,
-      "sha256": "6bacbc3c97a75ed5cad5beeb439d2d69607ee94ade17cf39a20dc3b0782313d6"
-    },
     "irrigation_dashboard.yaml": {
-      "bytes": 749957,
-      "sha256": "3b4e875f8c2ec6c85e65d8bd42684b0294143de9d941585e7c14aba272278c48"
+      "bytes": 812040,
+      "sha256": "b2aea6c1309d34a5c4fcdc382a72d97a1467d1626ebcbfbd71b16580884ce8ee"
+    },
+    "irrigation_dashboard.json": {
+      "bytes": 1011215,
+      "sha256": "6f078b7658b4312406b37ff04086575b8bde41b528961eeeb0f4fddb3a379871"
     }
   },
   "checks": {
@@ -281,17 +282,29 @@
     "no_build_tags": true,
     "live_native_loader_equality": false
   },
+  "ui_module": {
+    "path": "custom_components/irrigation_garden/frontend/irrigation-garden-ui.js",
+    "sha256": "efff098deed0261fb891acde2769dcdae398157d90f401f13813a1f1439f08a2"
+  },
   "custom_cards": [
     "custom:button-card",
     "custom:config-template-card",
     "custom:hui-element",
+    "custom:irrigation-garden-appearance",
+    "custom:irrigation-garden-entity-picker",
+    "custom:irrigation-garden-themed-card",
     "custom:mini-graph-card",
     "custom:mod-card",
     "custom:state-switch"
   ],
+  "ui_enhancements": {
+    "picker_rows": 68,
+    "popup_wrappers": 97,
+    "section_wrappers": 3
+  },
   "localization": {
     "language": "en",
-    "catalog_messages": 248,
+    "catalog_messages": 264,
     "fallback_keys": [],
     "changed_fields": 0
   },
