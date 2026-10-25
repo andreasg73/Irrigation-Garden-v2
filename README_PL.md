@@ -10,7 +10,7 @@ Przypisywanie zaworów i czujników obsługuje wyszukiwanie encji HA po nazwie/I
 
 ## Instalacja przez HACS
 
-Gałąź domyślna to **`main`**. Zawiera wersję rozwojową **`0.3.0b1` (beta)** z diagnostyką źródeł pogody. Nie opublikowano jeszcze wydania GitHub Release: przy pobieraniu przez HACS korzystaj z gałęzi domyślnej i sprawdź wersję integracji `0.3.0b1`. Wybór wydań opiszemy po ich opublikowaniu.
+Pierwsze numerowane wydanie to **[`0.3.0b1` (beta)](https://github.com/andreasg73/Irrigation-Garden-v2/releases/tag/0.3.0b1)** z diagnostyką źródeł pogody. Odśwież repozytorium w HACS, w razie potrzeby włącz pokazywanie wersji beta i wybierz `0.3.0b1`. Tag wydania wskazuje konkretny przetestowany kod; wybranie gałęzi domyślnej **`main`** nadal oznacza pobranie bieżącego commitu rozwojowego.
 
 Repozytorium można dodać w HACS jako **niestandardową integrację**. Instalator dostarcza ten sam silnik i panel EN/PL; aktywacja wymaga jednego wpisu YAML. [Instrukcja HACS i migracji istniejącej instalacji](docs/HACS_INSTALLATION.md#polski). Projekt nie jest w domyślnym katalogu HACS.
 
