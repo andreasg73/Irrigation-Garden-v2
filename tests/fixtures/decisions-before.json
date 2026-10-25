@@ -1,0 +1,870 @@
+{
+  "Garden Irrigation/irrigation_run_a_cycle.yaml": {
+    "script": {
+      "irrigation_run_a_cycle": {
+        "alias": "Irrigation Run A Cycle",
+        "description": "Run An Irrigation Cycle",
+        "fields": {
+          "cycle": {
+            "description": "Cycle to run",
+            "example": "cycle1"
+          }
+        },
+        "mode": "single",
+        "sequence": [
+          {
+            "condition": "state",
+            "entity_id": "input_boolean.irrigation_output_mode_initialized",
+            "state": "on"
+          },
+          {
+            "condition": "state",
+            "entity_id": "input_boolean.irrigation_master_control_switch",
+            "state": "on"
+          },
+          {
+            "condition": "template",
+            "value_template": "{{ cycle | default('') in ['cycle1', 'cycle2', 'cycle3'] }}"
+          },
+          {
+            "condition": "state",
+            "entity_id": "input_boolean.irrigation_stop_in_progress",
+            "state": "off"
+          },
+          {
+            "condition": "template",
+            "value_template": "{{ is_state('input_boolean.irrigation_' ~ cycle ~ '_running','on')\n   and (not states('input_text.irrigation_active_switch').startswith('switch.')\n        or is_state(states('input_text.irrigation_active_switch'),'off')) }}\n"
+          },
+          {
+            "variables": {
+              "physical_run": "{{ is_state('input_boolean.irrigation_disable_switches','off') }}"
+            }
+          },
+          {
+            "action": "input_text.set_value",
+            "target": {
+              "entity_id": "input_text.irrigation_active_cycle"
+            },
+            "data": {
+              "value": "{{ cycle }}"
+            }
+          },
+          {
+            "delay": {
+              "seconds": 1
+            }
+          },
+          {
+            "repeat": {
+              "count": "{{ [[states('input_number.irrigation_number_of_zones') | int(0), 0] | max, 16] | min }}\n",
+              "sequence": [
+                {
+                  "condition": "template",
+                  "value_template": "{{ is_state('input_boolean.irrigation_master_control_switch','on')\n   and is_state('input_boolean.irrigation_stop_in_progress','off')\n   and is_state('input_boolean.irrigation_' ~ cycle ~ '_running','on') }}\n"
+                },
+                {
+                  "variables": {
+                    "irrigation_zone_entity": "{{ states('input_text.irrigation_zone' ~ repeat.index ~ '_switch_entity_id') | trim }}",
+                    "zone_seconds": "{{ [[states('sensor.irrigation_' ~ cycle ~ '_zone' ~ repeat.index ~ '_actual_duration_in_seconds') | int(0), 0] | max, 7200] | min }}"
+                  }
+                },
+                {
+                  "variables": {
+                    "irrigation_zone_entity_valid": "{{ irrigation_zone_entity.startswith('switch.')\n   and irrigation_zone_entity in (states.switch | map(attribute='entity_id') | list) }}\n"
+                  }
+                },
+                {
+                  "action": "script.irrigation_write_to_log",
+                  "continue_on_error": true,
+                  "data": {
+                    "log_event": "ZONE_STARTING",
+                    "zone": "{{ repeat.index }}\n",
+                    "seconds": "{{ zone_seconds }}\n",
+                    "event_time": "{{ now() }}\n"
+                  }
+                },
+                {
+                  "choose": [
+                    {
+                      "conditions": {
+                        "condition": "template",
+                        "value_template": "{{ zone_seconds > 0 and (not physical_run or irrigation_zone_entity_valid) }}\n"
+                      },
+                      "sequence": [
+                        {
+                          "action": "input_number.set_value",
+                          "data": {
+                            "entity_id": "input_number.irrigation_failsafe_time_in_seconds",
+                            "value": "{{ zone_seconds + 10 }}\n"
+                          }
+                        },
+                        {
+                          "action": "script.irrigation_write_to_log",
+                          "continue_on_error": true,
+                          "data": {
+                            "log_event": "FAILSAFE_SET",
+                            "zone": "{{ repeat.index }}\n",
+                            "event_time": "{{ now() }}\n"
+                          }
+                        },
+                        {
+                          "action": "input_text.set_value",
+                          "data": {
+                            "entity_id": "input_text.irrigation_current_status",
+                            "value": "Watering..."
+                          }
+                        },
+                        {
+                          "action": "input_text.set_value",
+                          "data": {
+                            "entity_id": "input_text.irrigation_zone{{ repeat.index }}_previous_duration_in_seconds\n",
+                            "value": "Watering\n"
+                          }
+                        },
+                        {
+                          "if": [
+                            {
+                              "condition": "template",
+                              "value_template": "{{ physical_run }}"
+                            }
+                          ],
+                          "then": [
+                            {
+                              "wait_template": "{{ states(irrigation_zone_entity) in ['on','off'] }}",
+                              "timeout": {
+                                "seconds": "{{ [[states('input_number.irrigation_controller_offline_wait') | int(1), 1] | max, 60] | min }}"
+                              },
+                              "continue_on_timeout": true
+                            },
+                            {
+                              "if": [
+                                {
+                                  "condition": "template",
+                                  "value_template": "{{ not wait.completed }}"
+                                }
+                              ],
+                              "then": [
+                                {
+                                  "action": "input_boolean.turn_off",
+                                  "target": {
+                                    "entity_id": "input_boolean.irrigation_master_control_switch"
+                                  }
+                                },
+                                {
+                                  "stop": "Mapped output unavailable",
+                                  "error": true
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "action": "input_text.set_value",
+                          "target": {
+                            "entity_id": "input_text.irrigation_active_zone"
+                          },
+                          "data": {
+                            "value": "{{ 'zone' ~ repeat.index }}"
+                          }
+                        },
+                        {
+                          "action": "timer.start",
+                          "data": {
+                            "entity_id": "timer.irrigation_zone{{ repeat.index }}_timer\n",
+                            "duration": "{{ zone_seconds }}\n"
+                          }
+                        },
+                        {
+                          "action": "script.irrigation_write_to_log",
+                          "continue_on_error": true,
+                          "data": {
+                            "log_event": "ZONE_WATERING",
+                            "zone": "{{ repeat.index }}\n",
+                            "event_time": "{{ now() }}\n"
+                          }
+                        },
+                        {
+                          "wait_template": "{% set entity_id = 'timer.irrigation_zone' ~ repeat.index ~ '_timer' %} {{ is_state(entity_id, 'active') }}\n",
+                          "timeout": "00:00:10",
+                          "continue_on_timeout": false
+                        },
+                        {
+                          "choose": [
+                            {
+                              "conditions": {
+                                "condition": "state",
+                                "entity_id": "input_boolean.irrigation_disable_switches",
+                                "state": "off"
+                              },
+                              "sequence": [
+                                {
+                                  "condition": "template",
+                                  "value_template": "{{ irrigation_zone_entity_valid }}"
+                                },
+                                {
+                                  "condition": "template",
+                                  "value_template": "{{ physical_run\n   and is_state('input_boolean.irrigation_master_control_switch','on')\n   and is_state('input_boolean.irrigation_stop_in_progress','off')\n   and is_state('input_boolean.irrigation_' ~ cycle ~ '_running','on') }}\n"
+                                },
+                                {
+                                  "action": "input_datetime.set_datetime",
+                                  "target": {
+                                    "entity_id": "input_datetime.irrigation_failsafe_deadline"
+                                  },
+                                  "data": {
+                                    "timestamp": "{{ as_timestamp(now()) + zone_seconds + 10 }}"
+                                  }
+                                },
+                                {
+                                  "action": "input_text.set_value",
+                                  "target": {
+                                    "entity_id": "input_text.irrigation_active_switch"
+                                  },
+                                  "data": {
+                                    "value": "{{ irrigation_zone_entity }}"
+                                  }
+                                },
+                                {
+                                  "if": [
+                                    {
+                                      "condition": "template",
+                                      "value_template": "{{ not (physical_run\n   and is_state('input_boolean.irrigation_disable_switches','off')\n   and is_state('input_boolean.irrigation_output_mode_initialized','on')\n   and is_state('input_boolean.irrigation_master_control_switch','on')\n   and is_state('input_boolean.irrigation_stop_in_progress','off')\n   and is_state('input_boolean.irrigation_' ~ cycle ~ '_running','on')\n   and states(irrigation_zone_entity) in ['on','off']) }}\n"
+                                    }
+                                  ],
+                                  "then": [
+                                    {
+                                      "action": "input_boolean.turn_off",
+                                      "target": {
+                                        "entity_id": "input_boolean.irrigation_master_control_switch"
+                                      }
+                                    },
+                                    {
+                                      "stop": "Output permission changed before opening zone"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "action": "switch.turn_on",
+                                  "continue_on_error": true,
+                                  "target": {
+                                    "entity_id": "{{ irrigation_zone_entity }}"
+                                  }
+                                },
+                                {
+                                  "wait_template": "{{ is_state(irrigation_zone_entity,'on') }}",
+                                  "timeout": "00:00:05",
+                                  "continue_on_timeout": true
+                                },
+                                {
+                                  "if": [
+                                    {
+                                      "condition": "template",
+                                      "value_template": "{{ not wait.completed }}"
+                                    }
+                                  ],
+                                  "then": [
+                                    {
+                                      "action": "input_boolean.turn_off",
+                                      "target": {
+                                        "entity_id": "input_boolean.irrigation_master_control_switch"
+                                      }
+                                    },
+                                    {
+                                      "stop": "Output did not confirm ON",
+                                      "error": true
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "wait_template": "{% set entity_id = 'timer.irrigation_zone' ~ repeat.index ~ '_timer' %} {{ is_state(entity_id, 'idle') }}\n",
+                          "timeout": {
+                            "seconds": "{{ zone_seconds + 10 }}\n"
+                          },
+                          "continue_on_timeout": true
+                        },
+                        {
+                          "if": [
+                            {
+                              "condition": "template",
+                              "value_template": "{{ physical_run and is_state('input_boolean.irrigation_disable_switches', 'off') and is_state('input_boolean.irrigation_output_mode_initialized', 'on') and irrigation_zone_entity_valid }}"
+                            }
+                          ],
+                          "then": [
+                            {
+                              "action": "switch.turn_off",
+                              "continue_on_error": true,
+                              "target": {
+                                "entity_id": "{{ irrigation_zone_entity }}"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "if": [
+                            {
+                              "condition": "template",
+                              "value_template": "{{ physical_run }}"
+                            }
+                          ],
+                          "then": [
+                            {
+                              "wait_template": "{{ is_state(irrigation_zone_entity,'off') }}",
+                              "timeout": "00:00:05",
+                              "continue_on_timeout": true
+                            },
+                            {
+                              "if": [
+                                {
+                                  "condition": "template",
+                                  "value_template": "{{ not wait.completed }}"
+                                }
+                              ],
+                              "then": [
+                                {
+                                  "action": "input_boolean.turn_off",
+                                  "target": {
+                                    "entity_id": "input_boolean.irrigation_master_control_switch"
+                                  }
+                                },
+                                {
+                                  "stop": "Output did not confirm OFF; watchdog retains snapshot",
+                                  "error": true
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "action": "input_text.set_value",
+                          "target": {
+                            "entity_id": [
+                              "input_text.irrigation_active_switch",
+                              "input_text.irrigation_active_zone"
+                            ]
+                          },
+                          "data": {
+                            "value": ""
+                          }
+                        },
+                        {
+                          "action": "script.irrigation_write_to_log",
+                          "continue_on_error": true,
+                          "data": {
+                            "log_event": "ZONE_STOPPING",
+                            "zone": "{{ repeat.index }}\n",
+                            "event_time": "{{ now() }}\n"
+                          }
+                        },
+                        {
+                          "action": "input_text.set_value",
+                          "data": {
+                            "entity_id": "input_text.irrigation_zone{{ repeat.index }}_previous_duration_in_seconds\n",
+                            "value": "{% set duration = zone_seconds %} {% set today = now().strftime('%a') | lower %}\n{% if cycle == 'cycle3' or\n      is_state('input_boolean.irrigation_' ~ cycle ~ '_zone' ~ repeat.index ~ '_every_day', 'on') or\n      is_state('input_boolean.irrigation_' ~ cycle ~ '_zone' ~ repeat.index ~ '_' ~ today, 'on' ) %}\n  {{ duration }}\n{% else %}\n  Not scheduled today ({{ today.title() }})\n{% endif %}\n"
+                          }
+                        },
+                        {
+                          "action": "input_text.set_value",
+                          "data": {
+                            "entity_id": "input_text.irrigation_previous_total_watering_time",
+                            "value": "{% set duration = zone_seconds %} {% set current_total = states('input_text.irrigation_previous_total_watering_time') | float(0) %}\n{{ (current_total + duration) | string }}\n"
+                          }
+                        },
+                        {
+                          "action": "input_text.set_value",
+                          "data": {
+                            "entity_id": "input_text.irrigation_current_status",
+                            "value": "Changing Zone..."
+                          }
+                        },
+                        {
+                          "delay": {
+                            "seconds": "{{ states('input_number.irrigation_pause_between_zones_in_seconds') | int(0) }}\n"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "action": "input_text.set_value",
+            "target": {
+              "entity_id": [
+                "input_text.irrigation_active_cycle",
+                "input_text.irrigation_active_zone"
+              ]
+            },
+            "data": {
+              "value": ""
+            }
+          },
+          {
+            "action": "input_boolean.turn_off",
+            "data": {
+              "entity_id": "input_boolean.irrigation_{{ cycle }}_running\n"
+            }
+          },
+          {
+            "choose": [
+              {
+                "conditions": {
+                  "condition": "template",
+                  "value_template": "{{ is_state('input_boolean.irrigation_' + cycle + '_schedule_today_only', 'on') }}\n"
+                },
+                "sequence": [
+                  {
+                    "action": "homeassistant.turn_off",
+                    "data": {
+                      "entity_id": [
+                        "input_boolean.irrigation_{{ cycle }}_schedule_today_only",
+                        "input_boolean.irrigation_{{ cycle }}_schedule_enabled"
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "action": "input_text.set_value",
+            "data": {
+              "entity_id": "input_text.irrigation_current_status",
+              "value": "SYSTEM IDLE"
+            }
+          },
+          {
+            "action": "script.irrigation_write_to_log",
+            "continue_on_error": true,
+            "data": {
+              "log_event": "CYCLE_ENDED",
+              "cycle": "{{ cycle[-1] }}\n",
+              "event_time": "{{ now() }}\n"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Garden Irrigation/irrigation_cancel.yaml": {
+    "script": {
+      "irrigation_cancel_irrigation": {
+        "alias": "Irrigation Cancel Irrigation",
+        "mode": "single",
+        "sequence": [
+          {
+            "action": "input_boolean.turn_on",
+            "target": {
+              "entity_id": "input_boolean.irrigation_stop_in_progress"
+            }
+          },
+          {
+            "variables": {
+              "restart_entrypoints": "{{ ['automation.irrigation_triggered', 'automation.irrigation_triggered_cycle_start']\n   | select('is_state', 'on') | list }}\n",
+              "cycle_snapshot": "{{ states('input_text.irrigation_active_cycle') }}",
+              "zone_snapshot": "{{ states('input_text.irrigation_active_zone') }}"
+            }
+          },
+          {
+            "action": "automation.turn_off",
+            "target": {
+              "entity_id": [
+                "automation.irrigation_triggered",
+                "automation.irrigation_triggered_cycle_start"
+              ]
+            },
+            "data": {
+              "stop_actions": true
+            }
+          },
+          {
+            "action": "script.turn_off",
+            "target": {
+              "entity_id": [
+                "script.irrigation_run_a_cycle",
+                "script.irrigation_run_a_single_zone_on_demand"
+              ]
+            }
+          },
+          {
+            "variables": {
+              "cycle": "{{ cycle_snapshot if cycle_snapshot in ['cycle1','cycle2','cycle3']\n   else cycle | default('') | string }}\n",
+              "zone": "{{ zone_snapshot if zone_snapshot is match('^zone([1-9]|1[0-6])$')\n   else zone | default('') | string }}\n",
+              "mapped_zone_switches": "{% set ns = namespace(ids=[]) %} {% set existing = states.switch | map(attribute='entity_id') | list %} {% for n in range(1,17) %}\n  {% set entity = states('input_text.irrigation_zone' ~ n ~ '_switch_entity_id') | trim %}\n  {% if entity in existing %}{% set ns.ids = ns.ids + [entity] %}{% endif %}\n{% endfor %} {% set active = states('input_text.irrigation_active_switch') %} {% if active in existing %}{% set ns.ids = ns.ids + [active] %}{% endif %} {{ ns.ids | unique | list }}\n"
+            }
+          },
+          {
+            "if": [
+              {
+                "condition": "state",
+                "entity_id": "input_boolean.irrigation_disable_switches",
+                "state": "off"
+              },
+              {
+                "condition": "state",
+                "entity_id": "input_boolean.irrigation_output_mode_initialized",
+                "state": "on"
+              },
+              {
+                "condition": "template",
+                "value_template": "{{ mapped_zone_switches | length > 0 }}"
+              }
+            ],
+            "then": [
+              {
+                "repeat": {
+                  "for_each": "{{ mapped_zone_switches }}",
+                  "sequence": [
+                    {
+                      "if": [
+                        {
+                          "condition": "state",
+                          "entity_id": "input_boolean.irrigation_disable_switches",
+                          "state": "off"
+                        },
+                        {
+                          "condition": "state",
+                          "entity_id": "input_boolean.irrigation_output_mode_initialized",
+                          "state": "on"
+                        }
+                      ],
+                      "then": [
+                        {
+                          "action": "switch.turn_off",
+                          "continue_on_error": true,
+                          "target": {
+                            "entity_id": "{{ repeat.item }}"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "condition": "template",
+                "value_template": "{{ cycle in ['cycle1','cycle2','cycle3']\n   and zone is match('^zone([1-9]|1[0-6])$')\n   and is_state('timer.irrigation_' ~ zone ~ '_timer','active') }}\n"
+              }
+            ],
+            "then": [
+              {
+                "action": "timer.pause",
+                "target": {
+                  "entity_id": "{{ 'timer.irrigation_' ~ zone ~ '_timer' }}"
+                }
+              },
+              {
+                "variables": {
+                  "elapsed": "{% set timer = 'timer.irrigation_' ~ zone ~ '_timer' %} {% set total = as_timedelta(state_attr(timer,'duration') or '00:00:00').total_seconds() %} {% set remaining = as_timedelta(state_attr(timer,'remaining') or '00:00:00').total_seconds() %} {{ [total - remaining, 0] | max | round(0) | int }}\n"
+                }
+              },
+              {
+                "action": "input_text.set_value",
+                "target": {
+                  "entity_id": "{{ 'input_text.irrigation_' ~ zone ~ '_previous_duration_in_seconds' }}"
+                },
+                "data": {
+                  "value": "{{ elapsed }}"
+                }
+              },
+              {
+                "action": "input_text.set_value",
+                "target": {
+                  "entity_id": "input_text.irrigation_previous_total_watering_time"
+                },
+                "data": {
+                  "value": "{{ (states('input_text.irrigation_previous_total_watering_time') | float(0) + elapsed) | round(0) | int }}"
+                }
+              }
+            ]
+          },
+          {
+            "action": "timer.cancel",
+            "target": {
+              "entity_id": "{% set ns = namespace(ids=[]) %} {% for n in range(1,17) %}{% set ns.ids = ns.ids + ['timer.irrigation_zone' ~ n ~ '_timer'] %}{% endfor %} {{ ns.ids }}\n"
+            }
+          },
+          {
+            "action": "input_boolean.turn_off",
+            "target": {
+              "entity_id": [
+                "input_boolean.irrigation_cycle1_running",
+                "input_boolean.irrigation_cycle2_running",
+                "input_boolean.irrigation_cycle3_running"
+              ]
+            }
+          },
+          {
+            "if": [
+              {
+                "condition": "template",
+                "value_template": "{{ not states('input_text.irrigation_active_switch').startswith('switch.')\n   or is_state(states('input_text.irrigation_active_switch'),'off') }}\n"
+              }
+            ],
+            "then": [
+              {
+                "action": "input_text.set_value",
+                "target": {
+                  "entity_id": "input_text.irrigation_active_switch"
+                },
+                "data": {
+                  "value": ""
+                }
+              }
+            ]
+          },
+          {
+            "action": "input_text.set_value",
+            "target": {
+              "entity_id": [
+                "input_text.irrigation_active_cycle",
+                "input_text.irrigation_active_zone"
+              ]
+            },
+            "data": {
+              "value": ""
+            }
+          },
+          {
+            "action": "input_text.set_value",
+            "target": {
+              "entity_id": "input_text.irrigation_current_status"
+            },
+            "data": {
+              "value": "{{ 'STOP: output not confirmed OFF' if states('input_text.irrigation_active_switch').startswith('switch.') else 'SYSTEM IDLE' }}\n"
+            }
+          },
+          {
+            "action": "input_text.set_value",
+            "target": {
+              "entity_id": "input_text.irrigation_previous_run_cycle_name"
+            },
+            "data": {
+              "value": "{{ (states('input_text.irrigation_previous_run_cycle_name').replace(' (Cancelled)','')[:18] ~ ' (Cancelled)')[:30] }}"
+            }
+          },
+          {
+            "if": [
+              {
+                "condition": "state",
+                "entity_id": "input_boolean.irrigation_master_control_switch",
+                "state": "on"
+              },
+              {
+                "condition": "template",
+                "value_template": "{{ restart_entrypoints | length > 0 }}"
+              }
+            ],
+            "then": [
+              {
+                "action": "automation.turn_on",
+                "target": {
+                  "entity_id": "{{ restart_entrypoints }}"
+                }
+              }
+            ]
+          },
+          {
+            "action": "script.irrigation_restore_single_zone_settings",
+            "continue_on_error": true
+          },
+          {
+            "action": "input_boolean.turn_off",
+            "target": {
+              "entity_id": "input_boolean.irrigation_stop_in_progress"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Garden Irrigation/irrigation_triggered.yaml": {
+    "automation": [
+      {
+        "alias": "Irrigation Triggered",
+        "id": "irrigation_triggered",
+        "trigger": [
+          {
+            "trigger": "time",
+            "at": "input_datetime.irrigation_cycle1_start_time",
+            "id": "cycle1"
+          },
+          {
+            "trigger": "time",
+            "at": "input_datetime.irrigation_cycle2_start_time",
+            "id": "cycle2"
+          },
+          {
+            "trigger": "state",
+            "entity_id": "input_boolean.irrigation_cycle3_running",
+            "to": "on",
+            "id": "cycle3"
+          }
+        ],
+        "condition": [
+          {
+            "condition": "state",
+            "entity_id": "input_boolean.irrigation_master_control_switch",
+            "state": "on"
+          },
+          {
+            "condition": "template",
+            "value_template": "{{ is_state('input_boolean.irrigation_cycle1_running', 'off') and\n   is_state('input_boolean.irrigation_cycle2_running', 'off') and\n   (trigger.id == 'cycle3' or\n    is_state('input_boolean.irrigation_cycle3_running', 'off')) }}\n"
+          },
+          {
+            "condition": "template",
+            "value_template": "{% if is_state('input_boolean.irrigation_' ~ trigger.id ~ '_schedule_enabled', 'on') or\n      trigger.id == 'cycle3' %}\n  True\n{% else %}\n  False\n{% endif %}\n"
+          },
+          {
+            "condition": "template",
+            "value_template": "{% if is_state('input_boolean.irrigation_ignore_schedule_if_raining', 'off') or \n      trigger.id == 'cycle3' %}\n  True\n{% elif states('input_boolean.irrigation_ignore_schedule_if_raining') == 'on' and\n        states(states('input_text.irrigation_external_sensor_raining_now')) == 'off' %}\n  True\n{% else %}\n  False\n{% endif %}\n"
+          }
+        ],
+        "action": [
+          {
+            "if": [
+              {
+                "condition": "template",
+                "value_template": "{{ states('input_boolean.irrigation_' ~ trigger.id ~ '_wait_for_entity') == 'on' }}\n"
+              }
+            ],
+            "then": [
+              {
+                "variables": {
+                  "wait_for_entity_name": "{{ states('input_text.irrigation_' ~ trigger.id ~ '_wait_for_entity_name') }}\n",
+                  "wait_for_entity_state": "{{ states('input_text.irrigation_' ~ trigger.id ~ '_wait_for_entity_state') }}\n"
+                }
+              },
+              {
+                "action": "script.irrigation_write_to_log",
+                "data": {
+                  "log_event": "CYCLE_WAITING_FOR_ENTITY",
+                  "cycle": "{{ trigger.id[-1] }}\n",
+                  "event_time": "{{ now() }}\n"
+                }
+              },
+              {
+                "wait_template": "{% if wait_for_entity_state.startswith('not') %}\n  {% set chosen_states = wait_for_entity_state.replace('not in', '')\n                                              .replace('not', '')\n                                              .replace(' ','').split(',') %}\n  {{ has_value(wait_for_entity_name) and states(wait_for_entity_name) not in chosen_states }}\n{% else %}\n  {% set chosen_states = wait_for_entity_state.replace(' ','').split(',') %}\n  {{ has_value(wait_for_entity_name) and states(wait_for_entity_name) in chosen_states }}\n{% endif %}\n",
+                "timeout": "{{ states('input_number.irrigation_' ~ trigger.id ~ '_wait_for_entity_name_timeout_duration') }}\n"
+              },
+              {
+                "action": "script.irrigation_write_to_log",
+                "data": {
+                  "log_event": "CYCLE_WAITING_FOR_ENTITY_COMPLETE",
+                  "cycle": "{{ trigger.id[-1] }}\n",
+                  "wait_completed": "{{ wait.completed }}\n",
+                  "event_time": "{{ now() }}\n"
+                }
+              },
+              {
+                "if": [
+                  {
+                    "condition": "template",
+                    "value_template": "{% set timeout_continue = states('input_boolean.irrigation_' ~ trigger.id ~ '_wait_for_entity_name_timeout_continue') %} {{ not wait.completed and timeout_continue != 'on' }}\n"
+                  }
+                ],
+                "then": [
+                  {
+                    "action": "script.irrigation_write_to_log",
+                    "data": {
+                      "log_event": "CYCLE_ABORTED_WAITING_FOR_ENTITY",
+                      "cycle": "{{ trigger.id[-1] }}\n",
+                      "event_time": "{{ now() }}\n"
+                    }
+                  },
+                  {
+                    "if": [
+                      {
+                        "condition": "template",
+                        "value_template": "{{ has_value('script.irrigation_notify') }}"
+                      }
+                    ],
+                    "then": [
+                      {
+                        "action": "script.irrigation_notify",
+                        "data": {
+                          "show": true,
+                          "tell": "{{ states('input_text.irrigation_notification_user1_name') | lower }}\n",
+                          "type": "app_notification",
+                          "title": "Irrigation WARNING",
+                          "message": "{% set cycle_name =  states('input_text.irrigation_' ~ trigger.id ~ '_name') %} Cycle {{ trigger.id[-1] }} ({{ cycle_name }}) Cycle ABORTED - Wait for entity state timed out.\nEntity: {{ wait_for_entity_name }}\nWaiting for state: {{ wait_for_entity_state }}\nCurrent state: {{ states(wait_for_entity_name) }}\n\n(See Irrigation Log)\n"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "stop": "Wait for entity state failed"
+                  }
+                ]
+              },
+              {
+                "if": [
+                  {
+                    "condition": "template",
+                    "value_template": "{{ not wait.completed and\n   not wait_for_entity_state.startswith('not') and\n   states(wait_for_entity_name) not in wait_for_entity_state }}\n"
+                  }
+                ],
+                "then": [
+                  {
+                    "action": "script.irrigation_write_to_log",
+                    "data": {
+                      "log_event": "CYCLE_CONTINUES_UNEXPECTED_STATE",
+                      "cycle": "{{ trigger.id[-1] }}\n",
+                      "event_time": "{{ now() }}\n"
+                    }
+                  },
+                  {
+                    "if": [
+                      {
+                        "condition": "template",
+                        "value_template": "{{ has_value('script.irrigation_notify') }}"
+                      }
+                    ],
+                    "then": [
+                      {
+                        "action": "script.irrigation_notify",
+                        "data": {
+                          "show": true,
+                          "tell": "{{ states('input_text.irrigation_notification_user1_name') | lower }}\n",
+                          "type": "app_notification",
+                          "title": "Irrigation WARNING",
+                          "message": "{% set cycle_name =  states('input_text.irrigation_' ~ trigger.id ~ '_name') %} Cycle {{ trigger.id[-1] }} ({{ cycle_name }}) Cycle continuing with unexpected state.\nEntity: {{ wait_for_entity_name }}\nWaiting For state: {{ wait_for_entity_state }}\nCurrent state: {{ states(wait_for_entity_name) }}\n\n(See Irrigation Log)\n"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "condition": "template",
+            "value_template": "{{ is_state('input_boolean.irrigation_master_control_switch','on')\n   and is_state('input_boolean.irrigation_stop_in_progress','off')\n   and (trigger.id == 'cycle3' or\n        (is_state('input_boolean.irrigation_' ~ trigger.id ~ '_schedule_enabled','on') and\n         (is_state('input_boolean.irrigation_ignore_schedule_if_raining','off') or\n          (is_state('input_boolean.irrigation_ignore_schedule_if_raining','on') and\n           is_state(states('input_text.irrigation_external_sensor_raining_now'),'off'))) and\n         not is_state('script.irrigation_run_a_cycle','on') and\n         is_state('input_boolean.irrigation_cycle1_running','off') and\n         is_state('input_boolean.irrigation_cycle2_running','off') and\n         is_state('input_boolean.irrigation_cycle3_running','off'))) }}\n"
+          },
+          {
+            "action": "homeassistant.turn_on",
+            "data": {
+              "entity_id": "input_boolean.irrigation_{{ trigger.id }}_running\n"
+            }
+          },
+          {
+            "action": "script.irrigation_write_to_log",
+            "data": {
+              "log_event": "CYCLE_STARTING",
+              "cycle": "{{ trigger.id[-1] }}\n",
+              "event_time": "{{ now() }}\n"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
