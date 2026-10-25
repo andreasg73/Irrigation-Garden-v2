@@ -12,8 +12,8 @@ const sha=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex'
 (async()=>{
  const {Window}=await import(pathToFileURL(require.resolve('happy-dom')).href);
  const scratch=fs.mkdtempSync(require('node:os').tmpdir()+'/ig-ui-dom-');
- execFileSync(process.env.PYTHON||'python',['tools/build_ui_fixture.py',scratch],{cwd:ROOT});
- const html=fs.readFileSync(path.join(scratch,'fixture.html'),'utf8');
+ if(!process.env.IG_UI_FIXTURE)execFileSync(process.env.PYTHON||'python',['tools/build_ui_fixture.py',scratch],{cwd:ROOT});
+ const html=fs.readFileSync(process.env.IG_UI_FIXTURE||path.join(scratch,'fixture.html'),'utf8');
  const w=new Window({url:'https://irrigation-fixture.invalid',settings:{enableJavaScriptEvaluation:true,disableJavaScriptFileLoading:true,disableCSSFileLoading:true}});
  const scripts=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m=>m[1]);
  w.document.write(html.replace(/<script>[\s\S]*?<\/script>/g,''));
@@ -82,7 +82,7 @@ const sha=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex'
   check('ISO.no-runtime-errors',()=>assert.deepEqual(domErrors,[]));
   check('ISO.no-actuator-requests',()=>assert.ok(calls().every(c=>c.domain==='input_text'&&c.action==='set_value')));
  }finally{
-  const report={source_sha256:sha(SOURCE),suite_sha256:sha(__filename),layer:'happy-dom programmatic simulation; no real-browser geometry or taps',domErrors,counts:{passed:results.filter(x=>x.status==='passed').length,failed:results.filter(x=>x.status==='failed').length},results,mock_requests:calls(),limitations:['Real-browser fixture blocked by URL policy; no geometry/touch/IME claim.','Original-card creation is stubbed here; live HA rendering is checked separately.']};
+  const report={source_sha256:sha(SOURCE),suite_sha256:sha(__filename),layer:'happy-dom programmatic simulation; no real-browser geometry or taps',domErrors,counts:{passed:results.filter(x=>x.status==='passed').length,failed:results.filter(x=>x.status==='failed').length},results,mock_requests:calls(),limitations:['This suite does not exercise real-browser geometry, touch or IME.','Original-card creation is stubbed here; live HA rendering is checked separately.']};
   if(process.env.IG_UI_REPORT)fs.writeFileSync(process.env.IG_UI_REPORT,JSON.stringify(report,null,2));
   console.log(JSON.stringify(report));await w.happyDOM.close();
  }

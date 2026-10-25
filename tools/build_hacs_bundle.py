@@ -6,7 +6,7 @@ from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 component = ROOT / "custom_components/irrigation_garden"
-files = {str(p.relative_to(ROOT)): p.read_bytes() for folder in ("Garden Irrigation", "Logging") for p in sorted((ROOT/folder).glob("*.yaml"))}
+files = {p.relative_to(ROOT).as_posix(): p.read_bytes() for folder in ("Garden Irrigation", "Logging") for p in sorted((ROOT/folder).glob("*.yaml"))}
 assert len(files) == 29
 for language in ("en", "pl"):
     files["dashboard/" + language + ".yaml"] = (ROOT/"dist"/language/"irrigation_dashboard.yaml").read_bytes()
@@ -16,6 +16,7 @@ files["manifest.json"] = (json.dumps(manifest, ensure_ascii=False, sort_keys=Tru
 with ZipFile(component / "bundle.zip", "w", compression=ZIP_DEFLATED, compresslevel=9) as archive:
     for name, body in sorted(files.items()):
         info = ZipInfo(name, date_time=(2026, 10, 24, 0, 0, 0))
+        info.create_system = 3  # Canonical Unix metadata on Windows and Linux.
         info.compress_type = ZIP_DEFLATED
         info.external_attr = 0o100644 << 16
         archive.writestr(info, body)

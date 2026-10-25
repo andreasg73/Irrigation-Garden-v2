@@ -20,6 +20,25 @@ UI_LABELS = {
     'to_light': ('Switch to light mode', 'Przełącz na tryb jasny'),
     'loading': ('Loading…', 'Wczytywanie…'),
     'load_failed': ('Cannot load the original card. Refresh the dashboard.', 'Nie można wczytać oryginalnej karty. Odśwież panel.'),
+    'measurement': ('Measurement', 'Pomiar'),
+    'forecast': ('Forecast', 'Prognoza'),
+    'condition': ('Current conditions', 'Bieżąca pogoda'),
+    'healthy': ('Available; value is valid', 'Dostępna; wartość poprawna'),
+    'missing_source': ('Assigned entity does not exist', 'Przypisana encja nie istnieje'),
+    'missing_helper': ('Mapping helper is unavailable', 'Pomocnik przypisania jest niedostępny'),
+    'unknown_value': ('Source has no known value', 'Źródło nie ma znanej wartości'),
+    'wrong_unit': ('Wrong unit; expected', 'Niewłaściwa jednostka; wymagana'),
+    'wrong_domain': ('Wrong entity type; expected', 'Niewłaściwy typ encji; wymagany'),
+    'invalid_value': ('Invalid value', 'Nieprawidłowa wartość'),
+    'value': ('Value', 'Wartość'),
+    'reported': ('Last report to HA', 'Ostatni raport do HA'),
+    'updated': ('State or attributes updated', 'Zmiana wartości lub atrybutów'),
+    'checked': ('Report time checked', 'Czas raportu sprawdzono'),
+    'refresh': ('Refresh report time', 'Odśwież czas raportu'),
+    'report_failed': ('Report time unavailable; retry refresh', 'Czas raportu niedostępny; ponów odświeżanie'),
+    'no_report': ('No report timestamp', 'Brak czasu raportu'),
+    'report_hint': ('An unchanged value does not indicate failure. HA report time is not the time of a physical measurement or forecast issue.', 'Niezmienna wartość nie oznacza awarii. Czas raportu do HA nie jest czasem pomiaru fizycznego ani wydania prognozy.'),
+    'raining_on': ('on = raining; off = dry. Check the sensor polarity.', 'on = pada; off = sucho. Sprawdź polaryzację czujnika.'),
 }
 
 
@@ -51,6 +70,17 @@ def policy(entity):
     return None
 
 
+def weather_kind(entity):
+    suffix = entity.removeprefix('input_text.irrigation_external_sensor_')
+    if suffix.startswith('forecast_'):
+        return 'forecast'
+    if suffix == 'weather_outlook':
+        return 'condition'
+    if suffix.startswith('rainfall_') or suffix in {'raining_now', 'current_temp'}:
+        return 'measurement'
+    return None
+
+
 def enhance(data, language, catalog_dir):
     result = copy.deepcopy(data)
     _, catalog = read_catalog(catalog_dir / (language + '.ini'))
@@ -70,6 +100,9 @@ def enhance(data, language, catalog_dir):
             filters = policy(entity) if isinstance(entity, str) else None
             if filters and node.get('type') in {None, 'entity'}:
                 node.update(type='custom:irrigation-garden-entity-picker', ui_labels=labels, **filters)
+                kind = weather_kind(entity)
+                if kind:
+                    node['diagnostic_kind'] = kind
                 counts['picker_rows'] += 1
             for value in list(node.values()):
                 if value is not labels:
@@ -99,5 +132,5 @@ def original_structure(data):
     if data.get('type') == 'custom:irrigation-garden-themed-card':
         return original_structure(data['card'])
     if data.get('type') == 'custom:irrigation-garden-entity-picker':
-        return {k: original_structure(v) for k, v in data.items() if k not in {'type', 'ui_labels', 'domains', 'units', 'guard_watering'}}
+        return {k: original_structure(v) for k, v in data.items() if k not in {'type', 'ui_labels', 'domains', 'units', 'guard_watering', 'diagnostic_kind'}}
     return {k: original_structure(v) for k, v in data.items()}

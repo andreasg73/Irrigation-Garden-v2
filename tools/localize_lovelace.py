@@ -65,7 +65,7 @@ def write_catalog(path,language,native,messages):
  p=configparser.ConfigParser(interpolation=None);p.optionxform=str
  p['meta']={'language':language,'native_name':native,'fallback':'en','format':'1'}
  p['messages']={k:json.dumps(v,ensure_ascii=False) for k,v in messages.items()}
- with Path(path).open('w',encoding='utf-8') as f:
+ with Path(path).open('w',encoding='utf-8',newline='\n') as f:
   f.write('; Values are JSON strings. Preserve technical IDs, HTML tags and units.\n')
   p.write(f)
 

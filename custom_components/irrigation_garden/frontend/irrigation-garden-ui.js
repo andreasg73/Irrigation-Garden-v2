@@ -1,15 +1,16 @@
 /* Irrigation Garden UI: searchable mappings and local appearance, original engine unchanged. */
 (() => {
   'use strict';
-  const VERSION = '0.2.0b1';
+  const VERSION = '0.3.0b1';
   const EVENT = 'irrigation-garden-appearance';
   const memory = new Map();
   const palette = {
     light: {'primary-background-color':'#f4f6f8','secondary-background-color':'#ffffff','card-background-color':'#ffffff','ha-card-background':'#ffffff','primary-text-color':'#17212b','secondary-text-color':'#52606d','disabled-text-color':'#677684','divider-color':'#c5cdd4','ha-card-border-color':'#c5cdd4','accent-color':'#00796b','primary-color':'#00796b','state-icon-color':'#52606d','paper-item-icon-color':'#52606d','input-fill-color':'#edf1f4','input-ink-color':'#17212b','input-label-ink-color':'#52606d','mdc-theme-surface':'#ffffff','mdc-theme-on-surface':'#17212b','error-color':'#b3261e'},
     dark: {'primary-background-color':'#111827','secondary-background-color':'#1f2937','card-background-color':'#1f2937','ha-card-background':'#1f2937','primary-text-color':'#f3f4f6','secondary-text-color':'#cbd5e1','disabled-text-color':'#a5b1c2','divider-color':'#526176','ha-card-border-color':'#526176','accent-color':'#80cbc4','primary-color':'#80cbc4','state-icon-color':'#cbd5e1','paper-item-icon-color':'#cbd5e1','input-fill-color':'#273449','input-ink-color':'#f3f4f6','input-label-ink-color':'#cbd5e1','mdc-theme-surface':'#1f2937','mdc-theme-on-surface':'#f3f4f6','error-color':'#ffb4ab'}
   };
-  const fallback = {search:'Search entities',save:'Save',cancel:'Cancel',clear:'Clear selection',none:'Not configured',empty:'No matching entities',unavailable:'Unavailable',invalid:'Select an existing compatible entity.',failed:'Save failed. Your previous setting is retained.',busy:'Stop watering and close mapped valves before changing valve assignments.',changed:'This setting changed elsewhere. Reopen the picker before saving.',more:'matching entities — type to narrow the list',dark:'Dark mode',light:'Light mode',to_dark:'Switch to dark mode',to_light:'Switch to light mode',loading:'Loading…',load_failed:'Cannot load the original card. Refresh the dashboard.'};
-  const labels = c => ({...fallback,...c?.ui_labels});
+  const fallback = {"search":"Search entities","save":"Save","cancel":"Cancel","clear":"Clear selection","none":"Not configured","empty":"No matching entities","unavailable":"Unavailable","invalid":"Select an existing compatible entity.","failed":"Save failed. Your previous setting is retained.","busy":"Stop watering and close mapped valves before changing valve assignments.","changed":"This setting changed elsewhere. Reopen the picker before saving.","more":"matching entities — type to narrow the list","dark":"Dark mode","light":"Light mode","to_dark":"Switch to dark mode","to_light":"Switch to light mode","loading":"Loading…","load_failed":"Cannot load the original card. Refresh the dashboard.","measurement":"Measurement","forecast":"Forecast","condition":"Current conditions","healthy":"Available; value is valid","missing_source":"Assigned entity does not exist","missing_helper":"Mapping helper is unavailable","unknown_value":"Source has no known value","wrong_unit":"Wrong unit; expected","wrong_domain":"Wrong entity type; expected","invalid_value":"Invalid value","value":"Value","reported":"Last report to HA","updated":"State or attributes updated","checked":"Report time checked","refresh":"Refresh report time","report_failed":"Report time unavailable; retry refresh","no_report":"No report timestamp","report_hint":"An unchanged value does not indicate failure. HA report time is not the time of a physical measurement or forecast issue.","raining_on":"on = raining; off = dry. Check the sensor polarity."};
+  const polishFallback = {"search":"Szukaj encji","save":"Zapisz","cancel":"Anuluj","clear":"Wyczyść wybór","none":"Nie skonfigurowano","empty":"Brak pasujących encji","unavailable":"Niedostępna","invalid":"Wybierz istniejącą encję odpowiedniego typu.","failed":"Zapis nie powiódł się. Poprzednie ustawienie zostało zachowane.","busy":"Przed zmianą przypisania zaworu zatrzymaj podlewanie i zamknij przypisane zawory.","changed":"To ustawienie zmieniono w innym miejscu. Otwórz wybór ponownie przed zapisaniem.","more":"pasujących encji — wpisz tekst, aby zawęzić listę","dark":"Tryb ciemny","light":"Tryb jasny","to_dark":"Przełącz na tryb ciemny","to_light":"Przełącz na tryb jasny","loading":"Wczytywanie…","load_failed":"Nie można wczytać oryginalnej karty. Odśwież panel.","measurement":"Pomiar","forecast":"Prognoza","condition":"Bieżąca pogoda","healthy":"Dostępna; wartość poprawna","missing_source":"Przypisana encja nie istnieje","missing_helper":"Pomocnik przypisania jest niedostępny","unknown_value":"Źródło nie ma znanej wartości","wrong_unit":"Niewłaściwa jednostka; wymagana","wrong_domain":"Niewłaściwy typ encji; wymagany","invalid_value":"Nieprawidłowa wartość","value":"Wartość","reported":"Ostatni raport do HA","updated":"Zmiana wartości lub atrybutów","checked":"Czas raportu sprawdzono","refresh":"Odśwież czas raportu","report_failed":"Czas raportu niedostępny; ponów odświeżanie","no_report":"Brak czasu raportu","report_hint":"Niezmienna wartość nie oznacza awarii. Czas raportu do HA nie jest czasem pomiaru fizycznego ani wydania prognozy.","raining_on":"on = pada; off = sucho. Sprawdź polaryzację czujnika."};
+  const labels = c => ({...fallback,...(c?.ui_labels?.save==='Zapisz'?polishFallback:{}),...c?.ui_labels});
   const key = h => `irrigation-garden:appearance:${h?.user?.id || 'local'}`;
   function mode(h) {
     const k=key(h); let value=memory.get(k);
@@ -69,18 +70,72 @@
     return false;
   }
   function accepts(s,c){return !!s && (c.domains.includes('*') || c.domains.includes(s.entity_id.split('.')[0])) && (!c.units || c.units.includes(s.attributes?.unit_of_measurement));}
+  function weatherKind(entity){const prefix='input_text.irrigation_external_sensor_';if(!entity.startsWith(prefix))return undefined;const suffix=entity.slice(prefix.length);if(suffix.startsWith('forecast_'))return 'forecast';if(suffix==='weather_outlook')return 'condition';if(suffix.startsWith('rainfall_')||['raining_now','current_temp'].includes(suffix))return 'measurement';}
+  // One read-only template request for all visible weather rows, at most once
+  // per minute per connection (or on explicit refresh). No state_reported firehose.
+  const reports = new WeakMap();
+  const REPORT_EVENT = 'irrigation-garden-reports';
+  const REPORT_TEMPLATE = `{% set ns=namespace(rows=[]) %}{% for h in states.input_text if h.entity_id.startswith('input_text.irrigation_external_sensor_') %}{% set s=states[h.state] if h.state is match('^[a-z_]+[.][a-z0-9_]+$') else none %}{% set ns.rows=ns.rows+[{'helper':h.entity_id,'source':h.state,'last_reported':s.last_reported.isoformat() if s else none,'last_updated':s.last_updated.isoformat() if s else none}] %}{% endfor %}{{ ns.rows|to_json }}`;
+  function reportCache(h){const owner=h?.connection||h?.callApi;if(!owner || !['object','function'].includes(typeof owner))return null;if(!reports.has(owner))reports.set(owner,{rows:[],checked:0,pending:null,error:false});return reports.get(owner);}
+  function loadReports(h,force=false){
+    const cache=reportCache(h);if(!cache||!h.callApi)return;
+    if(cache.pending||(!force&&Date.now()-cache.checked<60000))return;
+    cache.checked=Date.now();cache.error=false;
+    cache.pending=Promise.resolve().then(()=>h.callApi('POST','template',{template:REPORT_TEMPLATE})).then(body=>{
+      const rows=typeof body==='string'?JSON.parse(body):body;
+      if(!Array.isArray(rows))throw Error('Invalid report response');
+      cache.rows=rows.filter(r=>r&&typeof r.helper==='string'&&typeof r.source==='string');
+      cache.completed=Date.now();
+    }).catch(()=>{cache.rows=[];cache.error=true;}).finally(()=>{cache.pending=null;window.dispatchEvent(new CustomEvent(REPORT_EVENT));});
+  }
+  function weatherStatus(h,c,t){
+    const helper=h.states[c.entity];
+    if(!helper||helper.state==='unavailable')return t.missing_helper;
+    const id=(helper.state||'').trim();
+    if(!id||['unknown','Not set','not set'].includes(id))return t.none;
+    const source=h.states[id];if(!source)return t.missing_source;
+    if(!c.domains.includes(id.split('.')[0]))return t.wrong_domain+': '+c.domains.join(', ');
+    if(source.state==='unavailable')return t.unavailable;
+    if(source.state==='unknown')return t.unknown_value;
+    if(c.units&&!c.units.includes(source.attributes?.unit_of_measurement))return t.wrong_unit+': '+c.units.join(', ');
+    const value=String(source.state??'').trim();
+    if(!value||(c.units&&(!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(value)||!Number.isFinite(Number(value))||(c.units.includes('mm')&&Number(value)<0)))||(c.domains.includes('binary_sensor')&&!['on','off'].includes(value)))return t.invalid_value;
+    return t.healthy;
+  }
+  function timestamp(value,h){const date=new Date(value);if(!value||!Number.isFinite(date.getTime()))return '';try{return new Intl.DateTimeFormat(h.locale?.language||h.language||undefined,{dateStyle:'short',timeStyle:'medium',timeZone:h.config?.time_zone}).format(date);}catch{return date.toISOString();}}
   class EntityPicker extends HTMLElement {
     constructor(){
       super();this.attachShadow({mode:'open'});this._serial=++EntityPicker.serial;this._appearance=()=>paint(this,this._hass);
       this.shadowRoot.innerHTML=`<style>${commonCSS}.open{width:100%;text-align:left;border:0;border-bottom:1px solid var(--divider-color);border-radius:0;display:grid;gap:3px;padding:8px 0;background:transparent}.value{color:var(--secondary-text-color);font-size:12px;overflow-wrap:anywhere}.edit{padding:8px 0}.search{box-sizing:border-box;min-height:44px;width:100%;padding:10px;border-radius:8px;border:1px solid var(--divider-color);background:var(--input-fill-color,var(--card-background-color))}.list{max-height:240px;overflow:auto;margin:6px 0;border:1px solid var(--divider-color);border-radius:8px}.option{width:100%;display:block;border:0;border-radius:0;border-bottom:1px solid var(--divider-color);text-align:left;padding:8px;min-height:52px}.option[aria-selected="true"]{box-shadow:inset 4px 0 var(--accent-color)}.option small{display:block;color:var(--secondary-text-color);overflow-wrap:anywhere}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.save{border:2px solid var(--accent-color)}.note,.error{font-size:13px;margin:6px 0;overflow-wrap:anywhere}.error{color:var(--error-color,#c43c32)}.selected{overflow-wrap:anywhere}</style><button class="open" type="button" aria-expanded="false"><span class="name"></span><span class="value"></span></button><div class="edit" hidden><input class="search" type="search" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="true"><div class="list" role="listbox"></div><div class="note" role="status"></div><div class="selected"></div><div class="actions"><button class="save" type="button"></button><button class="cancel" type="button"></button><button class="clear" type="button"></button></div><div class="error" role="alert"></div></div>`;
-      const $=s=>this.shadowRoot.querySelector(s);this.$=$;$('.open').addEventListener('click',()=>this._open());$('.search').addEventListener('input',()=>{this._query=$('.search').value;this._active=-1;this._list();});$('.search').addEventListener('keydown',e=>this._key(e));$('.cancel').addEventListener('click',()=>this._close());$('.clear').addEventListener('click',()=>{this._draft='';this._error('');this._selected();});$('.save').addEventListener('click',()=>this._save());
+      const info=document.createElement('div');info.className='diagnostics';info.hidden=true;info.innerHTML=`<style>.diagnostics{font-size:12px;line-height:1.5;padding:5px 0 12px;color:var(--secondary-text-color);overflow-wrap:anywhere}.health{font-weight:600}.health[data-ok="false"]{color:var(--error-color)}.kind{font-weight:600}.refresh{font-size:12px;margin-top:4px}.hint{margin:4px 0;max-width:60ch}</style><div class="kind"></div><div class="health" role="status"></div><div class="reading"></div><div class="reported"></div><div class="updated"></div><div class="checked"></div><details><summary></summary><div class="hint"></div><div class="polarity"></div></details><button type="button" class="refresh"></button>`;this.shadowRoot.querySelector('.open').after(info);
+      this._reports=()=>this._diagnostics();
+      const $=s=>this.shadowRoot.querySelector(s);this.$=$;$('.refresh').addEventListener('click',()=>{loadReports(this._hass,true);this._diagnostics();});$('.open').addEventListener('click',()=>this._open());$('.search').addEventListener('input',()=>{this._query=$('.search').value;this._active=-1;this._list();});$('.search').addEventListener('keydown',e=>this._key(e));$('.cancel').addEventListener('click',()=>this._close());$('.clear').addEventListener('click',()=>{this._draft='';this._error('');this._selected();});$('.save').addEventListener('click',()=>this._save());
     }
-    setConfig(c){if(!/^input_text\.irrigation_(zone\d+_switch_entity_id|external_sensor_[a-z0-9_]+|cycle[12]_wait_for_entity_name|notification_script|log_notify_entity|announcement_script|announcement_player|startup_ready_entity|ha_stopping_entity)$/.test(c.entity)||!Array.isArray(c.domains)||!c.domains.length)throw Error('A supported irrigation mapping and domains are required');this._config=c;this._t=labels(c);this._editing=false;this._render();}
+    setConfig(c){if(!/^input_text\.irrigation_(zone\d+_switch_entity_id|external_sensor_[a-z0-9_]+|cycle[12]_wait_for_entity_name|notification_script|log_notify_entity|announcement_script|announcement_player|startup_ready_entity|ha_stopping_entity)$/.test(c.entity)||!Array.isArray(c.domains)||!c.domains.length)throw Error('A supported irrigation mapping and domains are required');this._config={...c,diagnostic_kind:c.diagnostic_kind||weatherKind(c.entity)};this._t=labels(c);this._editing=false;this._render();}
     set hass(h){const old=this._hass;this._hass=h;this._render();if(this._editing && old?.states!==h.states){this._list();this._selected();}}
-    connectedCallback(){window.addEventListener(EVENT,this._appearance);this._render();}
-    disconnectedCallback(){window.removeEventListener(EVENT,this._appearance);}
+    connectedCallback(){window.addEventListener(EVENT,this._appearance);window.addEventListener(REPORT_EVENT,this._reports);this._render();}
+    disconnectedCallback(){window.removeEventListener(EVENT,this._appearance);window.removeEventListener(REPORT_EVENT,this._reports);}
     _render(){
       if(!this._config||!this._hass)return;paint(this,this._hass);const t=this._t;const s=this._hass.states[this._config.entity];const value=s?.state||'';this.$('.name').textContent=this._config.name||s?.attributes?.friendly_name||this._config.entity;this.$('.value').textContent=value==='unavailable'?t.unavailable:(['unknown',''].includes(value)?t.none:value);this.$('.open').disabled=!s||s.state==='unavailable';this.$('.save').textContent=t.save;this.$('.cancel').textContent=t.cancel;this.$('.clear').textContent=t.clear;this.$('.search').placeholder=t.search;this.$('.search').setAttribute('aria-label',t.search+' — '+this.$('.name').textContent);this.$('.list').id='ig-options-'+this._serial;this.$('.search').setAttribute('aria-controls',this.$('.list').id);
+      if(this.isConnected&&this._config.diagnostic_kind)loadReports(this._hass);
+      this._diagnostics();
+    }
+    _diagnostics(){
+      if(!this._config||!this._hass)return;
+      const t=this._t,h=this._hass,c=this._config;this.$('.diagnostics').hidden=!c.diagnostic_kind;if(!c.diagnostic_kind)return;
+      const id=h.states[c.entity]?.state,source=h.states[id],cache=reportCache(h);
+      // A delayed response must never attach the old source's report time to a
+      // newly assigned entity, or to a state updated after that snapshot.
+      const report=cache?.rows.find(r=>r.helper===c.entity&&r.source===id&&(!source?.last_updated||Date.parse(r.last_updated)===Date.parse(source.last_updated)));
+      const health=weatherStatus(h,c,t);this.$('.kind').textContent=t[c.diagnostic_kind];this.$('.health').textContent=health;this.$('.health').dataset.ok=String(health===t.healthy);
+      let reading=String(source?.state??'');
+      if(c.units&&health===t.healthy)try{reading=new Intl.NumberFormat(h.locale?.language||h.language||undefined,{maximumSignificantDigits:6}).format(Number(reading));}catch{}
+      this.$('.reading').textContent=t.value+': '+(source?reading+(source.attributes?.unit_of_measurement?' '+source.attributes.unit_of_measurement:''):'—');
+      this.$('.reported').textContent=t.reported+': '+(timestamp(report?.last_reported,h)||(cache?.pending?t.loading:cache?.error?t.report_failed:t.no_report));
+      this.$('.updated').textContent=t.updated+': '+(timestamp(source?.last_updated,h)||'—');
+      this.$('.checked').textContent=cache?.completed&&!cache.error?t.checked+': '+timestamp(cache.completed,h):'';
+      this.$('.refresh').textContent=t.refresh;this.$('.refresh').disabled=!!cache?.pending||!h.callApi;
+      this.$('summary').textContent=t.reported+' ⓘ';this.$('.hint').textContent=t.report_hint;this.$('.polarity').textContent=c.entity.endsWith('_raining_now')?t.raining_on:'';
     }
     _open(){if(this._pending)return;this._baseline=this._hass.states[this._config.entity]?.state||'';this._draft=this._baseline;this._query='';this._active=-1;this._editing=true;this.$('.open').setAttribute('aria-expanded','true');this.$('.edit').hidden=false;this.$('.search').value='';this._error('');this._list();this._selected();this.$('.search').focus();}
     _close(){if(this._pending)return;this._editing=false;this.$('.edit').hidden=true;this.$('.open').setAttribute('aria-expanded','false');this.$('.open').focus();}

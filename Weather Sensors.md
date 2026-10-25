@@ -26,7 +26,15 @@ The picker requires the [UI module](docs/ENTITY_PICKER_AND_APPEARANCE.md). Its c
 
 Rainfall totals must be nonnegative. The picker requires explicit `°C`/`mm` units; legacy unitless sources accepted by some backend templates will not appear in these lists. Convert and label other units in a separate source before assigning them. A rain rate in `mm/h`, a probability in `%` and a lifetime counter are not a daily total in `mm`.
 
-### Keep measurements and forecasts separate
+### Diagnostics in the source picker (0.3.0b1)
+
+Each weather assignment displays its purpose (measurement, forecast or current conditions), current value/unit and validation status. Missing assignments/entities, unknown/unavailable values, incompatible domains/units, nonnumeric temperatures/rain totals and negative rain totals are distinguished. This checks the value's format, not the accuracy, location, reporting period or physical health of a sensor. For rain contacts, `on` must mean raining and `off` dry; check the polarity yourself.
+
+**Last report to HA** is read from the backend `last_reported`, separately from **State or attributes updated** (`last_updated`). An unchanged value does not imply failure. These timestamps describe HA receiving state, not the original observation or forecast issue time. No universal timeout labels a sensor stale. Visible rows share one read-only `/api/template` request per connection, automatically refreshed on HA updates at most once a minute; **Refresh report time** requests a new snapshot. The check time is displayed. Failed reads or snapshots predating a source change show no valid report timestamp and can be retried. No values, assignments or watering settings are changed by diagnostics.
+
+Update the UI module and refresh the frontend. Searchable dashboards built with 0.2.0b1 are also supported without rebuilding. Manual installs rebuild EN/PL; HACS users prepare the updated payload using the installer options. See the [HA report timestamp](https://contributors.home-assistant.io/blog/2024/03/20/state_reported_timestamp/) and [REST API](https://contributors.home-assistant.io/core/internals/rest-api/) references.
+
+### Measurement and forecast semantics
 
 **Forecast rainfall is not observed rainfall.** Do not assign a next-24-hours forecast to Rain today or Rain yesterday. Likewise, yesterday's calendar total is not the last rolling 24 hours. A provider's total for today is not necessarily a next-24-hours forecast.
 
@@ -68,7 +76,15 @@ Lista wymaga [modułu interfejsu](docs/ENTITY_PICKER_AND_APPEARANCE.md). Pokazuj
 
 Sumy opadów muszą być nieujemne. Lista wymaga jawnej jednostki `°C`/`mm`; starsze źródła bez jednostki, akceptowane przez część szablonów silnika, nie pojawią się w tych filtrach. Inne jednostki trzeba najpierw przeliczyć i oznaczyć w osobnym źródle. Natężenie `mm/h`, prawdopodobieństwo `%` i licznik opadu od początku działania nie są dobową sumą w `mm`.
 
-### Pomiary, prognozy i czujnik deszczu
+### Diagnostyka przy wyborze źródła (0.3.0b1)
+
+Przy każdym przypisaniu widać przeznaczenie (pomiar, prognoza lub bieżąca pogoda), wartość z jednostką i wynik kontroli. Panel rozróżnia brak przypisania, nieistniejącą encję, nieznaną/niedostępną wartość, niewłaściwy typ/jednostkę, nieliczbową temperaturę/opady oraz ujemny opad. Kontrola dotyczy formatu wartości; nie potwierdza dokładności, lokalizacji, okresu danych ani fizycznej sprawności czujnika. W sygnale deszczu `on` musi oznaczać opad, a `off` sucho — sprawdź polaryzację.
+
+**Ostatni raport do HA** pochodzi z backendowego `last_reported`; osobno widać **Zmianę wartości lub atrybutów** (`last_updated`). Niezmienna wartość nie oznacza awarii. To czas otrzymania stanu przez HA, a nie oryginalnego pomiaru lub wydania prognozy. Panel nie stosuje uniwersalnego progu awarii. Widoczne wiersze współdzielą jeden odczyt `/api/template` na połączenie, automatycznie odświeżany przy aktualizacjach HA najwyżej raz na minutę; przycisk **Odśwież czas raportu** pobiera nowy odczyt. Widać czas sprawdzenia. Błąd odczytu lub odpowiedź sprzed zmiany źródła nie jest przedstawiana jako poprawny czas raportu; można ponowić odczyt. Diagnostyka nie zmienia wartości, przypisań ani ustawień podlewania.
+
+Zaktualizuj moduł UI i odśwież interfejs. Panel z wyszukiwaniem encji z wersji 0.2.0b1 również działa bez ponownego budowania. Instalacja ręczna: ponowne zbudowanie EN/PL; HACS: przygotowanie nowej paczki w opcjach instalatora. Referencje: [czas raportu HA](https://contributors.home-assistant.io/blog/2024/03/20/state_reported_timestamp/), [REST API](https://contributors.home-assistant.io/core/internals/rest-api/).
+
+### Znaczenie pomiarów i prognoz
 
 **Prognoza nie jest pomiarem rzeczywistych opadów.** Prognozy na następne 24 godziny nie przypisuj do opadów dzisiaj ani wczoraj. Suma poprzedniej doby kalendarzowej różni się od ostatnich 24 godzin; prognoza na dzisiaj również nie musi obejmować kolejnych 24 godzin.
 

@@ -4,9 +4,9 @@
   "format_version": 1,
   "build_tools": {
     "compile_lovelace.py": "4fb4764194da47e2b11c9596680194efdfe9d2ca31d0f530755b6cc71ed544de",
-    "localize_lovelace.py": "cd372f6949552f68a77578234ed744db49f20e1329b24eb83e1a86d7921f7cd5",
-    "build_i18n_release.py": "c3b64c3b0efa4a1dec3708d5813bc4945789954cd51289cb9f4ffab373dc7ddb",
-    "enhance_lovelace.py": "4d9cf5b76a873f2d1a06f200069fddc3202c5efff4ca704f70640362761d99ab"
+    "localize_lovelace.py": "d5ce36aae3a9b86072bbdd8bc30654b8a17bab05ca2f6adeeb86f5427c6f1d4c",
+    "build_i18n_release.py": "199693f689cdf486bcdc553af7bd9a080c1279bf5d56a71645b773a17564b428",
+    "enhance_lovelace.py": "3aed8bef15f0d720d1bb0bf918b5e35c984af85edb500844dbdd34d6078f6705"
   },
   "target": "Original kloggy/HA-Irrigation-Version2; localized original Lovelace",
   "language": "en",
@@ -262,18 +262,18 @@
     }
   ],
   "catalogs": {
-    "en.ini": "3251bffcb54f661728d4db578205859a41f0e2bb36ce727fbe3dba11645c931a"
+    "en.ini": "18cdb4d4120baff369200cbd0df07e1710b0eeee3fd85cb74eaa0fe30bb15f24"
   },
-  "semantic_sha256": "e7cef8437087ba9d9dbf0c3d503cb8329ad289a2f99ee9d43a48dd05395e4928",
+  "semantic_sha256": "39c4bf5e9b56619a7efe5918285174d01228e4d181fe89f8a15f6b2eaf6f9692",
   "english_semantic_sha256": "405730baf93b6ddd00dc288a502dee39762ae08dfb461bc34918513cad79a8cb",
   "generated": {
-    "irrigation_dashboard.yaml": {
-      "bytes": 812470,
-      "sha256": "641e54bc29a9d1d0ccf795d1f8796403145efd7d5d86c086df52d722a6c93f05"
-    },
     "irrigation_dashboard.json": {
-      "bytes": 1012751,
-      "sha256": "2e775558a368d2ea219438801b4f5068c4c743251e4c796a08ec458399f68ba2"
+      "bytes": 1154031,
+      "sha256": "38deec5276e03d9149c25cfd7dd58e525eb13c2eec5449e2cbd624ddeace897e"
+    },
+    "irrigation_dashboard.yaml": {
+      "bytes": 814155,
+      "sha256": "65e7188fc13d94a959eae4be6d0eb918ab49c0380ab6072ccbeff5937459c47c"
     }
   },
   "checks": {
@@ -284,7 +284,7 @@
   },
   "ui_module": {
     "path": "custom_components/irrigation_garden/frontend/irrigation-garden-ui.js",
-    "sha256": "efca4927bb9dac00618107257feee0b37b3222e56e4fc4d5bfec91483ae8cf56"
+    "sha256": "410fe0b6a2faf50b7bacba7d9b2cf8469a07755e2485907c95c73284ce6444fa"
   },
   "custom_cards": [
     "custom:button-card",
@@ -304,7 +304,7 @@
   },
   "localization": {
     "language": "en",
-    "catalog_messages": 264,
+    "catalog_messages": 283,
     "fallback_keys": [],
     "changed_fields": 0
   },
