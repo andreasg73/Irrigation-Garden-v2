@@ -16,6 +16,7 @@ files["manifest.json"] = (json.dumps(manifest, ensure_ascii=False, sort_keys=Tru
 with ZipFile(component / "bundle.zip", "w", compression=ZIP_DEFLATED, compresslevel=9) as archive:
     for name, body in sorted(files.items()):
         info = ZipInfo(name, date_time=(2026, 10, 24, 0, 0, 0))
+        info.create_system = 3  # Canonical Unix metadata on Windows and Linux.
         info.compress_type = ZIP_DEFLATED
         info.external_attr = 0o100644 << 16
         archive.writestr(info, body)
