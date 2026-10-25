@@ -55,7 +55,7 @@ async def main():
         await boolean('disable_switches', True)
         await boolean('testing_mode', True)
         await number('number_of_zones', 2)
-        await number('weather_adjusted_minimum_duration_in_seconds', 1)
+        await number('weather_adjusted_minimum_duration_in_seconds', 3)
         await number('weather_adjusted_maximum_duration_in_minutes', 60)
         old=hass.states.get('input_number.irrigation_pause_between_zones_in_seconds')
         hass.states.async_set(old.entity_id,'0',dict(old.attributes))
