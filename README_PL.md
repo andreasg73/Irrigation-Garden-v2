@@ -6,6 +6,8 @@ Nazwa projektu na GitHubie: **Irrigation Garden v2**. Po instalacji panel nazywa
 
 Przypisywanie zaworów i czujników obsługuje wyszukiwanie encji HA po nazwie/ID. Przycisk w panelu przełącza jasny i ciemny wygląd. [Wybór encji i wygląd](docs/ENTITY_PICKER_AND_APPEARANCE.md).
 
+[Źródła pogody i konfiguracja czujników](Weather%20Sensors.md#polski) · [Opcjonalny historyczny przykład SmartWeather](SmartWeather%20reference.md)
+
 ## Instalacja przez HACS
 
 Repozytorium można dodać w HACS jako **niestandardową integrację**. Instalator dostarcza ten sam silnik i panel EN/PL; aktywacja wymaga jednego wpisu YAML. [Instrukcja HACS i migracji istniejącej instalacji](docs/HACS_INSTALLATION.md#polski). Projekt nie jest w domyślnym katalogu HACS.
