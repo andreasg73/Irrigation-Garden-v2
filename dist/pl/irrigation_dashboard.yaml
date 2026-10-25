@@ -46,6 +46,54 @@ views:
         report_hint: Niezmienna wartość nie oznacza awarii. Czas raportu do HA nie jest czasem pomiaru fizycznego
           ani wydania prognozy.
         raining_on: on = pada; off = sucho. Sprawdź polaryzację czujnika.
+      show_decisions: false
+    - type: custom:irrigation-garden-decisions
+      ui_labels:
+        title: Dlaczego tak podlewa?
+        empty: Nie zapisano jeszcze decyzji. Wpisy pojawią się przy następnej próbie.
+        missing: Dziennik decyzji nie jest wczytany. Zaktualizuj pakiety silnika.
+        history: Historia decyzji
+        cycle: Cykl
+        zone: Strefa
+        base: Czas bazowy
+        selected: Wybrany czas
+        rain: Korekta opadów
+        temperature: Korekta temperatury
+        minimum: Podniesiono do minimalnego czasu
+        maximum: Ograniczono do maksymalnego czasu
+        testing: 'Tryb testowy: minuty zamieniono na sekundy'
+        simulation: Wyjścia zablokowane — symulacja
+        snapshot_mismatch: Czas silnika różni się od zapisanych ustawień. Obowiązuje wybrany czas; nie można potwierdzić
+          dokładnej przyczyny.
+        factor_unknown: Brak mnożnika korekty; silnik przyjmuje zero
+        hint: Zapisane decyzje, bez prognozowania ani potwierdzania przepływu wody. Zmiana pogody nie zmienia wpisów.
+          Zachowywane są ostatnie 64 wpisy.
+        master_off: 'Pominięto: sterowanie główne jest wyłączone'
+        cycle_busy: 'Pominięto: trwa już cykl podlewania'
+        schedule_disabled: 'Pominięto: ten harmonogram jest wyłączony'
+        raining_now: 'Pominięto: czujnik zgłasza deszcz'
+        rain_unknown: 'Pominięto: czujnik deszczu nie potwierdza, że jest sucho'
+        settings_unknown: 'Pominięto: wymagane ustawienia są niedostępne'
+        waiting_for_entity: Oczekiwanie na ustawiony stan encji
+        wait_timeout: 'Pominięto: upłynął czas oczekiwania na encję'
+        start_conditions_changed: 'Pominięto: warunki startu zmieniły się podczas oczekiwania'
+        cycle_started: Przyjęto cykl do wykonania
+        cycle_finished: Zakończono wykonywanie cyklu
+        cycle_stopped: Cykl przerwany przez STOP lub zabezpieczenie
+        duration_unknown: 'Pominięto: czas podlewania jest niedostępny'
+        duration_zero: 'Pominięto: czas bazowy wynosi zero'
+        zone_not_today: 'Pominięto: strefa nie jest zaplanowana na dziś'
+        rain_adjusted_zero: 'Pominięto: korekta opadów obniżyła czas do zera'
+        temp_adjusted_zero: 'Pominięto: korekta temperatury obniżyła czas do zera'
+        duration_rounded_zero: 'Pominięto: silnik wybrał zero sekund'
+        output_unassigned: 'Pominięto: nie przypisano prawidłowego zaworu'
+        duration_selected: Wybrano czas podlewania
+        duration_snapshot_changed: Silnik wybrał czas na podstawie innych danych
+        output_unavailable: 'Przerwano: przypisane wyjście jest niedostępne'
+        output_permission_changed: 'Przerwano: zmieniło się zezwolenie na otwarcie zaworu'
+        output_not_on: 'Przerwano: wyjście nie potwierdziło otwarcia'
+        output_not_off: 'Przerwano: wyjście nie potwierdziło zamknięcia'
+        unknown: Nierozpoznana decyzja
     - type: custom:irrigation-garden-themed-card
       ui_labels: *id001
       card:

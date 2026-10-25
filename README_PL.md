@@ -16,12 +16,14 @@ Repozytorium można dodać w HACS jako **niestandardową integrację**. Instalat
 
 ## Co zawiera ta wersja
 
+- [Wyjaśnienia decyzji podlewania](docs/WATERING_DECISIONS.md#polski): przyczyny pominięcia, korekty czasu i historia ostatnich 64 wpisów.
+
 - 27 oryginalnych, zmodernizowanych pakietów silnika, dwa pakiety logowania i 41 źródeł panelu.
 - Obsługę 1–16 stref, dwóch harmonogramów i cyklu ręcznego.
 - Poprawki zgodności z HA, szablonów, STOP/Master OFF, timerów, potwierdzania wyjść i sprzątania przy restarcie/zatrzymaniu HA.
 - Poprawki historii, opadów i temperatury oraz brakujących danych.
 - Oryginalny panel budowany bez `lovelace_gen`.
-- Wymienne słowniki INI EN/PL po 283 wiadomości, gotowe panele oraz narzędzia i testy.
+- Wymienne słowniki INI EN/PL po 325 wiadomości, gotowe panele oraz narzędzia i testy.
 - Własne, konfigurowalne adaptery powiadomień i logowania oraz lokalny pośrednik opisu pogody, zastępujące odwołania do prywatnych encji autora. [Co dodano i jak to skonfigurować](docs/OPTIONAL_FEATURES.md#polski).
 
 Jest to **wersja rozwojowa**. Zgodność sprawdzono z HA 2026.10.2; nie deklarujemy sprawdzenia każdej przyszłej wersji ani niezawodności każdego sterownika fizycznego. Przed migracją wykonaj kopię i sprawdź działanie na wirtualnych zaworach. Wymagania i pełna instalacja: [docs/INSTALLATION.md](docs/INSTALLATION.md).

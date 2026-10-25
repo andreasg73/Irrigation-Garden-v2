@@ -46,6 +46,54 @@ views:
         report_hint: An unchanged value does not indicate failure. HA report time is not the time of a physical
           measurement or forecast issue.
         raining_on: on = raining; off = dry. Check the sensor polarity.
+      show_decisions: false
+    - type: custom:irrigation-garden-decisions
+      ui_labels:
+        title: Why this watering decision?
+        empty: No decisions recorded yet. Entries appear at the next attempt.
+        missing: Decision journal is not loaded. Update the engine packages.
+        history: Decision history
+        cycle: Cycle
+        zone: Zone
+        base: Base time
+        selected: Selected time
+        rain: Rainfall adjustment
+        temperature: Temperature adjustment
+        minimum: Raised to the minimum time
+        maximum: Limited to the maximum time
+        testing: 'Testing mode: minutes become seconds'
+        simulation: Outputs blocked — simulation
+        snapshot_mismatch: Engine time differs from the saved settings. The selected time is authoritative; an exact
+          cause cannot be confirmed.
+        factor_unknown: Adjustment multiplier unavailable; the engine uses zero
+        hint: Recorded decisions, not a forecast or proof of water flow. Weather changes do not rewrite these entries.
+          The latest 64 entries are retained.
+        master_off: 'Skipped: master control is off'
+        cycle_busy: 'Skipped: another cycle is active'
+        schedule_disabled: 'Skipped: this schedule is disabled'
+        raining_now: 'Skipped: the rain sensor reports rain'
+        rain_unknown: 'Skipped: the rain sensor does not confirm dry conditions'
+        settings_unknown: 'Skipped: required settings are unavailable'
+        waiting_for_entity: Waiting for the configured entity state
+        wait_timeout: 'Skipped: waiting for the entity timed out'
+        start_conditions_changed: 'Skipped: start conditions changed while waiting'
+        cycle_started: Cycle accepted for processing
+        cycle_finished: Cycle processing finished
+        cycle_stopped: Cycle interrupted by STOP or a safety shutdown
+        duration_unknown: 'Skipped: duration data is unavailable'
+        duration_zero: 'Skipped: base time is zero'
+        zone_not_today: 'Skipped: this zone is not scheduled today'
+        rain_adjusted_zero: 'Skipped: rainfall adjustment reduced time to zero'
+        temp_adjusted_zero: 'Skipped: temperature adjustment reduced time to zero'
+        duration_rounded_zero: 'Skipped: the engine selected zero seconds'
+        output_unassigned: 'Skipped: no valid switch is assigned'
+        duration_selected: Watering time selected
+        duration_snapshot_changed: The engine selected a time using different inputs
+        output_unavailable: 'Interrupted: the assigned output is unavailable'
+        output_permission_changed: 'Interrupted: permission to open the valve changed'
+        output_not_on: 'Interrupted: the output did not confirm opening'
+        output_not_off: 'Interrupted: the output did not confirm closing'
+        unknown: Unrecognized decision
     - type: custom:irrigation-garden-themed-card
       ui_labels: *id001
       card:

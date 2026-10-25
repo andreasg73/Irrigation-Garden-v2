@@ -210,3 +210,27 @@ script:
 
 
 
+
+# Bounded, restored decision journal, independent of optional file logging.
+template:
+  - triggers:
+      - trigger: event
+        event_type: irrigation_decision
+    sensor:
+      - name: Irrigation Last Decision
+        unique_id: irrigation_last_decision
+        default_entity_id: sensor.irrigation_last_decision
+        icon: mdi:water-check
+        state: "{{ trigger.event.data.get('reason', 'unknown') }}"
+        attributes:
+          records: >
+            {% set old = this.attributes.get('records', []) %}
+            {% set old = old if old is sequence and old is not string and old is not mapping else [] %}
+            {% set d = trigger.event.data %}
+            {% set cycle = d.get('cycle', '') %}
+            {% set zone = d.get('zone', '') | string %}
+            {% set cycle_name = states('input_text.irrigation_' ~ cycle ~ '_name') if cycle in ['cycle1','cycle2','cycle3'] else '' %}
+            {% set zone_name = states('input_text.irrigation_zone' ~ zone ~ '_name') if zone | int(0) in range(1,17) else '' %}
+            {{ old[-63:] + [dict(d, at=now().isoformat(),
+                 cycle_name=cycle_name if cycle_name not in ['unknown','unavailable'] else '',
+                 zone_name=zone_name if zone_name not in ['unknown','unavailable'] else '')] }}

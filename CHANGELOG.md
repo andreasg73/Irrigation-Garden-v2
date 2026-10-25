@@ -1,5 +1,11 @@
 # Irrigation Garden v2 — development, 2026-10-25
 
+## Unreleased — 0.4.0b1
+
+- Record watering decisions at the original engine branches: rain admission, waits, zone skips, captured base/selected times, enabled weather factors, bounds, testing/simulation and output faults/stops.
+- Add a restored 64-entry journal and read-only EN/PL dashboard card. History uses captured values; ambiguous runtime/input mismatches are explicit. Existing valve actions, waits and safety guards are preserved.
+- Add independent math/control-preservation contracts, journal DOM tests and native isolated HA coverage, including output-mode race regressions.
+
 ## 0.3.0b1 — first published beta, 2026-10-25
 
 Published [GitHub Release 0.3.0b1](https://github.com/andreasg73/Irrigation-Garden-v2/releases/tag/0.3.0b1), pinned to tested commit `9ae31428dfc93e1291352356f991a53500bb165d`. The tag matches the integration manifest. In HACS, refresh repository data, enable beta releases if needed and select the numbered release; selecting `main` continues to track development commits. This publication supersedes earlier same-day notes that no release existed. No engine or Home Assistant settings changed.

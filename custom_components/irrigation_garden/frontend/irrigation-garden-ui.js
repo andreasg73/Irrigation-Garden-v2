@@ -1,7 +1,9 @@
 /* Irrigation Garden UI: searchable mappings and local appearance, original engine unchanged. */
 (() => {
   'use strict';
-  const VERSION = '0.3.0b1';
+  const VERSION = '0.4.0b1';
+  const decisionFallback = {"title": "Why this watering decision?", "empty": "No decisions recorded yet. Entries appear at the next attempt.", "missing": "Decision journal is not loaded. Update the engine packages.", "history": "Decision history", "cycle": "Cycle", "zone": "Zone", "base": "Base time", "selected": "Selected time", "rain": "Rainfall adjustment", "temperature": "Temperature adjustment", "minimum": "Raised to the minimum time", "maximum": "Limited to the maximum time", "testing": "Testing mode: minutes become seconds", "simulation": "Outputs blocked — simulation", "snapshot_mismatch": "Engine time differs from the saved settings. The selected time is authoritative; an exact cause cannot be confirmed.", "factor_unknown": "Adjustment multiplier unavailable; the engine uses zero", "hint": "Recorded decisions, not a forecast or proof of water flow. Weather changes do not rewrite these entries. The latest 64 entries are retained.", "master_off": "Skipped: master control is off", "cycle_busy": "Skipped: another cycle is active", "schedule_disabled": "Skipped: this schedule is disabled", "raining_now": "Skipped: the rain sensor reports rain", "rain_unknown": "Skipped: the rain sensor does not confirm dry conditions", "settings_unknown": "Skipped: required settings are unavailable", "waiting_for_entity": "Waiting for the configured entity state", "wait_timeout": "Skipped: waiting for the entity timed out", "start_conditions_changed": "Skipped: start conditions changed while waiting", "cycle_started": "Cycle accepted for processing", "cycle_finished": "Cycle processing finished", "cycle_stopped": "Cycle interrupted by STOP or a safety shutdown", "duration_unknown": "Skipped: duration data is unavailable", "duration_zero": "Skipped: base time is zero", "zone_not_today": "Skipped: this zone is not scheduled today", "rain_adjusted_zero": "Skipped: rainfall adjustment reduced time to zero", "temp_adjusted_zero": "Skipped: temperature adjustment reduced time to zero", "duration_rounded_zero": "Skipped: the engine selected zero seconds", "output_unassigned": "Skipped: no valid switch is assigned", "duration_selected": "Watering time selected", "duration_snapshot_changed": "The engine selected a time using different inputs", "output_unavailable": "Interrupted: the assigned output is unavailable", "output_permission_changed": "Interrupted: permission to open the valve changed", "output_not_on": "Interrupted: the output did not confirm opening", "output_not_off": "Interrupted: the output did not confirm closing", "unknown": "Unrecognized decision"};
+  const decisionPolish = {"title": "Dlaczego tak podlewa?", "empty": "Nie zapisano jeszcze decyzji. Wpisy pojawią się przy następnej próbie.", "missing": "Dziennik decyzji nie jest wczytany. Zaktualizuj pakiety silnika.", "history": "Historia decyzji", "cycle": "Cykl", "zone": "Strefa", "base": "Czas bazowy", "selected": "Wybrany czas", "rain": "Korekta opadów", "temperature": "Korekta temperatury", "minimum": "Podniesiono do minimalnego czasu", "maximum": "Ograniczono do maksymalnego czasu", "testing": "Tryb testowy: minuty zamieniono na sekundy", "simulation": "Wyjścia zablokowane — symulacja", "snapshot_mismatch": "Czas silnika różni się od zapisanych ustawień. Obowiązuje wybrany czas; nie można potwierdzić dokładnej przyczyny.", "factor_unknown": "Brak mnożnika korekty; silnik przyjmuje zero", "hint": "Zapisane decyzje, bez prognozowania ani potwierdzania przepływu wody. Zmiana pogody nie zmienia wpisów. Zachowywane są ostatnie 64 wpisy.", "master_off": "Pominięto: sterowanie główne jest wyłączone", "cycle_busy": "Pominięto: trwa już cykl podlewania", "schedule_disabled": "Pominięto: ten harmonogram jest wyłączony", "raining_now": "Pominięto: czujnik zgłasza deszcz", "rain_unknown": "Pominięto: czujnik deszczu nie potwierdza, że jest sucho", "settings_unknown": "Pominięto: wymagane ustawienia są niedostępne", "waiting_for_entity": "Oczekiwanie na ustawiony stan encji", "wait_timeout": "Pominięto: upłynął czas oczekiwania na encję", "start_conditions_changed": "Pominięto: warunki startu zmieniły się podczas oczekiwania", "cycle_started": "Przyjęto cykl do wykonania", "cycle_finished": "Zakończono wykonywanie cyklu", "cycle_stopped": "Cykl przerwany przez STOP lub zabezpieczenie", "duration_unknown": "Pominięto: czas podlewania jest niedostępny", "duration_zero": "Pominięto: czas bazowy wynosi zero", "zone_not_today": "Pominięto: strefa nie jest zaplanowana na dziś", "rain_adjusted_zero": "Pominięto: korekta opadów obniżyła czas do zera", "temp_adjusted_zero": "Pominięto: korekta temperatury obniżyła czas do zera", "duration_rounded_zero": "Pominięto: silnik wybrał zero sekund", "output_unassigned": "Pominięto: nie przypisano prawidłowego zaworu", "duration_selected": "Wybrano czas podlewania", "duration_snapshot_changed": "Silnik wybrał czas na podstawie innych danych", "output_unavailable": "Przerwano: przypisane wyjście jest niedostępne", "output_permission_changed": "Przerwano: zmieniło się zezwolenie na otwarcie zaworu", "output_not_on": "Przerwano: wyjście nie potwierdziło otwarcia", "output_not_off": "Przerwano: wyjście nie potwierdziło zamknięcia", "unknown": "Nierozpoznana decyzja"};
   const EVENT = 'irrigation-garden-appearance';
   const memory = new Map();
   const palette = {
@@ -55,6 +57,7 @@
     disconnectedCallback(){window.removeEventListener(EVENT,this._appearance);if(this._view&&this._prior){for(const [p,[v,priority,owned]] of this._prior){if(this._view.style.getPropertyValue(p)===owned){if(v)this._view.style.setProperty(p,v,priority);else this._view.style.removeProperty(p);}}}this._prior=null;this._view=null;}
     _update(){
       if(!this._hass)return;const m=paint(this,this._hass);const t=labels(this._config);const dark=m==='dark';const b=this.shadowRoot.querySelector('button');b.setAttribute('aria-label',dark?t.to_light:t.to_dark);b.setAttribute('aria-pressed',String(dark));b.title=b.getAttribute('aria-label');this.shadowRoot.querySelector('.icon').textContent=dark?'☀':'☾';this.shadowRoot.getElementById('label').textContent=dark?t.dark:t.light;
+      if(this._config?.show_decisions!==false){if(!this._journal){this._journal=document.createElement('irrigation-garden-decisions');this._journal.setConfig({ui_labels:t.save==='Zapisz'?decisionPolish:decisionFallback});this.shadowRoot.append(this._journal);}this._journal.hass=this._hass;}else if(this._journal){this._journal.remove();this._journal=null;}
       if(!this.isConnected)return;
       const view=ancestor(this,'hui-view');if(!view)return;
       if(!this._prior){this._view=view;this._prior=new Map();for(const p of ['--primary-background-color','--lovelace-background'])this._prior.set(p,[view.style.getPropertyValue(p),view.style.getPropertyPriority(p),'']);}
@@ -170,8 +173,75 @@
       try{await h.callService('input_text','set_value',{entity_id:this._config.entity,value});this._pending=false;this._close();}catch{this._error(this._t.failed);}finally{this._pending=false;for(const b of this.shadowRoot.querySelectorAll('button'))b.disabled=false;this.$('.search').disabled=false;this._selected();this._render();}
     }
   }
+  // This card only renders engine snapshots; it never calls services or a network API.
+  class DecisionJournal extends HTMLElement {
+    constructor() {
+      super(); this.attachShadow({mode:'open'});
+      this.shadowRoot.innerHTML=`<style>${commonCSS}
+        ha-card{display:block;padding:16px;border-radius:12px;background:var(--card-background-color);border:1px solid var(--divider-color)}
+        h2{font-size:18px;margin:0 0 10px}p{margin:5px 0;overflow-wrap:anywhere}.context,.at,.hint{color:var(--secondary-text-color);font-size:13px}
+        .reason{font-weight:600}.effects{font-size:14px}.hint{margin-top:12px}summary{cursor:pointer;min-height:44px;align-content:center}
+        summary:focus-visible{outline:3px solid var(--accent-color);outline-offset:2px}ol{padding:0;list-style:none;margin:0;max-height:420px;overflow:auto}
+        li{padding:12px 0;border-top:1px solid var(--divider-color)}.warning{color:var(--error-color)}
+      </style><ha-card><h2></h2><div class="latest" aria-live="polite"></div><details><summary></summary><ol tabindex="0"></ol></details><p class="hint"></p></ha-card>`;
+      this._appearance=()=>{if(this._hass)paint(this,this._hass);};
+    }
+    setConfig(c){this._config=c;this._signature=null;this._render();}
+    set hass(h){this._hass=h;this._render();}
+    connectedCallback(){window.addEventListener(EVENT,this._appearance);this._render();}
+    disconnectedCallback(){window.removeEventListener(EVENT,this._appearance);}
+    getCardSize(){return 3;}
+    getGridOptions(){return {columns:12,rows:'auto'};}
+    _render(){
+      if(!this._hass||!this._config)return;
+      paint(this,this._hass); const t={...decisionFallback,...this._config.ui_labels};
+      const s=this._hass.states[this._config.entity||'sensor.irrigation_last_decision'];
+      const records=Array.isArray(s?.attributes?.records)?s.attributes.records.filter(r=>r&&typeof r==='object'&&typeof r.reason==='string').slice(-64).reverse():[];
+      const signature=JSON.stringify([records,!!s,t,this._hass.locale?.language,this._hass.config?.time_zone]);
+      if(signature===this._signature)return;this._signature=signature;
+      const q=x=>this.shadowRoot.querySelector(x);
+      const text=(tag,value,cls)=>{const e=document.createElement(tag);e.textContent=String(value??'');if(cls)e.className=cls;return e;};
+      const numeric=value=>value!==null&&value!==undefined&&String(value).trim()!==''&&Number.isFinite(Number(value));
+      const time=value=>{if(!numeric(value))return '—';const n=Math.max(0,Math.round(Number(value)));return n>=60?`${Math.floor(n/60)} min${n%60?` ${n%60} s`:''}`:`${n} s`;};
+      const row=r=>{
+        const el=document.createElement('div');
+        const cycle=/^cycle[123]$/.test(r.cycle)?`${t.cycle||'Cycle'} ${r.cycle.slice(-1)}`:'';
+        const zone=Number.isInteger(Number(r.zone))&&Number(r.zone)>=1&&Number(r.zone)<=16?`${t.zone||'Zone'} ${r.zone}`:'';
+        el.append(text('p',[r.cycle_name||cycle,r.zone_name||zone].filter(Boolean).join(' · '),'context'));
+        let reason=t[r.reason]||t.unknown||r.reason;
+        el.append(text('p',reason,'reason'));
+        if(numeric(r.seconds))el.append(text('p',`${t.base}: ${numeric(r.base)?time(Number(r.base)*60):'—'} → ${t.selected}: ${time(r.seconds)}`,'duration'));
+        const effects=[];
+        const adjusted=r.rain===true||r.temperature===true;
+        if(r.rain===true)effects.push(numeric(r.rain_factor)?`${t.rain}: ×${Number(r.rain_factor)} (${Math.round((Number(r.rain_factor)-1)*100)}%)`:t.factor_unknown);
+        if(r.temperature===true)effects.push(numeric(r.temperature_factor)?`${t.temperature}: ×${Number(r.temperature_factor)} (${Math.round((Number(r.temperature_factor)-1)*100)}%)`:t.factor_unknown);
+        const raw=Number(r.base)*60*(r.rain===true?Number(r.rain_factor):1)*(r.temperature===true?Number(r.temperature_factor):1);
+        // Bounds are applied before testing-mode scaling and final rounding.
+        if(adjusted&&raw!==0&&Number.isFinite(raw)){
+          if(raw>Number(r.maximum))effects.push(`${t.maximum}: ${time(r.maximum)}`);
+          else if(raw<Number(r.minimum))effects.push(`${t.minimum}: ${time(r.minimum)}`);
+        }
+        if(r.testing===true)effects.push(t.testing);
+        if(r.physical===false)effects.push(t.simulation);
+        for(const effect of effects.filter(Boolean))el.append(text('p',effect,'effects'));
+        if(numeric(r.expected)&&numeric(r.seconds)&&Number(r.expected)!==Number(r.seconds))el.append(text('p',t.snapshot_mismatch,'warning'));
+        if(r.rain_source)el.append(text('p',`${r.rain_source}: ${r.rain_state??'—'}`,'context'));
+        if(r.source)el.append(text('p',`${r.source} → ${r.expected??'—'}${r.observed!==undefined?` (${r.observed})`:''}`,'context'));
+        const date=new Date(r.at);
+        let formatted=r.at||'';
+        if(Number.isFinite(date.getTime())){try{formatted=new Intl.DateTimeFormat(this._hass.locale?.language||'en',{dateStyle:'short',timeStyle:'medium',timeZone:this._hass.config?.time_zone||'UTC'}).format(date);}catch{formatted=date.toISOString();}}
+        el.append(text('p',formatted,'at'));return el;
+      };
+      q('h2').textContent=t.title||'Watering decisions';q('.hint').textContent=t.hint||'';
+      q('summary').textContent=`${t.history||'Decision history'} (${records.length})`;
+      q('ol').setAttribute('aria-label',t.history||'Decision history');q('details').hidden=records.length<2;
+      q('.latest').replaceChildren(records.length?row(records[0]):text('p',s?t.empty:t.missing));
+      q('ol').replaceChildren(...records.slice(1).map(r=>{const li=document.createElement('li');li.append(row(r));return li;}));
+    }
+  }
+
   EntityPicker.serial=0;
-  for(const [name,element]of [['irrigation-garden-themed-card',ThemedCard],['irrigation-garden-appearance',AppearanceButton],['irrigation-garden-entity-picker',EntityPicker]])if(!customElements.get(name))customElements.define(name,element);
+  for(const [name,element]of [['irrigation-garden-decisions',DecisionJournal],['irrigation-garden-themed-card',ThemedCard],['irrigation-garden-appearance',AppearanceButton],['irrigation-garden-entity-picker',EntityPicker]])if(!customElements.get(name))customElements.define(name,element);
   window.customCards=window.customCards||[];window.customCards.push({type:'irrigation-garden-appearance',name:'Irrigation Garden appearance',description:'Light/dark appearance for the original irrigation dashboard.'});
   console.info('Irrigation Garden UI '+VERSION);
 })();

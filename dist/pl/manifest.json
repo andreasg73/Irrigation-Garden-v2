@@ -4,9 +4,10 @@
   "format_version": 1,
   "build_tools": {
     "compile_lovelace.py": "4fb4764194da47e2b11c9596680194efdfe9d2ca31d0f530755b6cc71ed544de",
-    "localize_lovelace.py": "d5ce36aae3a9b86072bbdd8bc30654b8a17bab05ca2f6adeeb86f5427c6f1d4c",
-    "build_i18n_release.py": "199693f689cdf486bcdc553af7bd9a080c1279bf5d56a71645b773a17564b428",
-    "enhance_lovelace.py": "3aed8bef15f0d720d1bb0bf918b5e35c984af85edb500844dbdd34d6078f6705"
+    "localize_lovelace.py": "1bb5f970f89c373a2f9254d6bd9426d254400caea32abcc56e6e86c262ac66db",
+    "build_i18n_release.py": "0c7b9ffa64cd2692c50e61e5f33da32d8c293cfe99165da6189892d0fb7388ed",
+    "enhance_lovelace.py": "3be8d1acf9afeae28cc110247ce52d807e17a7d48a3990425601b11dd1c7fc7f",
+    "decision_labels.py": "22206bad29b23609d80f2d894cabc49549c8ab217af9166e5aaec9e6658e1848"
   },
   "target": "Original kloggy/HA-Irrigation-Version2; localized original Lovelace",
   "language": "pl",
@@ -262,19 +263,19 @@
     }
   ],
   "catalogs": {
-    "en.ini": "18cdb4d4120baff369200cbd0df07e1710b0eeee3fd85cb74eaa0fe30bb15f24",
-    "pl.ini": "44513ce0fa8f9fe314068e6ca1041f0ee3874cbae2cec2b09919c660951bd7c7"
+    "en.ini": "b7a0e69bc5d8e5b385733df45b0398abe54ef72d74795c7a88f2695dfe1fa450",
+    "pl.ini": "783240a51c05c441d2a94a24e83fef02c2bfce4f1d8d66bc896a69dc82474143"
   },
-  "semantic_sha256": "c2e40b6afd05e20db89892a2b67359e2288479dd007f2789b79a6ee4257a71d5",
+  "semantic_sha256": "10d9242ca898245a1868cc06b87b756df95e3506104ed866228bc059f1dc17ca",
   "english_semantic_sha256": "405730baf93b6ddd00dc288a502dee39762ae08dfb461bc34918513cad79a8cb",
   "generated": {
     "irrigation_dashboard.json": {
-      "bytes": 2751969,
-      "sha256": "6b9680c7d6d2071ca142be61a4933f38b9adcd241ef0f13a67fcd62ee516b1c7"
+      "bytes": 2754654,
+      "sha256": "889c54081c897cfff82abef7141f9aec2da7186b36484ecb4afabd2c0ead99a2"
     },
     "irrigation_dashboard.yaml": {
-      "bytes": 2589951,
-      "sha256": "fb53c684dd00a00d871992234bdef750dc87372500a5a5b49e1cb1b7ce01e4f2"
+      "bytes": 2592920,
+      "sha256": "fc7fef105bdcc863f6d60c8e9317eeb035fcd313f3ce0437ee61e6de59aa0b35"
     }
   },
   "checks": {
@@ -285,13 +286,14 @@
   },
   "ui_module": {
     "path": "custom_components/irrigation_garden/frontend/irrigation-garden-ui.js",
-    "sha256": "410fe0b6a2faf50b7bacba7d9b2cf8469a07755e2485907c95c73284ce6444fa"
+    "sha256": "4303e93e3579c64cf9412f290f4bd70de493e02bcbe68f2299b49293df6d7126"
   },
   "custom_cards": [
     "custom:button-card",
     "custom:config-template-card",
     "custom:hui-element",
     "custom:irrigation-garden-appearance",
+    "custom:irrigation-garden-decisions",
     "custom:irrigation-garden-entity-picker",
     "custom:irrigation-garden-themed-card",
     "custom:mini-graph-card",
@@ -305,8 +307,8 @@
   },
   "localization": {
     "language": "pl",
-    "catalog_messages": 283,
-    "translated_messages": 283,
+    "catalog_messages": 325,
+    "translated_messages": 325,
     "fallback_keys": [],
     "changed_fields": 1035,
     "changed_paths": [

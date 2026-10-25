@@ -19,6 +19,7 @@ jobs:
       - run: python tools/build_i18n_release.py --language en --output dist/en
       - run: python tools/build_i18n_release.py --language pl --output dist/pl
       - run: python tools/test_localization.py
+      - run: python tools/test_decision_contracts.py
       - run: node tools/test_localization_js.cjs
       - run: python tools/check_publication.py
       - run: python tools/build_hacs_bundle.py
@@ -38,6 +39,8 @@ jobs:
       - run: |
           source .venv/bin/activate
           python -m pytest tests/hacs -q
+          python tools/test_decisions_runtime.py
+          python tools/test_output_mode_races.py
   ui-dom-contracts:
     runs-on: ubuntu-latest
     steps:
@@ -52,3 +55,4 @@ jobs:
       - run: npm install --prefix "$RUNNER_TEMP/ig-ui-deps" happy-dom@21.0.4
       - run: NODE_PATH="$RUNNER_TEMP/ig-ui-deps/node_modules" node tools/test_ui_dom.cjs
       - run: NODE_PATH="$RUNNER_TEMP/ig-ui-deps/node_modules" node tools/test_weather_diagnostics.cjs
+      - run: NODE_PATH="$RUNNER_TEMP/ig-ui-deps/node_modules" node tools/test_decisions_dom.cjs

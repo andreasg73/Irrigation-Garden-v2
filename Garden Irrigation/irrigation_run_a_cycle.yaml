@@ -44,6 +44,14 @@ script:
         data:
           value: "{{ cycle }}"
 
+      - event: irrigation_decision
+
+        continue_on_error: true
+        event_data:
+          reason: "cycle_started"
+          cycle: "{{ cycle }}"
+          physical: "{{ physical_run }}"
+
       #=== Short pause before starting
       - delay:
           seconds: 1
@@ -67,6 +75,63 @@ script:
                 irrigation_zone_entity_valid: >
                   {{ irrigation_zone_entity.startswith('switch.')
                      and irrigation_zone_entity in (states.switch | map(attribute='entity_id') | list) }}
+
+            # Snapshot the chosen runtime and its inputs before any yielding service.
+            - variables:
+                decision_base: "{{ states('input_number.irrigation_' ~ cycle ~ '_zone' ~ repeat.index ~ '_duration') }}"
+                decision_duration: "{{ states('sensor.irrigation_' ~ cycle ~ '_zone' ~ repeat.index ~ '_actual_duration_in_seconds') }}"
+                decision_rain: "{{ cycle != 'cycle3' and is_state('input_boolean.irrigation_' ~ cycle ~ '_adjust_for_rainfall','on') }}"
+                decision_temp: "{{ cycle != 'cycle3' and is_state('input_boolean.irrigation_' ~ cycle ~ '_adjust_for_temperature','on') }}"
+                decision_rain_factor: "{{ states('input_number.irrigation_rainfall_multiplier') }}"
+                decision_temp_factor: "{{ states('input_number.irrigation_temp_multiplier') }}"
+                decision_min: "{{ states('input_number.irrigation_weather_adjusted_minimum_duration_in_seconds') | float(0) }}"
+                decision_max: "{{ states('input_number.irrigation_weather_adjusted_maximum_duration_in_minutes') | float(0) * 60 }}"
+                decision_testing: "{{ is_state('input_boolean.irrigation_testing_mode','on') }}"
+                decision_today: >
+                  {% set today = ['mon','tue','wed','thu','fri','sat','sun'][now().weekday()] %}
+                  {{ cycle == 'cycle3' or
+                     is_state('input_boolean.irrigation_' ~ cycle ~ '_zone' ~ repeat.index ~ '_every_day','on') or
+                     is_state('input_boolean.irrigation_' ~ cycle ~ '_zone' ~ repeat.index ~ '_' ~ today,'on') }}
+            - variables:
+                decision_expected: >
+                  {% set d = decision_base | float(0) * 60 %}
+                  {% if decision_rain %}{% set d = d * (decision_rain_factor | float(0)) %}{% endif %}
+                  {% if decision_temp %}{% set d = d * (decision_temp_factor | float(0)) %}{% endif %}
+                  {% if d != 0 and (decision_rain or decision_temp) %}
+                    {% if d > decision_max %}{% set d = decision_max %}
+                    {% elif d < decision_min %}{% set d = decision_min %}{% endif %}
+                  {% endif %}
+                  {% if not decision_today or (cycle != 'cycle3' and decision_base | int(0) == 0) %}{% set d = 0 %}{% endif %}
+                  {% set d = ((d / 60) if decision_testing else d) | round() | int(0) %}
+                  {{ [[d, 0] | max, 7200] | min }}
+                decision_reason: >
+                  {% if not is_number(decision_duration) %}duration_unknown
+                  {% elif not is_number(decision_base) %}duration_unknown
+                  {% elif decision_base | float(0) == 0 %}duration_zero
+                  {% elif not decision_today %}zone_not_today
+                  {% elif zone_seconds == 0 and decision_rain and decision_rain_factor | float(0) == 0 %}rain_adjusted_zero
+                  {% elif zone_seconds == 0 and decision_temp and decision_temp_factor | float(0) == 0 %}temp_adjusted_zero
+                  {% elif zone_seconds == 0 %}duration_rounded_zero
+                  {% elif physical_run and not irrigation_zone_entity_valid %}output_unassigned
+                  {% else %}duration_selected{% endif %}
+            - event: irrigation_decision
+              continue_on_error: true
+              event_data:
+                reason: "{{ (decision_reason | trim) if decision_expected == zone_seconds else 'duration_snapshot_changed' }}"
+                cycle: "{{ cycle }}"
+                zone: "{{ repeat.index }}"
+                seconds: "{{ zone_seconds }}"
+                base: "{{ decision_base }}"
+                rain: "{{ decision_rain }}"
+                rain_factor: "{{ decision_rain_factor }}"
+                temperature: "{{ decision_temp }}"
+                temperature_factor: "{{ decision_temp_factor }}"
+                minimum: "{{ decision_min }}"
+                maximum: "{{ decision_max }}"
+                testing: "{{ decision_testing }}"
+                physical: "{{ physical_run }}"
+                expected: "{{ decision_expected }}"
+                output: "{{ irrigation_zone_entity }}"
 
             #=== Write To Log
             - action: script.irrigation_write_to_log
@@ -133,6 +198,13 @@ script:
                             - condition: template
                               value_template: "{{ not wait.completed }}"
                           then:
+                            - event: irrigation_decision
+                              continue_on_error: true
+                              event_data:
+                                reason: "output_unavailable"
+                                cycle: "{{ cycle }}"
+                                zone: "{{ repeat.index }}"
+                                output: "{{ irrigation_zone_entity }}"
                             - action: input_boolean.turn_off
                               target:
                                 entity_id: input_boolean.irrigation_master_control_switch
@@ -208,6 +280,13 @@ script:
                                      and is_state('input_boolean.irrigation_' ~ cycle ~ '_running','on')
                                      and states(irrigation_zone_entity) in ['on','off']) }}
                             then:
+                              - event: irrigation_decision
+                                continue_on_error: true
+                                event_data:
+                                  reason: "output_permission_changed"
+                                  cycle: "{{ cycle }}"
+                                  zone: "{{ repeat.index }}"
+                                  output: "{{ irrigation_zone_entity }}"
                               - action: input_boolean.turn_off
                                 target:
                                   entity_id: input_boolean.irrigation_master_control_switch
@@ -224,6 +303,13 @@ script:
                               - condition: template
                                 value_template: "{{ not wait.completed }}"
                             then:
+                              - event: irrigation_decision
+                                continue_on_error: true
+                                event_data:
+                                  reason: "output_not_on"
+                                  cycle: "{{ cycle }}"
+                                  zone: "{{ repeat.index }}"
+                                  output: "{{ irrigation_zone_entity }}"
                               - action: input_boolean.turn_off
                                 target:
                                   entity_id: input_boolean.irrigation_master_control_switch
@@ -270,6 +356,13 @@ script:
                             - condition: template
                               value_template: "{{ not wait.completed }}"
                           then:
+                            - event: irrigation_decision
+                              continue_on_error: true
+                              event_data:
+                                reason: "output_not_off"
+                                cycle: "{{ cycle }}"
+                                zone: "{{ repeat.index }}"
+                                output: "{{ irrigation_zone_entity }}"
                             - action: input_boolean.turn_off
                               target:
                                 entity_id: input_boolean.irrigation_master_control_switch
@@ -372,6 +465,9 @@ script:
             {{ cycle[-1] }}
           event_time: >
             {{ now() }}
-
-
-
+      - event: irrigation_decision
+        continue_on_error: true
+        event_data:
+          reason: "cycle_finished"
+          cycle: "{{ cycle }}"
+          physical: "{{ physical_run }}"
