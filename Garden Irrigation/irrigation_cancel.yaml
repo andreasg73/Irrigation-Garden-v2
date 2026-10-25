@@ -156,3 +156,14 @@ script:
       - action: input_boolean.turn_off
         target:
           entity_id: input_boolean.irrigation_stop_in_progress
+      - if:
+          - condition: template
+            value_template: "{{ cycle_snapshot in ['cycle1','cycle2','cycle3'] }}"
+        then:
+          - event: irrigation_decision
+            continue_on_error: true
+            event_data:
+              reason: "cycle_stopped"
+              cycle: "{{ cycle_snapshot }}"
+              zone: "{{ zone_snapshot }}"
+              output_closed: "{{ not states('input_text.irrigation_active_switch').startswith('switch.') }}"
