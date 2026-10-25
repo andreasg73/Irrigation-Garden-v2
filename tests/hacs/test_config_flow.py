@@ -29,7 +29,7 @@ async def hass(tmp_path):
     # integration discovery, schemas, flow manager and entry storage stay real.
     with patch("homeassistant.config_entries.async_process_deps_reqs", new=AsyncMock()), patch(
         "homeassistant.config_entries.ConfigEntry.async_setup", new=AsyncMock(return_value=True)
-    ), patch("homeassistant.config_entries.async_setup_component", new=AsyncMock(return_value=True)):
+    ), patch("homeassistant.config_entries.async_setup_component", new=AsyncMock(return_value=True)), patch("custom_components.irrigation_garden.frontend.async_setup_frontend", new=AsyncMock()):
         yield hass
         await hass.async_block_till_done()
         await hass.async_stop()
